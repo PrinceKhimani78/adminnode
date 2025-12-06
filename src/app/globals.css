@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fffff0;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+.section-container {
+  @apply px-5 sm:px-6 lg:px-[5%] 2xl:px-[15%];
+}
+
+/* recruiter testimonials overrides */
+.recruiter-testimonials [class*="text-"][class*="#72B76A"] {
+  @apply text-[white];
+}
+.recruiter-testimonials [class*="border-"][class*="#72B76A"] {
+  @apply border-[#FFE680]; /* light yellow border */
+}
+.recruiter-testimonials [class*="bg-"][class*="#72B76A"] {
+  @apply bg-[#FFCC23]/60;
+}
+
+/* Generic custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px; /* horizontal height */
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1; /* light gray background */
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #c1c1c1; /* darker gray scroll handle */
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1; /* darker on hover */
+}
+
+/* ✅ Custom horizontal scrollbar for tables */
+.table-scroll {
+  scrollbar-width: thin !important; /* Firefox */
+  scrollbar-color: #c1c1c1 #f1f1f1 !important;
+}
+.table-scroll::-webkit-scrollbar {
+  height: 6px !important; /* horizontal scrollbar thickness */
+}
+.table-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1 !important; /* light gray track */
+  border-radius: 4px !important;
+}
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1 !important; /* darker gray handle */
+  border-radius: 4px !important;
+}
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1 !important; /* darker on hover */
+}
+.ant-tooltip-inner {
+  color: #ffffff !important; /* white text */
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px; /* optional: rounded edges */
+}
+/* Thin scrollbar for all elements */
+::-webkit-scrollbar {
+  width: 4px; /* Default is ~16px, this makes it slim */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+}
+
+::-webkit-scrollbar-thumb {
+  background: lightgray; /* Thumb color */
+  border-radius: 6px; /* Rounded thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #005080; /* Darker on hover */
+}
+
+/* recruiter testimonials background overrides */
+.recruiter-testimonials .bg-\[\#72B76A\]\/40 {
+  background-color: rgba(255, 230, 128, 0.8) !important;
+}
+.recruiter-testimonials .bg-\[\#72B76A\]\/80 {
+  background-color: rgba(255, 230, 128, 0.8) !important;
+}
+
+/* Body + typography */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 🚫 Hide global scrollbars (page only) */
+html {
+  scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Animations */
+@keyframes spinBorder {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sheen {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateX(150%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-fadeInScale {
+  animation: fadeInScale 0.3s ease-out forwards;
+}

@@ -1,0 +1,236 @@
+.bar1,
+.bar2,
+.bar3 {
+  width: 25px;
+  height: 3px;
+  background-color: #72b76a;
+  margin: 5px 0;
+  transition: 0.4s;
+}
+
+/* When menu is open */
+.change .bar1 {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+.change .bar2 {
+  opacity: 0;
+}
+.change .bar3 {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+.change {
+  background-color: transparent;
+  color: black;
+  outline: none;
+  z-index: 50;
+}
+
+.menu_bg {
+  background-color: #fffff0;
+  transition: 0.8s ease-in-out;
+  overflow-y: auto;
+}
+
+/* Contact Btn */
+.contactBtn {
+  position: relative;
+  padding: 0.4em 1.5em 0.4em 1.5em;
+  border: none;
+  background: white;
+  transition: all 0.1s linear;
+  box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.1);
+}
+
+.contactBtn:active {
+  transform: scale(0.95);
+}
+
+.contactBtn span {
+  color: #464646;
+}
+
+.contactBtn .border_contactBtn {
+  position: absolute;
+  border: 0.08em solid white;
+  transition: all 0.3s 0.08s linear;
+  top: 50%;
+  left: 50%;
+  width: 6.5em;
+  height: 2.2em;
+  transform: translate(-50%, -50%);
+}
+
+.contactBtn:hover .border_contactBtn {
+  display: block;
+  width: 7.3em;
+  height: 2.8em;
+}
+
+.full_rounded_contactBtn {
+  border-radius: 0.5em;
+}
+
+/* Footer css */
+
+.newsletter_btn {
+  display: inline-block;
+  background-color: #00c9ff;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  width: 110px;
+  transition: all 0.5s;
+  cursor: pointer;
+  border: 1px solid #00c9ff;
+  border-radius: 0px 8px 8px 0px;
+}
+
+.newsletter_btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.newsletter_btn span:after {
+  content: "»";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -15px;
+  transition: 0.5s;
+}
+
+.newsletter_btn:hover span {
+  padding-right: 15px;
+}
+
+.newsletter_btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+/* Social media icons */
+.wrapper {
+  display: inline-flex;
+  list-style: none;
+  height: 120px;
+  padding-top: 30px;
+  font-family: "Poppins", sans-serif;
+  justify-content: center;
+}
+
+@media (max-width: 1023px) {
+  .wrapper {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    padding-top: 0px;
+  }
+}
+
+.wrapper .icon {
+  position: relative;
+  background: #2c2a2a;
+  border-radius: 50%;
+  margin: 10px;
+  width: 45px;
+  height: 45px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background: #fff;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background: #fff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .icon:hover .tooltip {
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.wrapper .icon:hover span,
+.wrapper .icon:hover .tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .facebook:hover,
+.wrapper .facebook:hover .tooltip,
+.wrapper .facebook:hover .tooltip::before {
+  background: #0065e9;
+  color: #fff;
+}
+
+.wrapper .instagram:hover,
+.wrapper .instagram:hover .tooltip,
+.wrapper .instagram:hover .tooltip::before {
+  background: #e4405f;
+  color: #fff;
+}
+
+.wrapper .whatsapp:hover,
+.wrapper .whatsapp:hover .tooltip,
+.wrapper .whatsapp:hover .tooltip::before {
+  background: #25d366;
+  color: #fff;
+}
+
+.wrapper .linkedin:hover,
+.wrapper .linkedin:hover .tooltip,
+.wrapper .linkedin:hover .tooltip::before {
+  background: #1c71c5;
+  color: #fff;
+}
+
+.wrapper .youtube:hover,
+.wrapper .youtube:hover .tooltip,
+.wrapper .youtube:hover .tooltip::before {
+  background: #ff0000;
+  color: #fff;
+}
+
+/* Rotating text animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 50s linear infinite;
+}

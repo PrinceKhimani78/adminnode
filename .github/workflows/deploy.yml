@@ -30,18 +30,15 @@ jobs:
           mkdir release
           cp -r .next public package.json package-lock.json start.sh release/
 
-
-      - name: Deploy to Server via SSH
+      - name: Clean server app folder
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/demo.rojgariindia.com/app
-            rm -rf *
+            rm -rf /home/demo.rojgariindia.com/app/*
             mkdir -p /home/demo.rojgariindia.com/app
-            exit
 
       - name: Upload release to server
         uses: appleboy/scp-action@v0.1.7
@@ -52,7 +49,7 @@ jobs:
           source: "release/*"
           target: "/home/demo.rojgariindia.com/app"
 
-      - name: Restart PM2 on server
+      - name: Install & Restart PM2 on Server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -60,6 +57,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/demo.rojgariindia.com/app
+            npm install --omit=dev
             chmod +x start.sh
-            pm2 reload rojgari-demo || pm2 start start.sh --name rojgari-demo
+            pm2 delete rojgari-demo || true
+            pm2 start start.sh --name rojgari-demo
             pm2 save

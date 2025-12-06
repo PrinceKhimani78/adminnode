@@ -28,7 +28,8 @@ jobs:
         run: |
           rm -rf release
           mkdir release
-          cp -r .next public start.sh server.js package.json package-lock.json release/
+          cp -r .next public package.json package-lock.json release/
+
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.0.0

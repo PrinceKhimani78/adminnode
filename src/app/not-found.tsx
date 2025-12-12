@@ -10,7 +10,7 @@ export default function NotFound() {
         {/* Illustration */}
         <div className="flex-1 flex justify-center mt-30">
           <Image
-            src="/images/error-404.png"
+            src="/images/error-404.webp"
             alt="404 Illustration"
             width={400}
             height={400}

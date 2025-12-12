@@ -34,18 +34,18 @@ const SKILL = [
   "Tips",
 ] as const;
 // const OFFICE_PHOTOS = [
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
-//   "/images/job-grid.png",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
+//   "/images/job-gridwebp",
 // ];
 
 const REQUIREMENTS: string[] = [
@@ -202,7 +202,7 @@ const Details = () => {
               <div className="relative overflow-hidden rounded-2xl">
                 <div className="relative h-[220px] xs:h-[260px] md:h-[320px] lg:h-[360px]">
                   <Image
-                    src="/images/jobdetail.png"
+                    src="/images/jobdetailwebp"
                     alt="Job cover"
                     fill
                     className="absolute inset-0 h-full w-full object-cover"
@@ -615,7 +615,7 @@ const Details = () => {
               className="group relative block overflow-hidden rounded-2xl"
             >
               <Image
-                src="/images/job-grid.png"
+                src="/images/job-gridwebp"
                 alt="Video cover"
                 width={500}
                 height={650}
@@ -633,7 +633,7 @@ const Details = () => {
         {/* <div className="mt-17 overflow-hidden rounded-2xl border border-blue-100 shadow-[0_6px_24px_-12px_rgba(59,130,246,0.35)]">
             <div className="relative h-48 sm:h-56 md:h-64">
               <Image
-                src="/images/job-grid.png"
+                src="/images/job-gridwebp"
                 alt="Recruiting"
                 fill
                 className="object-cover"

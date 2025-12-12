@@ -91,7 +91,7 @@ const Details = () => {
                 {/* hero Image  */}
                 <div className="relative h-[250px] xs:h-[260px] md:h-[320px] lg:h-[420px]">
                   <Image
-                    src="/images/blogdetail.png"
+                    src="/images/blogdetailwebp"
                     alt="Job cover"
                     fill
                     className="absolute inset-0 h-full w-full object-cover"
@@ -187,7 +187,7 @@ const Details = () => {
                         {/* Author image */}
                         <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl mx-auto sm:mx-0">
                           <Image
-                            src="/images/author.png"
+                            src="/images/authorwebp"
                             alt="Rosalina William"
                             fill
                             className="object-cover"
@@ -290,7 +290,7 @@ const Details = () => {
                             {/* Avatar */}
                             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
                               <Image
-                                src="/images/comment.png"
+                                src="/images/commentwebp"
                                 alt="Richard Anderson"
                                 fill
                                 className="object-cover"
@@ -324,7 +324,7 @@ const Details = () => {
                           <div className="flex gap-4">
                             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
                               <Image
-                                src="/images/comment.png"
+                                src="/images/commentwebp"
                                 alt="Devid Abraham"
                                 fill
                                 className="object-cover"
@@ -468,31 +468,31 @@ const Details = () => {
                       title:
                         "Equipment you can count on. People you can trust.",
                       date: "April 08, 2023",
-                      img: "/images/job-grid.png",
+                      img: "/images/job-gridwebp",
                       href: "/blog1",
                     },
                     {
                       title: "Advanced Service Functions by Air Transport",
                       date: "April 12, 2023",
-                      img: "/images/job-grid.png",
+                      img: "/images/job-gridwebp",
                       href: "/blog2",
                     },
                     {
                       title: "Advanced Service Functions by Air Transport",
                       date: "April 12, 2023",
-                      img: "/images/job-grid.png",
+                      img: "/images/job-gridwebp",
                       href: "/blog3",
                     },
                     {
                       title: "Advanced Service Functions by Air Transport",
                       date: "April 12, 2023",
-                      img: "/images/job-grid.png",
+                      img: "/images/job-gridwebp",
                       href: "/blog4",
                     },
                     {
                       title: "Advanced Service Functions by Air Transport",
                       date: "April 12, 2023",
-                      img: "/images/job-grid.png",
+                      img: "/images/job-gridwebp",
                       href: "/blog5",
                     },
                   ].map((a) => (

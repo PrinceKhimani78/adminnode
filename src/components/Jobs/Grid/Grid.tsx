@@ -688,7 +688,7 @@ const Grid = () => {
                   <div className="mt-6 overflow-hidden rounded-lg border border-blue-100 shadow-[0_6px_24px_-12px_rgba(59,130,246,0.35)]">
                     <div className="relative h-48 sm:h-56 md:h-64">
                       <Image
-                        src="/images/job-grid.png"
+                        src="/images/job-gridwebp"
                         alt="Recruiting"
                         fill
                         className="object-cover"

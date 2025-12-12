@@ -64,25 +64,25 @@ const recentUsers = [
     name: "Alicia Keys",
     role: "Candidate",
     joined: "2 days ago",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Mark Wilson",
     role: "Recruiter",
     joined: "5 days ago",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Emma Stone",
     role: "Candidate",
     joined: "1 week ago",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Chris Evans",
     role: "Recruiter",
     joined: "2 weeks ago",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
 ];
 

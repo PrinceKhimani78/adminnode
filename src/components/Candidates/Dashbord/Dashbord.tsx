@@ -40,28 +40,28 @@ const applicants = [
     role: "Charted Accountant",
     location: "New York",
     rate: "$20 / Day",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Peter Hawkins",
     role: "Medical Professed",
     location: "New York",
     rate: "$7 / Hour",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Ralph Johnson",
     role: "Bank Manger",
     location: "New York",
     rate: "$180 / Day",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Randall Henderson",
     role: "IT Contractor",
     location: "New York",
     rate: "$90 / Week",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
 ];
 
@@ -130,7 +130,7 @@ const Dashbord = () => {
           {/* Profile */}
           <div className="flex items-center gap-4">
             <Image
-              src="/images/profile1.png"
+              src="/images/profile1webp"
               alt="Profile"
               width={80}
               height={80}

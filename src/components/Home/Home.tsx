@@ -487,7 +487,7 @@ const Home = () => {
 
         <section className="relative overflow-hidden">
           <div
-            className="h-[155vh] lg:h-[100vh]  w-full bg-[url('/images/RI_banner_bgHome.png')] bg-cover bg-center bg-no-repeat bg-fixed"
+            className="h-[155vh] lg:h-[100vh]  w-full bg-[url('/images/RI_banner_bgHome.webp')] bg-cover bg-center bg-no-repeat bg-fixed"
             ref={typewriter1Ref}
           />
 
@@ -682,7 +682,7 @@ const Home = () => {
               {/* RIGHT: floating cards column */}
               <FloatingCardsAuto
                 cards={socialCards}
-                sideImageUrl="https://static.vecteezy.com/system/resources/previews/048/415/844/non_2x/3d-icon-simple-female-character-working-on-laptop-while-sitting-in-chair-free-png.png"
+                sideImageUrl="https://static.vecteezy.com/system/resources/previews/048/415/844/non_2x/3d-icon-simple-female-character-working-on-laptop-while-sitting-in-chair-free-pngwebp"
                 duration={18}
               />
             </div>
@@ -695,7 +695,7 @@ const Home = () => {
             <div
               className="absolute inset-0 -z-10 bg-cover bg-[5%_center] lg:bg-[40%_center] bg-no-repeat"
               style={{
-                backgroundImage: 'url("/images/RI_banner_bg.png")',
+                backgroundImage: 'url("/images/RI_banner_bgwebp")',
                 transform: `translateY(${scrollPosition * 0.1}px)`,
               }}
               role="img"
@@ -861,7 +861,7 @@ const Home = () => {
                 {/* RIGHT: floating cards column 
                 <FloatingCardsAuto
                   cards={socialCards}
-                  sideImageUrl="https://static.vecteezy.com/system/resources/previews/048/415/844/non_2x/3d-icon-simple-female-character-working-on-laptop-while-sitting-in-chair-free-png.png"
+                  sideImageUrl="https://static.vecteezy.com/system/resources/previews/048/415/844/non_2x/3d-icon-simple-female-character-working-on-laptop-while-sitting-in-chair-free-pngwebp"
                   speed={10}
                   resumeSpeed={16}
                 />
@@ -995,7 +995,7 @@ const Home = () => {
                     <div
                       className="bg-contain bg-center bg-no-repeat h-[300px] w-[300px] lg:h-[450px] lg:w-[450px]"
                       style={{
-                        backgroundImage: "url('/images/aboutus.png')",
+                        backgroundImage: "url('/images/aboutus.webp')",
                       }}
                     />
                   </motion.div>
@@ -1192,7 +1192,7 @@ const Home = () => {
               <div>
                 <Link href="/" className="flex items-center h-full">
                   <Image
-                    src="/images/map-img.png"
+                    src="/images/map-img.webp"
                     alt="World map sketch"
                     width={500}
                     height={300}
@@ -1213,7 +1213,7 @@ const Home = () => {
                   <div className="animate_inner_rotate absolute bg-white rounded-[50px] h-72 w-72 animate-rotate-reverse z-10"></div>
                   <Link href="/" className="inline-block">
                     <Image
-                      src="/images/girl.png"
+                      src="/images/girl.webp"
                       alt="Girl-img"
                       height={400}
                       width={400}

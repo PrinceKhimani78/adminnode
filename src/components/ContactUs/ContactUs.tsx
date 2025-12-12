@@ -24,7 +24,7 @@ const ContactUs = () => {
     <>
       {/* ===== banner ===== */}
       <section className="relative overflow-hidden">
-        <div className="h-[220px] lg:h-[350px] bg-[url('/images/RI_banner_bg.png')] bg-cover bg-center bg-no-repeat bg-fixed" />
+        <div className="h-[220px] lg:h-[350px] bg-[url('/images/RI_banner_bgwebp')] bg-cover bg-center bg-no-repeat bg-fixed" />
         <div className="absolute inset-0 flex h-[220px] lg:h-[350px] place-items-end  justify-center px-5 lg:px-[5%] 2xl:px-[10%]">
           <div className="max-w-screen-xl w-full text-center">
             <h1 className="inline-block mb-4 px-4 py-2 text-slate-900  sm:text-xl fontAL font-semibold capitalize text-2xl md:text-3xl lg:text-4xl mt-5">

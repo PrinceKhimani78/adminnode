@@ -17,7 +17,7 @@ const jobs = [
   },
   {
     id: 2,
-    logo: "/images/miscrosoft.png",
+    logo: "/images/miscrosoftwebp",
     title: "IT Department Manager",
     company: "Microsoft Solution",
     date: "28/06/2023",
@@ -45,7 +45,7 @@ const jobs = [
   },
   {
     id: 6,
-    logo: "/images/miscrosoft.png",
+    logo: "/images/miscrosoftwebp",
     title: "Full Stack Developer",
     company: "NextGen IT",
     date: "30/06/2023",
@@ -66,7 +66,7 @@ const jobs = [
   },
   {
     id: 9,
-    logo: "/images/miscrosoft.png",
+    logo: "/images/miscrosoftwebp",
     title: "Project Manager",
     company: "Agile Corp",
     date: "01/07/2023",
@@ -94,7 +94,7 @@ const jobs = [
   },
   {
     id: 13,
-    logo: "/images/miscrosoft.png",
+    logo: "/images/miscrosoftwebp",
     title: "Cyber Security Analyst",
     company: "SecureNet Pvt Ltd",
     date: "03/07/2023",
@@ -115,7 +115,7 @@ const jobs = [
   },
   {
     id: 16,
-    logo: "/images/miscrosoft.png",
+    logo: "/images/miscrosoftwebp",
     title: "HR Manager",
     company: "PeopleFirst Ltd",
     date: "05/07/2023",
@@ -136,7 +136,7 @@ const jobs = [
   },
   {
     id: 19,
-    logo: "/images/miscrosoft.png",
+    logo: "/images/miscrosoftwebp",
     title: "SEO Specialist",
     company: "RankBoost Agency",
     date: "06/07/2023",
@@ -236,7 +236,7 @@ const Savedjobs = () => {
         {/* Profile */}
         <div className="flex items-center gap-4">
           <Image
-            src="/images/profile1.png"
+            src="/images/profile1webp"
             alt="Profile"
             width={80}
             height={80}

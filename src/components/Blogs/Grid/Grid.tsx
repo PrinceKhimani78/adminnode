@@ -428,31 +428,31 @@ const Grid = () => {
                           title:
                             "Equipment you can count on. People you can trust.",
                           date: "April 08, 2023",
-                          img: "/images/job-grid.png",
+                          img: "/images/job-gridwebp",
                           href: "/blog1",
                         },
                         {
                           title: "Advanced Service Functions by Air Transport",
                           date: "April 12, 2023",
-                          img: "/images/job-grid.png",
+                          img: "/images/job-gridwebp",
                           href: "/blog2",
                         },
                         {
                           title: "Advanced Service Functions by Air Transport",
                           date: "April 12, 2023",
-                          img: "/images/job-grid.png",
+                          img: "/images/job-gridwebp",
                           href: "/blog3",
                         },
                         {
                           title: "Advanced Service Functions by Air Transport",
                           date: "April 12, 2023",
-                          img: "/images/job-grid.png",
+                          img: "/images/job-gridwebp",
                           href: "/blog4",
                         },
                         {
                           title: "Advanced Service Functions by Air Transport",
                           date: "April 12, 2023",
-                          img: "/images/job-grid.png",
+                          img: "/images/job-gridwebp",
                           href: "/blog5",
                         },
                       ].map((a) => (

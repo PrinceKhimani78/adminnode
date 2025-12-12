@@ -44,42 +44,42 @@ const inboxMessages = [
     message:
       "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
     date: "18 June 2023",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Richred Paul",
     message:
       "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
     date: "19 June 2023",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Jon Doe",
     message:
       "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
     date: "20 June 2023",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Lucy Smith",
     message:
       "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
     date: "18 June 2023",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Richred Paul",
     message:
       "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
     date: "19 June 2023",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Jon Doe",
     message:
       "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
     date: "20 June 2023",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
 ];
 const applicants = [
@@ -88,28 +88,28 @@ const applicants = [
     role: "Charted Accountant",
     location: "New York",
     rate: "$20 / Day",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Peter Hawkins",
     role: "Medical Professed",
     location: "New York",
     rate: "$7 / Hour",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Ralph Johnson",
     role: "Bank Manger",
     location: "New York",
     rate: "$180 / Day",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
   {
     name: "Randall Henderson",
     role: "IT Contractor",
     location: "New York",
     rate: "$90 / Week",
-    image: "/images/profile1.png",
+    image: "/images/profile1webp",
   },
 ];
 
@@ -272,7 +272,7 @@ const Dashboard = () => {
           {/* Profile */}
           <div className="flex items-center gap-4">
             <Image
-              src="/images/profile1.png"
+              src="/images/profile1webp"
               alt="Profile"
               width={80}
               height={80}

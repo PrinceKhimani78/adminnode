@@ -18,7 +18,7 @@ const candidates = [
     role: "UI Designer",
     date: "15/06/2023 at 10:35 am",
     status: "Approved",
-    img: "/images/profile1.png",
+    img: "/images/profile1webp",
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ const candidates = [
     role: "Medical Professed",
     date: "16/06/2023 at 11:35 am",
     status: "Pending",
-    img: "/images/profile1.png",
+    img: "/images/profile1webp",
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ const candidates = [
     role: "Bank Manager",
     date: "17/06/2023 at 01:15 pm",
     status: "Rejected",
-    img: "/images/profile1.png",
+    img: "/images/profile1webp",
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const candidates = [
     role: "IT Contractor",
     date: "18/06/2023 at 10:35 am",
     status: "Pending",
-    img: "/images/profile1.png",
+    img: "/images/profile1webp",
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ const candidates = [
     role: "Digital & Creative",
     date: "22/06/2023 at 10:35 am",
     status: "Approved",
-    img: "/images/profile1.png",
+    img: "/images/profile1webp",
   },
 ];
 
@@ -201,7 +201,7 @@ const Candidateslist = () => {
           {/* Profile */}
           <div className="flex items-center gap-4">
             <Image
-              src="/images/profile1.png"
+              src="/images/profile1webp"
               alt="Profile"
               width={80}
               height={80}

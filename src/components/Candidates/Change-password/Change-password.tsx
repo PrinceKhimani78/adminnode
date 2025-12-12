@@ -104,7 +104,7 @@ const Changepassword = () => {
           {/* Profile */}
           <div className="flex items-center gap-4">
             <Image
-              src="/images/profile1.png"
+              src="/images/profile1webp"
               alt="Profile"
               width={80}
               height={80}

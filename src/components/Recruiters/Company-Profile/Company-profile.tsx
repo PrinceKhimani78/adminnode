@@ -152,7 +152,7 @@ const Companyprofile = () => {
           {/* Profile */}
           <div className="flex items-center gap-4">
             <Image
-              src="/images/profile1.png"
+              src="/images/profile1webp"
               alt="Profile"
               width={80}
               height={80}
@@ -201,7 +201,7 @@ const Companyprofile = () => {
                 Max file size is <b>1MB</b>, Minimum dimension:
                 <b> 136 x 136 </b> and suitable file types are
                 <span className="text-blue-600"> .jpg</span> &{" "}
-                <span className="text-blue-600">.png</span>
+                <span className="text-blue-600">webp</span>
               </p>
             </div>
 
@@ -217,7 +217,7 @@ const Companyprofile = () => {
                 Max file size is <b>1MB</b>, Minimum dimension:
                 <b> 770 x 310 </b> and suitable file types are
                 <span className="text-blue-600"> .jpg</span> &{" "}
-                <span className="text-blue-600">.png</span>
+                <span className="text-blue-600">webp</span>
               </p>
             </div>
           </div>

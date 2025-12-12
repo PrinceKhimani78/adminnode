@@ -150,7 +150,7 @@ const Candidates = () => {
               no: "01",
               bg: "bg-[#00c9ff]/40",
               num: "text-[#00c9ff]",
-              icon: "/images/icon1.png",
+              icon: "/images/icon1webp",
               titleTop: "Register",
               titleBottom: "Your Account",
               offset: "sm:translate-y-0",
@@ -161,7 +161,7 @@ const Candidates = () => {
               no: "02",
               bg: "bg-[#ffcc23]/50",
               num: "text-[#ffcc23]",
-              icon: "/images/icon2.png",
+              icon: "/images/icon2webp",
               titleTop: "Search",
               titleBottom: "Your Job",
               offset: "sm:-translate-y-6",
@@ -172,7 +172,7 @@ const Candidates = () => {
               no: "03",
               bg: "bg-[#ae70bb]/60",
               num: "text-[#ae70bb]",
-              icon: "/images/icon3.png",
+              icon: "/images/icon3webp",
               titleTop: "Apply",
               titleBottom: "For Dream Job",
               offset: "sm:-translate-y-2",
@@ -183,7 +183,7 @@ const Candidates = () => {
               no: "04",
               bg: "bg-[#72b76a]/60",
               num: "text-[#72b76a]",
-              icon: "/images/icon4.png",
+              icon: "/images/icon4webp",
               titleTop: "Upload",
               titleBottom: "Your Resume",
               offset: "sm:translate-y-4",
@@ -352,7 +352,7 @@ const Candidates = () => {
 
             {/* Girl Image */}
             <Image
-              src="/images/profile.png"
+              src="/images/profilewebp"
               alt="Candidate Illustration"
               width={300}
               height={300}

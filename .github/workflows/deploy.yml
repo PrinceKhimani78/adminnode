@@ -28,9 +28,9 @@ jobs:
         run: |
           rm -rf release
           mkdir release
-          cp -r .next public package.json package-lock.json start.sh next.config.ts release/
+          cp -r .next public package.json package-lock.json start.sh next.config.js release/
 
-      # ✅ CLEAR SERVER
+      # Clear server path
       - name: Clear Server Folder
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -41,7 +41,7 @@ jobs:
             rm -rf /home/demo.rojgariindia.com/app/*
             mkdir -p /home/demo.rojgariindia.com/app
 
-      # ✅ ✅ ✅ THIS WAS YOUR REAL BUG ✅ ✅ ✅
+      # Upload new build
       - name: Upload Release to Server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -51,7 +51,7 @@ jobs:
           source: "release"
           target: "/home/demo.rojgariindia.com/app"
 
-      # ✅ INSTALL + START AFTER FILES EXIST
+      # Install & restart PM2
       - name: Install & Restart PM2
         uses: appleboy/ssh-action@v1.0.0
         with:

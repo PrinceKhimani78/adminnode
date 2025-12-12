@@ -28,7 +28,7 @@ jobs:
         run: |
           rm -rf release
           mkdir release
-          cp -r .next public package.json package-lock.json start.sh release/
+          cp -r .next public package.json package-lock.json start.sh next.config.js release/
 
       # ✅ CLEAR SERVER
       - name: Clear Server Folder

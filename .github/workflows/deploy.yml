@@ -18,50 +18,44 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Deps
+      - name: Install Dependencies
         run: npm install
 
       - name: Build App
         run: npm run build
 
-      - name: Create Release Folder
+      - name: Prepare Release
         run: |
           rm -rf release
           mkdir release
           cp -r .next public package.json package-lock.json start.sh next.config.js release/
 
-      # Clear server path
-      - name: Clear Server Folder
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            rm -rf /home/demo.rojgariindia.com/app/*
-            mkdir -p /home/demo.rojgariindia.com/app
-
-      # Upload new build
+      # Upload build to server
       - name: Upload Release to Server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "release"
+          source: "release/*"
           target: "/home/demo.rojgariindia.com/app"
 
-      # Install & restart PM2
-      - name: Install & Restart PM2
-        uses: appleboy/ssh-action@v1.0.0
+      # Stop → install → start (NO reload)
+      - name: Restart Demo App
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 30m
           script: |
-            cd /home/demo.rojgariindia.com/app/release
+            cd /home/demo.rojgariindia.com/app
+
+            pm2 stop rojgari-demo || true
+
             npm install --omit=dev
+
             chmod +x start.sh
-            pm2 delete rojgari-demo || true
             pm2 start start.sh --name rojgari-demo
+
             pm2 save

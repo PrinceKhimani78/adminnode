@@ -178,7 +178,7 @@ const Companyprofile = () => {
               {/* */}
               <div className="relative w-[120px] h-[120px] flex items-center justify-center rounded-md border border-gray-200 bg-white">
                 <Image
-                  src="/images/company.jpg"
+                  src="/images/company.webp"
                   alt="Company Logo"
                   width={100}
                   height={100}

@@ -1072,7 +1072,7 @@ const Home = () => {
                     <div className="flex justify-between gap-10">
                       <Link href="/" className="inline-block">
                         <Image
-                          src="/images/company.jpg"
+                          src="/images/company.webp"
                           alt="Company logo"
                           width={64}
                           height={64}

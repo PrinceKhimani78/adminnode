@@ -477,7 +477,7 @@ const Details = () => {
                 <div className="absolute -top-6 left-6 rounded-xl bg-white p-2 shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
                   <div className="relative h-14 w-14 overflow-hidden rounded-lg">
                     <Image
-                      src="/images/company.jpg"
+                      src="/images/company.webp"
                       alt="Company logo"
                       width={56}
                       height={56}

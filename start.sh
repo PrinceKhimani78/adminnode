@@ -1,8 +1,4 @@
 #!/bin/bash
-set -e
-
-export NODE_ENV=production
-export PORT=3021
-
-cd /home/demo.rojgariindia.com/app/release
-exec npx next start -p 3021
+npm install
+npm run build
+pm2 restart adminnode || pm2 start ecosystem.config.js

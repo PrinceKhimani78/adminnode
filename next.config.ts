@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: false, // disable for now to avoid double render issues
+  reactStrictMode: true,
 
   images: {
     remotePatterns: [
@@ -20,10 +20,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // IMPORTANT: disable experimental streaming issues
-  experimental: {
-    serverActions: false,
-  },
+  swcMinify: true,
 };
 
 export default nextConfig;

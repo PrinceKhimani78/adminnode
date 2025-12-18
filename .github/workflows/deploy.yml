@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -21,10 +21,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build app
+      - name: Build Next.js app
         run: npm run build
 
-      - name: Upload to server
+      - name: Upload project to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -32,17 +32,21 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "."
           target: "/home/admin.rojgariindia.com/release"
+          overwrite: true
 
-      - name: Start or restart app with PM2
+      - name: Start or restart adminnode with PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /home/admin.rojgariindia.com
+            cd /home/admin.rojgariindia.com/release
+
             if [ ! -f ecosystem.config.js ]; then
-              echo "ecosystem.config.js missing" && exit 1
+              echo "ecosystem.config.js missing in release directory"
+              exit 1
             fi
+
             pm2 start ecosystem.config.js --only adminnode || pm2 restart adminnode
             pm2 save

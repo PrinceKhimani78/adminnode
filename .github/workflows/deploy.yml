@@ -1,4 +1,4 @@
-name: Deploy Demo Next.js to Server
+name: Deploy AdminNode
 
 on:
   push:
@@ -10,58 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
-      - name: Install Deps
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Build App
+      - name: Build app
         run: npm run build
 
-      - name: Create Release Folder
-        run: |
-          rm -rf release
-          mkdir release
-          cp -r .next public package.json package-lock.json start.sh next.config.js release/
-
-      # Clear server path
-      - name: Clear Server Folder
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            rm -rf /home/demo.rojgariindia.com/app/*
-            mkdir -p /home/demo.rojgariindia.com/app
-
-      # Upload new build
-      - name: Upload Release to Server
+      - name: Upload to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "release"
-          target: "/home/demo.rojgariindia.com/app"
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "."
+          target: "/home/admin.rojgariindia.com/release"
 
-      # Install & restart PM2
-      - name: Install & Restart PM2
+      - name: Start or restart app with PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /home/demo.rojgariindia.com/app/release
-            npm install --omit=dev
-            chmod +x start.sh
-            pm2 delete rojgari-demo || true
-            pm2 start start.sh --name rojgari-demo
+            cd /home/admin.rojgariindia.com
+            if [ ! -f ecosystem.config.js ]; then
+              echo "ecosystem.config.js missing" && exit 1
+            fi
+            pm2 start ecosystem.config.js --only adminnode || pm2 restart adminnode
             pm2 save

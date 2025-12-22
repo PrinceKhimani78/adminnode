@@ -48,8 +48,14 @@ jobs:
             # Clean old build artifacts to prevent disk bloat
             rm -rf .next node_modules
 
-            # install prod deps only
-            npm ci --omit=dev
+            # Install ALL dependencies (needed for build)
+            npm ci
+
+            # Build the application
+            npm run build
+
+            # Remove dev dependencies after build (save disk space)
+            npm prune --production
 
             # Kill only next-server processes running on port 3022
             lsof -ti:3022 | xargs kill -9 2>/dev/null || true

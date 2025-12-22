@@ -18,10 +18,18 @@ function SuccessAnim() {
   const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     fetch("/animations/success.json")
       .then((res) => res.json())
-      .then((data) => setAnimationData(data))
+      .then((data) => {
+        if (isMounted) setAnimationData(data);
+      })
       .catch((err) => console.error("Failed to load animation:", err));
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   if (!animationData) return null;
@@ -52,6 +60,9 @@ export default function ComingSoon() {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const [titleWidth, setTitleWidth] = useState(0);
 
+  // Track timeout for cleanup
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     if (titleRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -61,6 +72,13 @@ export default function ComingSoon() {
       setTitleWidth(titleRef.current.offsetWidth);
       return () => resizeObserver.disconnect();
     }
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   const triggerConfetti = () => {
@@ -82,7 +100,12 @@ export default function ComingSoon() {
     setIsSubscribed(true);
     setShowSuccess(true);
     triggerConfetti();
-    setTimeout(() => setShowSuccess(false), 2500);
+
+    // Clear previous timeout if exists
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    // Set new timeout and store reference
+    timeoutRef.current = setTimeout(() => setShowSuccess(false), 2500);
     setFormData({ email: "", phone: "" });
   };
 

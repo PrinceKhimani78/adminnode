@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Particles from "react-tsparticles";
 import Image from "next/image";
 import {
@@ -25,6 +25,9 @@ export default function ComingSoon() {
 
   const launchDate = new Date("2025-11-01T00:00:00").getTime();
   const startDate = new Date("2025-10-01T00:00:00").getTime();
+
+  // Track timeouts for cleanup
+  const timeoutRefs = useRef<NodeJS.Timeout[]>([]);
 
   // Countdown & Progress logic
   useEffect(() => {
@@ -54,7 +57,14 @@ export default function ComingSoon() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [launchDate]);
+  }, [launchDate, startDate]); // Add startDate dependency
+
+  // Cleanup all timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutRefs.current.forEach(clearTimeout);
+    };
+  }, []);
 
   // Particles Init
   const particlesInit = () => {};
@@ -85,7 +95,7 @@ export default function ComingSoon() {
     });
 
     // 🎉 Second confetti burst (a bit delayed for natural effect)
-    setTimeout(() => {
+    const timeout1 = setTimeout(() => {
       confetti({
         particleCount: 70,
         spread: 100,
@@ -94,6 +104,7 @@ export default function ComingSoon() {
         colors: ["#FFD633", "#00C9FF", "#ffffff"],
       });
     }, 250);
+    timeoutRefs.current.push(timeout1);
 
     // ✅ Update button + success popup
     setSubscribed(true);
@@ -101,10 +112,11 @@ export default function ComingSoon() {
     setFormData({ email: "", phone: "" });
 
     // Revert back after 4 seconds
-    setTimeout(() => {
+    const timeout2 = setTimeout(() => {
       setShowSuccess(false);
       setSubscribed(false);
     }, 4000);
+    timeoutRefs.current.push(timeout2);
   };
 
   // 💬 AnimatedText component
@@ -112,7 +124,7 @@ export default function ComingSoon() {
     const messages = [
       "👨‍💻 Developers are finalizing features",
       "💼 Employers are onboarding to Rojgari",
-      "🚀 We’re getting ready for launch",
+      "🚀 We're getting ready for launch",
       "🎯 Your next job is almost here!",
     ];
     const [index, setIndex] = useState(0);
@@ -122,7 +134,7 @@ export default function ComingSoon() {
         setIndex((prev) => (prev + 1) % messages.length);
       }, 3000); // every 3 seconds change
       return () => clearInterval(timer);
-    }, []);
+    }, [messages.length]); // Add dependency to prevent stale closure
 
     return (
       <motion.span

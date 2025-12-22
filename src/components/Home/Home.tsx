@@ -153,7 +153,7 @@ export const useOnScreen = (
     observer.observe(current);
 
     return () => {
-      observer.unobserve(current);
+      if (current) observer.unobserve(current);
       observer.disconnect();
     };
   }, [options]);

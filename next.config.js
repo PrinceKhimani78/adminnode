@@ -3,14 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
 
   images: {
-    unoptimized: true, // ⬅️ THIS is the fix
+    unoptimized: true,
   },
 
   eslint: {
     ignoreDuringBuilds: true,
   },
-
-  swcMinify: true,
 };
 
 module.exports = nextConfig;

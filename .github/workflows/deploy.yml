@@ -51,11 +51,13 @@ jobs:
             # install prod deps only
             npm ci --omit=dev
 
-            # SAFELY restart or start (no duplicates, no port conflicts)
-            if pm2 describe adminnode > /dev/null; then
-              pm2 restart adminnode --update-env
-            else
-              PORT=3022 pm2 start npm --name adminnode -- start
-            fi
+            # Kill only next-server processes running on port 3022
+            lsof -ti:3022 | xargs kill -9 2>/dev/null || true
+
+            # Stop and delete existing PM2 process (only adminnode)
+            pm2 delete adminnode 2>/dev/null || true
+
+            # Start fresh PM2 process
+            PORT=3022 pm2 start npm --name adminnode -- start
 
             pm2 save

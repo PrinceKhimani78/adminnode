@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start -p 3022",
-  "lint": "eslint"
-}
-,
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 3022",
+    "lint": "eslint"
+  },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",
@@ -20,14 +19,14 @@
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.542.0",
-    "next": "15.5.0",
+    "next": "^15.5.9",
     "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-countup": "^6.5.3",
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
-    "react-multi-carousel": "^2.8.6",
+    "react-multi-carousel": "^2.8.5",
     "react-simple-typewriter": "^5.0.1",
     "react-tsparticles": "^2.12.2",
     "recharts": "^3.2.1",

@@ -45,6 +45,9 @@ jobs:
 
             cd /home/admin.rojgariindia.com/release
 
+            # Clean old build artifacts to prevent disk bloat
+            rm -rf .next node_modules
+
             # install prod deps only
             npm ci --omit=dev
 

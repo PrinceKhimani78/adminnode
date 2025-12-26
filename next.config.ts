@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  // ✅ REQUIRED for your CI/CD + PM2 setup
+  output: "standalone",
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "randomuser.me" },

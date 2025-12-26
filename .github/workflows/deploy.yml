@@ -10,60 +10,74 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Next.js app
+      # 4. Build Next.js
+      - name: Build application
         run: npm run build
 
-      - name: Upload project to server
+      # 5. Prepare production bundle (standalone)
+      - name: Prepare release
+        run: |
+          rm -rf release
+          mkdir release
+
+          # Next standalone server + node_modules
+          cp -r .next/standalone/* release/
+
+          # Static assets + BUILD_ID
+          cp -r .next release/
+
+          # Runtime files
+          cp package.json start.sh release/
+          chmod +x release/start.sh
+
+          tar -czf release.tar.gz -C release .
+          rm -rf release
+
+      # 6. Upload to server
+      - name: Upload release
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "."
-          target: "/home/admin.rojgariindia.com/release"
-          overwrite: true
+          source: "release.tar.gz"
+          target: "/home/admin.rojgariindia.com/"
 
-      - name: Start or restart adminnode with PM2
-        uses: appleboy/ssh-action@v1.0.0
+      # 7. Restart PM2 (FAST, SAFE)
+      - name: Restart AdminNode
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          command_timeout: 2m
           script: |
             set -e
+            cd /home/admin.rojgariindia.com
 
-            cd /home/admin.rojgariindia.com/release
+            pm2 stop adminnode || true
+            pm2 delete adminnode || true
 
-            # Clean old build artifacts to prevent disk bloat
-            rm -rf .next node_modules
+            rm -rf release
+            mkdir release
+            tar -xzf release.tar.gz -C release
+            rm release.tar.gz
 
-            # Install ALL dependencies (needed for build)
-            npm ci
-
-            # Build the application
-            npm run build
-
-            # Remove dev dependencies after build (save disk space)
-            npm prune --production
-
-            # Kill only next-server processes running on port 3022
-            lsof -ti:3022 | xargs kill -9 2>/dev/null || true
-
-            # Stop and delete existing PM2 process (only adminnode)
-            pm2 delete adminnode 2>/dev/null || true
-
-            # Start fresh PM2 process
-            PORT=3022 pm2 start npm --name adminnode -- start
-
-            pm2 save
+            cd release
+            PORT=3022 pm2 start start.sh --name adminnode
+            pm2 save --force

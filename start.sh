@@ -1,4 +1,8 @@
 #!/bin/bash
-npm install
-npm run build
-pm2 restart adminnode || pm2 start ecosystem.config.js
+set -e
+
+export NODE_ENV=production
+export PORT=3022
+
+# app directory already contains server.js + .next + node_modules
+exec node server.js

@@ -10,74 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Build Next.js
-      - name: Build application
+      - name: Build Next.js app
         run: npm run build
 
-      # 5. Prepare production bundle (standalone)
-      - name: Prepare release
-        run: |
-          rm -rf release
-          mkdir release
-
-          # Next standalone server + node_modules
-          cp -r .next/standalone/* release/
-
-          # Static assets + BUILD_ID
-          cp -r .next release/
-
-          # Runtime files
-          cp package.json start.sh release/
-          chmod +x release/start.sh
-
-          tar -czf release.tar.gz -C release .
-          rm -rf release
-
-      # 6. Upload to server
-      - name: Upload release
+      - name: Upload build to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "release.tar.gz"
-          target: "/home/admin.rojgariindia.com/"
+          source: "."
+          target: "/home/admin.rojgariindia.com/release"
+          overwrite: true
 
-      # 7. Restart PM2 (FAST, SAFE)
-      - name: Restart AdminNode
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Restart AdminNode with PM2
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          command_timeout: 2m
+          command_timeout: 10m
           script: |
             set -e
-            cd /home/admin.rojgariindia.com
+            cd /home/admin.rojgariindia.com/release
 
-            pm2 stop adminnode || true
             pm2 delete adminnode || true
-
-            rm -rf release
-            mkdir release
-            tar -xzf release.tar.gz -C release
-            rm release.tar.gz
-
-            cd release
-            PORT=3022 pm2 start start.sh --name adminnode
-            pm2 save --force
+            PORT=3022 pm2 start npm --name adminnode -- start
+            pm2 save

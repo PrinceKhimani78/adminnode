@@ -150,3 +150,10 @@ html::-webkit-scrollbar {
 .animate-fadeInScale {
   animation: fadeInScale 0.3s ease-out forwards;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #000000 !important;
+}

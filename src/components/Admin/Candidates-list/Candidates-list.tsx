@@ -84,6 +84,14 @@ const Candidateslist = () => {
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
 
   // Filter logic (basic)
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+  const handleViewCandidate = (candidate: Candidate) => {
+    setSelectedCandidate(candidate);
+    setShowDetailsModal(true);
+  };
+
   const filteredCandidates = candidates.filter(c => {
     if (selectedKeywords.length === 0) return true;
     const searchString = `${c.full_name} ${c.position || ''} ${c.status}`.toLowerCase();
@@ -175,12 +183,13 @@ const Candidateslist = () => {
               width={80}
               height={80}
               className="rounded-full border"
+              unoptimized={true}
             />
             <div>
               <h2 className="text-base sm:text-lg font-bold">
-                Randall Henderson
+                Admin User
               </h2>
-              <p className="text-gray-500">IT Contractor</p>
+              <p className="text-gray-500">Administrator</p>
             </div>
           </div>
           {/* Table Container */}
@@ -244,7 +253,8 @@ const Candidateslist = () => {
                         alt={c.full_name}
                         width={40}
                         height={40}
-                        className="rounded-full border"
+                        className="rounded-full border object-cover"
+                        unoptimized={true}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -273,7 +283,11 @@ const Candidateslist = () => {
                     </span>
                   </div>
                   <div className="flex gap-3 px-3 py-3 justify-center col-span-1">
-                    <button className="text-[#00C9FF] hover:text-blue-700">
+                    <button
+                      onClick={() => handleViewCandidate(c)}
+                      className="text-[#00C9FF] hover:text-blue-700"
+                      title="View Details"
+                    >
                       <FaEye />
                     </button>
                     {/* <button className="text-[#00C9FF] hover:text-blue-700">
@@ -294,7 +308,8 @@ const Candidateslist = () => {
                         alt={c.full_name}
                         width={40}
                         height={40}
-                        className="rounded-full border"
+                        className="rounded-full border object-cover"
+                        unoptimized={true}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -325,7 +340,10 @@ const Candidateslist = () => {
                     </span>
                   </p>
                   <div className="flex gap-4 justify-start mt-2">
-                    <button className="text-[#00C9FF] hover:text-blue-700">
+                    <button
+                      onClick={() => handleViewCandidate(c)}
+                      className="text-[#00C9FF] hover:text-blue-700"
+                    >
                       <FaEye />
                     </button>
                   </div>
@@ -426,6 +444,110 @@ const Candidateslist = () => {
             </div>
           </div>
         )}
+
+        {/* Candidate Details Modal */}
+        {showDetailsModal && selectedCandidate && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999] animate-fadeIn p-4 overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl relative flex flex-col max-h-[90vh]">
+              {/* Header */}
+              <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white rounded-t-xl z-10">
+                <h2 className="text-xl font-bold text-gray-800">Candidate Details</h2>
+                <button
+                  onClick={() => setShowDetailsModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition"
+                >
+                  <RxCross2 size={24} />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 overflow-y-auto">
+                {/* Header Profile Section */}
+                <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8">
+                  {selectedCandidate.profile_photo ? (
+                    <Image
+                      src={`https://api.rojgariindia.com/uploads/${selectedCandidate.profile_photo}`}
+                      alt={selectedCandidate.full_name}
+                      width={100}
+                      height={100}
+                      className="rounded-full border-4 border-gray-100 object-cover shadow-sm"
+                      unoptimized={true}
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 shadow-sm">
+                      {selectedCandidate.full_name?.charAt(0) || 'U'}
+                    </div>
+                  )}
+                  <div className="text-center sm:text-left">
+                    <h3 className="text-2xl font-bold text-gray-900">{selectedCandidate.full_name} {selectedCandidate.surname}</h3>
+                    <p className="text-gray-500 font-medium">{selectedCandidate.position || 'Job Seeker'}</p>
+                    <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${selectedCandidate.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                      {selectedCandidate.status || 'Active'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Details Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+
+                  {/* Personal Info */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Contact Info</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">Email:</span> {selectedCandidate.email}</p>
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">Mobile:</span> {selectedCandidate.mobile_number}</p>
+                    </div>
+                  </div>
+
+                  {/* Location Info */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Location</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">District:</span> {selectedCandidate.district || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">City:</span> {selectedCandidate.city || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">Village:</span> {selectedCandidate.village || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  {/* Experience Info */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Professional</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">Experience:</span> {selectedCandidate.total_experience_years ? `${selectedCandidate.total_experience_years} Years` : 'Fresher'}</p>
+                    </div>
+                  </div>
+
+                  {/* Salary Info */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Expectations</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">Min Salary:</span> ₹{selectedCandidate.expected_salary_min || 0}</p>
+                      <p><span className="font-medium text-gray-700 w-24 inline-block">Max Salary:</span> ₹{selectedCandidate.expected_salary_max || 0}</p>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* System Info */}
+                <div className="mt-6 pt-4 border-t text-xs text-gray-400 text-center">
+                  Registered on: {new Date(selectedCandidate.created_at).toLocaleDateString()}
+                </div>
+
+              </div>
+
+              {/* Footer */}
+              <div className="p-5 border-t bg-gray-50 rounded-b-xl flex justify-end">
+                <button
+                  onClick={() => setShowDetailsModal(false)}
+                  className="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-medium transition"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* search popup  */}
 
         {showPopup && (
@@ -451,8 +573,8 @@ const Candidateslist = () => {
                   value={selectedKeywords.join(" ")}
                   readOnly
                   className="w-full pl-10 p-2 rounded bg-white text-sm placeholder-slate-400 
-               ring-1 ring-gray-300 focus:outline-none focus:ring-2 
-               focus:ring-[#00C9FF] transition"
+                ring-1 ring-gray-300 focus:outline-none focus:ring-2 
+                focus:ring-[#00C9FF] transition"
                 />
               </div>
 
@@ -463,8 +585,8 @@ const Candidateslist = () => {
                     key={keyword}
                     onClick={() => handleKeywordClick(keyword)}
                     className="px-4 py-2 rounded-lg bg-white border border-gray-200 
-                       hover:bg-gray-50 focus:ring-2 focus:ring-[#00C9FF] 
-                       transition text-gray-700 text-sm"
+                        hover:bg-gray-50 focus:ring-2 focus:ring-[#00C9FF] 
+                        transition text-gray-700 text-sm"
                   >
                     {keyword}
                   </button>
@@ -474,8 +596,8 @@ const Candidateslist = () => {
           </div>
         )}
       </div>
-      {/* <Footer /> */}
     </>
+
   );
 };
 

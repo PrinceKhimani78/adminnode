@@ -24,8 +24,20 @@ interface Candidate {
   expected_salary_max: number;
   profile_photo?: string;
   created_at: string;
+  updated_at: string;
   status: string;
   position?: string;
+  job_category?: string;
+  gender?: string;
+  date_of_birth?: string;
+  marital_status?: string;
+  alternate_mobile_number?: string;
+  address?: string;
+  current_location?: string;
+  interview_availability?: string;
+  preferred_shift?: string;
+  resume?: string;
+  fresher?: boolean;
 }
 
 const Candidateslist = () => {

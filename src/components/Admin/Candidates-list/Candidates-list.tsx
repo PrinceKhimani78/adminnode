@@ -465,7 +465,7 @@ const Candidateslist = () => {
               {/* Content */}
               <div className="p-6 overflow-y-auto">
                 {/* Header Profile Section */}
-                <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8">
+                <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8 border-b pb-6">
                   {selectedCandidate.profile_photo ? (
                     <img
                       src={`https://api.rojgariindia.com/uploads/${selectedCandidate.profile_photo}`}
@@ -481,24 +481,53 @@ const Candidateslist = () => {
                       {selectedCandidate.full_name?.charAt(0) || 'U'}
                     </div>
                   )}
-                  <div className="text-center sm:text-left">
+                  <div className="text-center sm:text-left flex-1">
                     <h3 className="text-2xl font-bold text-gray-900">{selectedCandidate.full_name} {selectedCandidate.surname}</h3>
-                    <p className="text-gray-500 font-medium">{selectedCandidate.position || 'Job Seeker'}</p>
-                    <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${selectedCandidate.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
-                      {selectedCandidate.status || 'Active'}
-                    </span>
+                    <p className="text-gray-500 font-medium">{selectedCandidate.job_category || selectedCandidate.position || 'Job Seeker'}</p>
+                    <div className="flex flex-wrap gap-2 mt-2 justify-center sm:justify-start">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${selectedCandidate.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                        {selectedCandidate.status || 'Active'}
+                      </span>
+                      {selectedCandidate.resume && (
+                        <a
+                          href={`https://api.rojgariindia.com/uploads/${selectedCandidate.resume}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
+                        >
+                          Download Resume
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Details Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
 
-                  {/* Personal Info */}
+                  {/* Contact Info */}
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Contact Info</h4>
                     <div className="space-y-2 text-sm">
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">Email:</span> {selectedCandidate.email}</p>
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">Mobile:</span> {selectedCandidate.mobile_number}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Email:</span> {selectedCandidate.email}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Mobile:</span> {selectedCandidate.mobile_number}</p>
+                      {selectedCandidate.alternate_mobile_number && (
+                        <p><span className="font-medium text-gray-700 w-32 inline-block">Alt Mobile:</span> {selectedCandidate.alternate_mobile_number}</p>
+                      )}
+                      <div className="flex">
+                        <span className="font-medium text-gray-700 w-32 shrink-0">Address:</span>
+                        <span className="break-words flex-1">{selectedCandidate.address || 'N/A'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personal Details */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Personal Details</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Gender:</span> {selectedCandidate.gender || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">DOB:</span> {selectedCandidate.date_of_birth || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Marital Status:</span> {selectedCandidate.marital_status || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -506,34 +535,42 @@ const Candidateslist = () => {
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Location</h4>
                     <div className="space-y-2 text-sm">
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">District:</span> {selectedCandidate.district || 'N/A'}</p>
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">City:</span> {selectedCandidate.city || 'N/A'}</p>
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">Village:</span> {selectedCandidate.village || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">District:</span> {selectedCandidate.district || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">City:</span> {selectedCandidate.city || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Village:</span> {selectedCandidate.village || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Current Loc:</span> {selectedCandidate.current_location || 'N/A'}</p>
                     </div>
                   </div>
 
-                  {/* Experience Info */}
+                  {/* Professional Info */}
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Professional</h4>
                     <div className="space-y-2 text-sm">
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">Experience:</span> {selectedCandidate.total_experience_years ? `${selectedCandidate.total_experience_years} Years` : 'Fresher'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Status:</span>
+                        {selectedCandidate.fresher ? 'Fresher' : 'Experienced'}
+                      </p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Total Exp:</span> {selectedCandidate.total_experience_years ? `${selectedCandidate.total_experience_years} Years` : '0 Years'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Job Category:</span> {selectedCandidate.job_category || 'N/A'}</p>
                     </div>
                   </div>
 
-                  {/* Salary Info */}
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Expectations</h4>
-                    <div className="space-y-2 text-sm">
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">Min Salary:</span> ₹{selectedCandidate.expected_salary_min || 0}</p>
-                      <p><span className="font-medium text-gray-700 w-24 inline-block">Max Salary:</span> ₹{selectedCandidate.expected_salary_max || 0}</p>
+                  {/* Availability & Salary */}
+                  <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Availability & Expectations</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Min Salary:</span> ₹{selectedCandidate.expected_salary_min || 0}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Max Salary:</span> ₹{selectedCandidate.expected_salary_max || 0}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Availability:</span> {selectedCandidate.interview_availability || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Pref. Shift:</span> {selectedCandidate.preferred_shift || 'N/A'}</p>
                     </div>
                   </div>
 
                 </div>
 
                 {/* System Info */}
-                <div className="mt-6 pt-4 border-t text-xs text-gray-400 text-center">
-                  Registered on: {new Date(selectedCandidate.created_at).toLocaleDateString()}
+                <div className="mt-6 pt-4 border-t text-xs text-gray-400 text-center flex justify-between px-4">
+                  <span>Registered on: {new Date(selectedCandidate.created_at).toLocaleDateString()}</span>
+                  <span>Last Updated: {new Date(selectedCandidate.updated_at).toLocaleDateString()}</span>
                 </div>
 
               </div>

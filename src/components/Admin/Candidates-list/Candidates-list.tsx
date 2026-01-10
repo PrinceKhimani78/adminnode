@@ -248,13 +248,14 @@ const Candidateslist = () => {
                   </div>
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
-                      <Image
+                      <img
                         src={`https://api.rojgariindia.com/uploads/${c.profile_photo}`}
                         alt={c.full_name}
                         width={40}
                         height={40}
-                        className="rounded-full border object-cover"
-                        unoptimized={true}
+                        className="rounded-full border object-cover w-10 h-10"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -303,13 +304,14 @@ const Candidateslist = () => {
                 <div className="sm:hidden px-3 py-4 space-y-2">
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
-                      <Image
+                      <img
                         src={`https://api.rojgariindia.com/uploads/${c.profile_photo}`}
                         alt={c.full_name}
                         width={40}
                         height={40}
-                        className="rounded-full border object-cover"
-                        unoptimized={true}
+                        className="rounded-full border object-cover w-10 h-10"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -465,13 +467,14 @@ const Candidateslist = () => {
                 {/* Header Profile Section */}
                 <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8">
                   {selectedCandidate.profile_photo ? (
-                    <Image
+                    <img
                       src={`https://api.rojgariindia.com/uploads/${selectedCandidate.profile_photo}`}
                       alt={selectedCandidate.full_name}
                       width={100}
                       height={100}
-                      className="rounded-full border-4 border-gray-100 object-cover shadow-sm"
-                      unoptimized={true}
+                      className="rounded-full border-4 border-gray-100 object-cover shadow-sm w-24 h-24"
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 shadow-sm">

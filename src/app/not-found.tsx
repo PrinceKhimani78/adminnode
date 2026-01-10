@@ -1,4 +1,3 @@
-import Footer from "@/components/Footer/Footer";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,8 +48,6 @@ export default function NotFound() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

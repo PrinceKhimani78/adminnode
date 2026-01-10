@@ -10,68 +10,30 @@ import { FiChevronRight } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { FaSearch } from "react-icons/fa";
 
-const candidates = [
-  {
-    id: 1,
-    name: "Wanda Montgomery",
-    location: "New York",
-    role: "UI Designer",
-    date: "15/06/2023 at 10:35 am",
-    status: "Approved",
-    img: "/images/profile1.webp",
-  },
-  {
-    id: 2,
-    name: "Peter Hawkins",
-    location: "New York",
-    role: "Medical Professed",
-    date: "16/06/2023 at 11:35 am",
-    status: "Pending",
-    img: "/images/profile1.webp",
-  },
-  {
-    id: 3,
-    name: "Ralph Johnson",
-    location: "New York",
-    role: "Bank Manager",
-    date: "17/06/2023 at 01:15 pm",
-    status: "Rejected",
-    img: "/images/profile1.webp",
-  },
-  {
-    id: 4,
-    name: "Randall Henderson",
-    location: "New York",
-    role: "IT Contractor",
-    date: "18/06/2023 at 10:35 am",
-    status: "Pending",
-    img: "/images/profile1.webp",
-  },
-  {
-    id: 5,
-    name: "Randall Warren",
-    location: "New York",
-    role: "Digital & Creative",
-    date: "22/06/2023 at 10:35 am",
-    status: "Approved",
-    img: "/images/profile1.webp",
-  },
-];
-
-const getStatusClasses = (status: string) => {
-  switch (status) {
-    case "Approved":
-      return "bg-green-500 text-white px-3 py-1 rounded text-xs font-semibold";
-    case "Pending":
-      return "bg-yellow-600 text-white px-3 py-1 rounded text-xs font-semibold";
-    case "Rejected":
-      return "bg-red-500 text-white px-3 py-1 rounded text-xs font-semibold";
-    default:
-      return "bg-gray-400 text-white px-3 py-1 rounded text-xs font-semibold";
-  }
-};
+// Define candidate interface based on API response
+interface Candidate {
+  id: string;
+  full_name: string;
+  surname: string;
+  email: string;
+  mobile_number: string;
+  district: string;
+  city: string;
+  village: string;
+  total_experience_years: number;
+  expected_salary_min: number;
+  expected_salary_max: number;
+  profile_photo?: string;
+  created_at: string;
+  status: string;
+  position?: string;
+}
 
 const Candidateslist = () => {
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const [showPopup, setShowPopup] = useState(false);
   // Lock body scroll when popup is open
   useEffect(() => {
@@ -90,22 +52,49 @@ const Candidateslist = () => {
       body.style.paddingRight = prevPaddingRight;
     };
   }, [showPopup]);
-  // / Auto show popup after 4 seconds
+
+  // Fetch real data
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPopup(true);
-    }, 4000);
-    return () => clearTimeout(timer);
+    const fetchCandidates = async () => {
+      try {
+        const response = await fetch("https://api.rojgariindia.com/api/candidate-profile?limit=100");
+        const data = await response.json();
+        if (data.success && data.data && data.data.profiles) {
+          setCandidates(data.data.profiles);
+        } else {
+          console.error("Invalid data format:", data);
+        }
+      } catch (err) {
+        console.error("Error fetching candidates:", err);
+        setError("Failed to load candidates");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCandidates();
   }, []);
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [entries, setEntries] = useState(10);
+  // const [entries, setEntries] = useState(10); // Simplified for now
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const totalPages = Math.ceil(candidates.length / entries);
+  const entries = 10;
 
+  // Filter candidates locally for now
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
+
+  // Filter logic (basic)
+  const filteredCandidates = candidates.filter(c => {
+    if (selectedKeywords.length === 0) return true;
+    const searchString = `${c.full_name} ${c.position || ''} ${c.status}`.toLowerCase();
+    return selectedKeywords.some(k => searchString.includes(k.toLowerCase()));
+  });
+
+  const totalPages = Math.ceil(filteredCandidates.length / entries);
   const startIndex = (currentPage - 1) * entries;
   const endIndex = startIndex + entries;
-  const currentCandidates = candidates.slice(startIndex, endIndex);
+  const currentCandidates = filteredCandidates.slice(startIndex, endIndex);
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -116,19 +105,14 @@ const Candidateslist = () => {
   };
 
   const handleEntriesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEntries(Number(e.target.value));
-    setCurrentPage(1); // reset to first page when entries per page changes
+    // setEntries(Number(e.target.value));
+    setCurrentPage(1);
   };
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
 
   const keywords = [
-    "Employee",
-    "Project",
-    "Attendance",
-    "Salary",
-    "Leave Management",
-    "Day-Off Request",
-    "Recruitment & Hiring",
+    "Active",
+    "Experience",
+    "Fresher",
   ];
 
   const handleKeywordClick = (keyword: string) => {
@@ -250,19 +234,18 @@ const Candidateslist = () => {
                 <input type="checkbox" />
               </div>
               <div className="px-3">Name</div>
-              <div className="px-3">Applied For</div>
-              <div className="px-3">Date</div>
+              <div className="px-3">Mobile</div>
+              <div className="px-3">Location</div>
+              <div className="px-3">Experience</div>
               <div className="px-3">Status</div>
-              <div className="px-3 text-center col-span-2">Actions</div>
+              <div className="px-3 text-center col-span-1">Actions</div>
             </div>
 
-            {/* Rows */}
-            {currentCandidates.map((c, i) => (
+            {loading ? <div className="p-10 text-center">Loading candidates...</div> : currentCandidates.map((c, i) => (
               <div
                 key={c.id}
-                className={`border-b ${
-                  i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
+                className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}
               >
                 {/* Desktop Grid */}
                 <div className="hidden sm:grid grid-cols-7 items-center text-sm">
@@ -270,82 +253,95 @@ const Candidateslist = () => {
                     <input type="checkbox" />
                   </div>
                   <div className="flex items-center gap-3 px-3 py-3">
-                    <Image
-                      src={c.img}
-                      alt={c.name}
-                      width={40}
-                      height={40}
-                      className="rounded-full border"
-                    />
+                    {c.profile_photo ? (
+                      <Image
+                        src={`https://api.rojgariindia.com/uploads/${c.profile_photo}`}
+                        alt={c.full_name}
+                        width={40}
+                        height={40}
+                        className="rounded-full border"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                        {c.full_name?.charAt(0) || 'U'}
+                      </div>
+                    )}
                     <div>
-                      <p className="font-semibold text-slate-950">{c.name}</p>
-                      <p className="flex items-center gap-1 text-xs text-gray-500">
-                        <FaMapMarkerAlt className="text-[#00c9ff] text-sm" />
-                        {c.location}
-                      </p>
+                      <p className="font-semibold text-slate-950">{c.full_name} {c.surname}</p>
+                      <p className="text-xs text-gray-500">{c.email}</p>
                     </div>
                   </div>
-                  <div className="px-3 py-3">{c.role}</div>
-                  <div className="px-3 py-3 text-gray-500">{c.date}</div>
+                  <div className="px-3 py-3">{c.mobile_number}</div>
                   <div className="px-3 py-3">
-                    <span className={getStatusClasses(c.status)}>
-                      {c.status}
+                    <p className="flex items-center gap-1">
+                      <FaMapMarkerAlt className="text-[#00c9ff] text-xs" />
+                      {c.district || c.city}, {c.village ? c.village : ''}
+                    </p>
+                  </div>
+                  <div className="px-3 py-3 font-medium">
+                    {c.total_experience_years ? `${c.total_experience_years} Years` : 'Fresher'}
+                  </div>
+                  <div className="px-3 py-3">
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                      }`}>
+                      {c.status || 'Active'}
                     </span>
                   </div>
-                  <div className="flex gap-3 px-3 py-3 justify-center col-span-2">
+                  <div className="flex gap-3 px-3 py-3 justify-center col-span-1">
                     <button className="text-[#00C9FF] hover:text-blue-700">
                       <FaEye />
                     </button>
-                    <button className="text-[#00C9FF] hover:text-blue-700">
+                    {/* <button className="text-[#00C9FF] hover:text-blue-700">
                       <FaEnvelope />
                     </button>
                     <button className="text-[#00C9FF] hover:text-blue-700">
                       <FaTrash />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
 
                 {/* Mobile Card */}
                 <div className="sm:hidden px-3 py-4 space-y-2">
                   <div className="flex items-center gap-3 px-3 py-3">
-                    <Image
-                      src={c.img}
-                      alt={c.name}
-                      width={40}
-                      height={40}
-                      className="rounded-full border"
-                    />
+                    {c.profile_photo ? (
+                      <Image
+                        src={`https://api.rojgariindia.com/uploads/${c.profile_photo}`}
+                        alt={c.full_name}
+                        width={40}
+                        height={40}
+                        className="rounded-full border"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                        {c.full_name?.charAt(0) || 'U'}
+                      </div>
+                    )}
                     <div>
-                      <p className="font-semibold text-slate-950">{c.name}</p>
+                      <p className="font-semibold text-slate-950">{c.full_name}</p>
                       <p className="text-xs text-gray-500 flex items-center gap-1">
                         <FaMapMarkerAlt className="text-[#00c9ff]" />{" "}
-                        {c.location}
+                        {c.district || c.city}
                       </p>
                     </div>
                   </div>
                   <p className="text-sm">
-                    <span className="font-semibold">Applied For: </span>
-                    {c.role}
+                    <span className="font-semibold">Mobile: </span>
+                    {c.mobile_number}
                   </p>
                   <p className="text-sm text-gray-500">
-                    <span className="font-semibold">Date: </span>
-                    {c.date}
+                    <span className="font-semibold">Experience: </span>
+                    {c.total_experience_years ? `${c.total_experience_years} Years` : 'Fresher'}
                   </p>
                   <p>
                     <span className="font-semibold">Status: </span>
-                    <span className={getStatusClasses(c.status)}>
-                      {c.status}
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                      }`}>
+                      {c.status || 'Active'}
                     </span>
                   </p>
                   <div className="flex gap-4 justify-start mt-2">
                     <button className="text-[#00C9FF] hover:text-blue-700">
                       <FaEye />
-                    </button>
-                    <button className="text-[#00C9FF] hover:text-blue-700">
-                      <FaEnvelope />
-                    </button>
-                    <button className="text-[#00C9FF] hover:text-blue-700">
-                      <FaTrash />
                     </button>
                   </div>
                 </div>
@@ -356,18 +352,17 @@ const Candidateslist = () => {
             <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 gap-2 mt-5">
               <p>
                 Showing {startIndex + 1} to{" "}
-                {endIndex > candidates.length ? candidates.length : endIndex} of{" "}
-                {candidates.length} entries
+                {endIndex > filteredCandidates.length ? filteredCandidates.length : endIndex} of{" "}
+                {filteredCandidates.length} entries
               </p>
               <div className="flex items-center gap-1">
                 <button
                   onClick={handlePrev}
                   disabled={currentPage === 1}
-                  className={`px-3 py-1 border rounded cursor-pointer ${
-                    currentPage === 1
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-gray-100"
-                  }`}
+                  className={`px-3 py-1 border rounded cursor-pointer ${currentPage === 1
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-100"
+                    }`}
                 >
                   Previous
                 </button>
@@ -376,11 +371,10 @@ const Candidateslist = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentPage(index + 1)}
-                    className={`px-3 py-1 border rounded cursor-pointer ${
-                      currentPage === index + 1
-                        ? "bg-[#023052] text-white"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
+                    className={`px-3 py-1 border rounded cursor-pointer ${currentPage === index + 1
+                      ? "bg-[#023052] text-white"
+                      : "bg-gray-100 text-gray-700"
+                      }`}
                   >
                     {index + 1}
                   </button>
@@ -389,11 +383,10 @@ const Candidateslist = () => {
                 <button
                   onClick={handleNext}
                   disabled={currentPage === totalPages}
-                  className={`px-3 py-1 border rounded cursor-pointer ${
-                    currentPage === totalPages
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-gray-100"
-                  }`}
+                  className={`px-3 py-1 border rounded cursor-pointer ${currentPage === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-100"
+                    }`}
                 >
                   Next
                 </button>

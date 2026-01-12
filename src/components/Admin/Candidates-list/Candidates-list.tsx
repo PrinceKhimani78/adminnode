@@ -38,6 +38,22 @@ interface Candidate {
   preferred_shift?: string;
   resume?: string;
   fresher?: boolean;
+  work_experience?: {
+    id?: string;
+    position: string;
+    company: string;
+    start_date: string;
+    end_date?: string;
+    is_current: boolean;
+    salary_period?: string; // This corresponds to Notice Period
+    current_wages?: number;
+    current_city?: string;
+    current_village?: string;
+  }[];
+  skills?: {
+    skill_name: string;
+    years_of_experience: string;
+  }[];
 }
 
 const Candidateslist = () => {
@@ -576,6 +592,50 @@ const Candidateslist = () => {
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Pref. Shift:</span> {selectedCandidate.preferred_shift || 'N/A'}</p>
                     </div>
                   </div>
+
+                  {/* Skills Section */}
+                  {selectedCandidate.skills && selectedCandidate.skills.length > 0 && (
+                    <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
+                      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Skills</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedCandidate.skills.map((skill, index) => (
+                          <span key={index} className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 shadow-sm">
+                            {skill.skill_name} ({skill.years_of_experience} yrs)
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Work Experience Section (Current Salary & Notice Period) */}
+                  {selectedCandidate.work_experience && selectedCandidate.work_experience.length > 0 && (
+                    <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
+                      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Work Experience</h4>
+                      <div className="space-y-4">
+                        {selectedCandidate.work_experience.map((exp, index) => (
+                          <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <h5 className="font-bold text-gray-800">{exp.position}</h5>
+                                <p className="text-sm text-gray-600">{exp.company}</p>
+                              </div>
+                              <span className={`px-2 py-1 text-xs rounded font-medium ${exp.is_current ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                                {exp.is_current ? 'Current' : 'Previous'}
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+                              <p><span className="font-semibold">Duration:</span> {exp.start_date} - {exp.end_date || 'Present'}</p>
+                              {exp.salary_period && <p><span className="font-semibold">Notice Period:</span> {exp.salary_period}</p>}
+                              {exp.current_wages && <p><span className="font-semibold">Current Salary:</span> ₹{exp.current_wages}</p>}
+                              {(exp.current_city || exp.current_village) && (
+                                <p><span className="font-semibold">Location:</span> {exp.current_city} {exp.current_village ? `, ${exp.current_village}` : ''}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                 </div>
 

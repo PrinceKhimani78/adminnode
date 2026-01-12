@@ -24,6 +24,8 @@ jobs:
 
       - name: Build Next.js app
         run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: https://api.rojgariindia.com/api
 
       - name: Upload build to server
         uses: appleboy/scp-action@v0.1.7

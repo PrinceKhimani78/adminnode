@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "seeklogo.com" },
       { protocol: "https", hostname: "upload.wikimedia.org" },
       { protocol: "https", hostname: "api.rojgariindia.com" },
+      { protocol: "http", hostname: "localhost" },
     ],
   },
 

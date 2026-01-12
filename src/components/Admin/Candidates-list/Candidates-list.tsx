@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import Image from 'next/image';
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Sidebar from "../Common/Sidebar";
 import { FaEye, FaEnvelope, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
@@ -285,14 +285,17 @@ const Candidateslist = () => {
                   </div>
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
-                      <img
-                        src={`https://api.rojgariindia.com/uploads/${c.profile_photo}`}
+                      <Image
+                        src={
+                          c.profile_photo?.startsWith("http")
+                            ? c.profile_photo
+                            : `${process.env.NEXT_PUBLIC_API_URL}/candidate-profile/${c.id}/download/photo?size=thumbnail`
+                        }
                         alt={c.full_name}
                         width={40}
                         height={40}
                         className="rounded-full border object-cover w-10 h-10"
-                        referrerPolicy="no-referrer"
-                        loading="lazy"
+                        unoptimized={c.profile_photo?.startsWith("http")}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -341,14 +344,17 @@ const Candidateslist = () => {
                 <div className="sm:hidden px-3 py-4 space-y-2">
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
-                      <img
-                        src={`https://api.rojgariindia.com/uploads/${c.profile_photo}`}
+                      <Image
+                        src={
+                          c.profile_photo?.startsWith("http")
+                            ? c.profile_photo
+                            : `${process.env.NEXT_PUBLIC_API_URL}/candidate-profile/${c.id}/download/photo?size=thumbnail`
+                        }
                         alt={c.full_name}
                         width={40}
                         height={40}
                         className="rounded-full border object-cover w-10 h-10"
-                        referrerPolicy="no-referrer"
-                        loading="lazy"
+                        unoptimized={c.profile_photo?.startsWith("http")}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Tooltip } from "antd";
 import {
   FaHome,
@@ -25,6 +25,18 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
+  const router = useRouter(); // Need to import useRouter
+
+  // AUTH GUARD: Check if user is logged in
+  useEffect(() => {
+    // Only check on client side
+    if (typeof window !== "undefined") {
+      const isLoggedIn = localStorage.getItem("admin_logged_in");
+      if (!isLoggedIn) {
+        router.push("/"); // Redirect to login if not authenticated
+      }
+    }
+  }, [router]);
 
   const menuItems = [
     {
@@ -146,11 +158,10 @@ export default function Sidebar({
                   <Link
                     href={item.href}
                     className={`flex items-center gap-2 rounded-md
-                    ${
-                      isActive
+                    ${isActive
                         ? "bg-[#72B76A] text-white"
                         : "text-[#72B76A] hover:bg-[#72B76A] hover:text-white"
-                    }`}
+                      }`}
                   >
                     <div className="w-10 h-10 flex items-center justify-center text-lg">
                       {item.icon}

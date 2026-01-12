@@ -50,9 +50,18 @@ interface Candidate {
     current_city?: string;
     current_village?: string;
   }[];
+  summary?: string;
+  additional_info?: string;
+  availability_start?: string;
+  education?: {
+    degree: string;
+    university: string;
+    passing_year: string;
+  }[];
   skills?: {
     skill_name: string;
     years_of_experience: string;
+    level?: string;
   }[];
 }
 
@@ -579,6 +588,29 @@ const Candidateslist = () => {
                       </p>
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Total Exp:</span> {selectedCandidate.total_experience_years ? `${selectedCandidate.total_experience_years} Years` : '0 Years'}</p>
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Job Category:</span> {selectedCandidate.job_category || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">Joining Date:</span> {selectedCandidate.availability_start ? new Date(selectedCandidate.availability_start).toLocaleDateString() : 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  {/* Summary & Additional Info */}
+                  <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Overview</h4>
+                    <div className="space-y-3 text-sm">
+                      {selectedCandidate.summary && (
+                        <div>
+                          <p className="font-medium text-gray-700 mb-1">Summary:</p>
+                          <p className="text-gray-600 bg-white p-3 rounded border border-gray-100">{selectedCandidate.summary}</p>
+                        </div>
+                      )}
+                      {selectedCandidate.additional_info && (
+                        <div>
+                          <p className="font-medium text-gray-700 mb-1">Additional Info:</p>
+                          <p className="text-gray-600 bg-white p-3 rounded border border-gray-100">{selectedCandidate.additional_info}</p>
+                        </div>
+                      )}
+                      {!selectedCandidate.summary && !selectedCandidate.additional_info && (
+                        <p className="text-gray-500 italic">No summary or additional info provided.</p>
+                      )}
                     </div>
                   </div>
 
@@ -593,14 +625,34 @@ const Candidateslist = () => {
                     </div>
                   </div>
 
+                  {/* Education Section */}
+                  {selectedCandidate.education && selectedCandidate.education.length > 0 && (
+                    <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
+                      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Education</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {selectedCandidate.education.map((edu, index) => (
+                          <div key={index} className="bg-white p-3 rounded border border-gray-200">
+                            <p className="font-bold text-gray-800">{edu.degree}</p>
+                            <p className="text-sm text-gray-600">{edu.university}</p>
+                            <p className="text-xs text-gray-500 mt-1">Passing Year: {edu.passing_year}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Skills Section */}
                   {selectedCandidate.skills && selectedCandidate.skills.length > 0 && (
                     <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
                       <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Skills</h4>
                       <div className="flex flex-wrap gap-2">
                         {selectedCandidate.skills.map((skill, index) => (
-                          <span key={index} className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 shadow-sm">
-                            {skill.skill_name} ({skill.years_of_experience} yrs)
+                          <span key={index} className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 shadow-sm flex flex-col items-center sm:flex-row sm:gap-2">
+                            <span className="font-medium">{skill.skill_name}</span>
+                            <span className="text-xs text-gray-500 bg-gray-100 px-1 rounded">
+                              {skill.years_of_experience} yrs
+                              {skill.level ? ` • ${skill.level}` : ''}
+                            </span>
                           </span>
                         ))}
                       </div>

@@ -210,7 +210,7 @@ const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4  relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">
@@ -316,7 +316,7 @@ const Dashboard = () => {
           {/* Profile Views & Inbox side by side */}
           <div className="grid ">
             {/* Profile Views */}
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="bg-white">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <FaFileAlt /> Your Profile Views
               </h3>
@@ -376,7 +376,7 @@ const Dashboard = () => {
             </div> */}
           </div>
           {/* Recent Activities  */}
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white">
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
               <FaBriefcase className="text-gray-600" />
               Recent Activities
@@ -393,7 +393,7 @@ const Dashboard = () => {
             </div>
           </div>
           {/* Recent Applicants */}
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white">
             <h3 className="text-lg font-semibold mb-4">Recent Applicants</h3>
             <div className="divide-y divide-gray-400">
               {applicants.map((applicant, i) => (
@@ -427,14 +427,14 @@ const Dashboard = () => {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex sm:flex-row flex-row sm:justify-end justify-center gap-3 text-[#42A5F5]">
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
+                  <div className="flex sm:flex-row flex-row sm:justify-end justify-center gap-3 ">
+                    <button className="p-2 rounded-full text-[#00233e] hover:bg-[rgba(0,35,62,0.1)] transition-colors">
                       <FaEye />
                     </button>
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
+                    <button className="p-2 hover:bg-blue-50 rounded-full text-[#42A5F5]">
                       <FaEnvelope />
                     </button>
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
+                    <button className="p-2 hover:bg-red-100 text-red-600 rounded-full">
                       <FaTrash />
                     </button>
                   </div>

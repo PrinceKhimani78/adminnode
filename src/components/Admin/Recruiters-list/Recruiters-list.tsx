@@ -5,6 +5,7 @@ import Link from "next/link";
 import Sidebar from "../Common/Sidebar";
 import { FaEye, FaEnvelope, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
 import { IoChevronForward } from "react-icons/io5";
+
 import { RxCross2 } from "react-icons/rx";
 import { FaSearch } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -69,7 +70,7 @@ const getStatusClasses = (status: string) => {
   }
 };
 
-const Candidateslist = () => {
+const Recruiterlist = () => {
   const [showPopup, setShowPopup] = useState(false);
   // Lock body scroll when popup is open
   useEffect(() => {
@@ -136,7 +137,7 @@ const Candidateslist = () => {
   };
   return (
     <>
-      <div className="pl-2 pr-4 py-2 flex gap-3 min-w-0 sm:gap-4  relative">
+      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4  relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">
@@ -157,7 +158,7 @@ const Candidateslist = () => {
                     lineHeight: 1.2,
                   }}
                 >
-                  Candidates List
+                  Recruiters List
                 </h1>
               </div>
               {/* Breadcrumbs */}
@@ -174,7 +175,7 @@ const Candidateslist = () => {
                   </li>
                   <li>
                     <span className="text-gray-700 font-medium">
-                      All Candidates
+                      All Recruiters
                     </span>
                   </li>
                 </ol>
@@ -199,7 +200,7 @@ const Candidateslist = () => {
             </div>
           </div>
           {/* Table Container */}
-          <div className="bg-white p-5">
+          <div className="bg-white  p-5">
             {/* Top Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
               <div className="flex items-center gap-2">
@@ -229,7 +230,7 @@ const Candidateslist = () => {
             </div>
 
             {/* Table Header (desktop only) */}
-            <div className="hidden lg:grid grid-cols-7 font-semibold text-sm text-gray-600 border-b py-2">
+            <div className="hidden sm:grid grid-cols-7 font-semibold text-sm text-gray-600 border-b py-2">
               <div className="px-3">
                 <input type="checkbox" />
               </div>
@@ -485,4 +486,4 @@ const Candidateslist = () => {
   );
 };
 
-export default Candidateslist;
+export default Recruiterlist;

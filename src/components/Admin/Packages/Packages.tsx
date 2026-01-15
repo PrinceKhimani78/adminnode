@@ -3,7 +3,6 @@ import Sidebar from "../Common/Sidebar";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
 import { IoChevronForward } from "react-icons/io5";
 import { FiChevronRight } from "react-icons/fi";
 
@@ -80,7 +79,7 @@ const Packages = () => {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4  relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">

@@ -35,13 +35,13 @@ const InputField = ({ id, label, placeholder, icon }: InputFieldProps) => (
     >
       {label}
     </label>
-    <span className="absolute left-3 top-8 text-[#00C9FF]">{icon}</span>
+    <span className="absolute left-3 top-8 text-[#72B76A]">{icon}</span>
     <input
       type="text"
       id={id}
       placeholder={placeholder}
-      className="w-full pl-10 p-2 rounded bg-blue-50 text-sm placeholder-slate-400 ring-1 ring-blue-100 
-      transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+      className="w-full pl-10 p-2 rounded bg-green-50 text-sm placeholder-slate-400 ring-1 ring-green-100 
+      transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
     />
   </div>
 );
@@ -50,7 +50,7 @@ const Postjob = () => {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4  relative">
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">
           {/* Title + Breadcrumb */}
@@ -231,8 +231,8 @@ const Postjob = () => {
                 id="description"
                 rows={4}
                 placeholder="Job description..."
-                className="w-full p-2 rounded  text-sm placeholder-slate-400 ring-1 ring-blue-100 
-                transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+                className="w-full p-2 rounded  text-sm placeholder-slate-400 ring-1 ring-green-100 
+                transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
               />
             </div>
 
@@ -257,8 +257,8 @@ const Postjob = () => {
               {/* Publish Job */}
               <button
                 type="submit"
-                className="w-full sm:w-auto relative px-4 h-9 overflow-hidden group border border-[#00c9ff] bg-[#00c9ff] rounded-md 
-    hover:bg-transparent text-white hover:text-[#00c9ff] active:scale-90 transition-all ease-out duration-700 cursor-pointer text-sm"
+                className="w-full sm:w-auto relative px-4 h-9 overflow-hidden group border border-[#72B76A] bg-[#72B76A] rounded-md 
+    hover:bg-transparent text-white hover:text-[#72B76A] active:scale-90 transition-all ease-out duration-700 cursor-pointer text-sm"
               >
                 <span
                   className="absolute right-0 w-8 h-full top-0 transition-all duration-1000 transform 
@@ -272,8 +272,8 @@ const Postjob = () => {
               {/* Save Draft */}
               <button
                 type="button"
-                className="w-full sm:w-auto relative px-4 h-9 overflow-hidden group border border-[#00c9ff] bg-white text-[#00c9ff] rounded-md 
-    hover:bg-[#00c9ff] hover:text-white active:scale-90 transition-all ease-out duration-700 cursor-pointer text-sm"
+                className="w-full sm:w-auto relative px-4 h-9 overflow-hidden group border border-[#72B76A] bg-white text-[#72B76A] rounded-md 
+    hover:bg-[#72B76A] hover:text-white active:scale-90 transition-all ease-out duration-700 cursor-pointer text-sm"
               >
                 <span
                   className="absolute right-0 w-8 h-full top-0 transition-all duration-1000 transform 
@@ -302,7 +302,7 @@ const Postjob = () => {
                 <div className="flex justify-center gap-4">
                   <button
                     onClick={() => setShowModal(false)}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
                   >
                     No
                   </button>

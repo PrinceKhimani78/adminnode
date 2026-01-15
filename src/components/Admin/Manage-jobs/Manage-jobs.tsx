@@ -6,7 +6,7 @@ import Sidebar from "../Common/Sidebar";
 import { FaEye, FaTrash } from "react-icons/fa";
 
 import { IoChevronForward } from "react-icons/io5";
-import { FiChevronRight } from "react-icons/fi";
+import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 
 const jobs = [
   {
@@ -108,7 +108,7 @@ const Managejobs = () => {
   };
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">
@@ -238,11 +238,11 @@ const Managejobs = () => {
                     <p>Expired: {job.expired}</p>
                   </div>
                   {/* Actions */}
-                  <div className="flex gap-3 text-[#00C9FF]">
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
+                  <div className="flex gap-3 mt-2 sm:mt-0">
+                    <button className="p-2 rounded-full text-[#00233e] hover:bg-[rgba(0,35,62,0.1)] transition-colors">
                       <FaEye />
                     </button>
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
+                    <button className="p-2 hover:bg-red-100 text-red-600 rounded-full">
                       <FaTrash />
                     </button>
                   </div>
@@ -261,13 +261,13 @@ const Managejobs = () => {
               <button
                 onClick={handlePrev}
                 disabled={currentPage === 1}
-                className={`px-3 py-1 border rounded cursor-pointer ${
+                className={`px-3 py-1 border rounded flex items-center justify-center ${
                   currentPage === 1
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-100"
+                    : "bg-gray-100 hover:bg-gray-200"
                 }`}
               >
-                Previous
+                <FiChevronLeft size={16} />
               </button>
 
               {[...Array(totalPages)].map((_, index) => (
@@ -287,13 +287,13 @@ const Managejobs = () => {
               <button
                 onClick={handleNext}
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1 border rounded cursor-pointer ${
+                className={`px-3 py-1 border rounded flex items-center justify-center ${
                   currentPage === totalPages
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-100"
+                    : "bg-gray-100 hover:bg-gray-200"
                 }`}
               >
-                Next
+                <FiChevronRight size={16} />
               </button>
             </div>
           </div>

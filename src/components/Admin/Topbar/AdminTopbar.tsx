@@ -14,14 +14,14 @@ export default function AdminTopbar({ username }: AdminTopbarProps) {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("admin_user");
 
-    router.push("/admin/login");
+    router.push("/");
   };
 
   return (
     <div className="w-full h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 py-6">
       {/* Left – Username */}
       <div className="text-sm font-semibold text-gray-800">
-        Welcome, <span className="text-[#72B76A]">{username}</span>
+        Welcoome, <span className="text-[#72B76A]">{username}</span>
       </div>
 
       {/* Right – Logout */}

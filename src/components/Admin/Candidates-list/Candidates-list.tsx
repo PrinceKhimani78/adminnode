@@ -38,6 +38,7 @@ interface Candidate {
   preferred_shift?: string;
   resume?: string;
   fresher?: boolean;
+  pincode?: string;
   work_experience?: {
     id?: string;
     position: string;
@@ -582,6 +583,7 @@ const Candidateslist = () => {
                       <p><span className="font-medium text-gray-700 w-32 inline-block">City:</span> {selectedCandidate.city || 'N/A'}</p>
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Village:</span> {selectedCandidate.village || 'N/A'}</p>
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Current Loc:</span> {selectedCandidate.current_location || 'N/A'}</p>
+                      <p><span className="font-medium text-gray-700 w-32 inline-block">PIN CODE:</span> {selectedCandidate.pincode || 'N/A'}</p>
                     </div>
                   </div>
 

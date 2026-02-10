@@ -54,6 +54,7 @@ interface Candidate {
   summary?: string;
   additional_info?: string;
   availability_start?: string;
+  languages_known?: string[];
   education?: {
     degree: string;
     university: string;
@@ -63,6 +64,11 @@ interface Candidate {
     skill_name: string;
     years_of_experience: string;
     level?: string;
+  }[];
+  certifications?: {
+    name: string;
+    year?: string;
+    achievement?: string;
   }[];
 }
 
@@ -572,6 +578,16 @@ const Candidateslist = () => {
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Gender:</span> {selectedCandidate.gender || 'N/A'}</p>
                       <p><span className="font-medium text-gray-700 w-32 inline-block">DOB:</span> {selectedCandidate.date_of_birth || 'N/A'}</p>
                       <p><span className="font-medium text-gray-700 w-32 inline-block">Marital Status:</span> {selectedCandidate.marital_status || 'N/A'}</p>
+                      {selectedCandidate.languages_known && selectedCandidate.languages_known.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          <span className="font-medium text-gray-700 w-32 inline-block">Languages:</span>
+                          <div className="flex flex-wrap gap-1 flex-1">
+                            {selectedCandidate.languages_known.map((lang, idx) => (
+                              <span key={idx} className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs border border-blue-100">{lang}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -662,6 +678,24 @@ const Candidateslist = () => {
                               {skill.level ? ` • ${skill.level}` : ''}
                             </span>
                           </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Certifications Section */}
+                  {selectedCandidate.certifications && selectedCandidate.certifications.length > 0 && (
+                    <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
+                      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Certifications</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {selectedCandidate.certifications.map((cert, index) => (
+                          <div key={index} className="bg-white p-3 rounded border border-gray-200 shadow-sm">
+                            <div className="flex justify-between items-start mb-1">
+                              <p className="font-bold text-gray-800">{cert.name}</p>
+                              {cert.year && <span className="text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded text-gray-600">{cert.year}</span>}
+                            </div>
+                            {cert.achievement && <p className="text-sm text-gray-600">{cert.achievement}</p>}
+                          </div>
                         ))}
                       </div>
                     </div>

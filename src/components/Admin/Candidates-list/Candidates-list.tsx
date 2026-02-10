@@ -131,9 +131,19 @@ const Candidateslist = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
-  const handleViewCandidate = (candidate: Candidate) => {
-    setSelectedCandidate(candidate);
+  const handleViewCandidate = async (candidate: Candidate) => {
+    setSelectedCandidate(candidate); // Set initial data from list
     setShowDetailsModal(true);
+
+    try {
+      const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${candidate.id}`);
+      const data = await response.json();
+      if (data.success && data.data) {
+        setSelectedCandidate(data.data); // Update with full details
+      }
+    } catch (err) {
+      console.error("Error fetching full candidate details:", err);
+    }
   };
 
   const filteredCandidates = candidates.filter(c => {

@@ -137,6 +137,9 @@ const Candidateslist = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
+  const [candidateToDelete, setCandidateToDelete] = useState<Candidate | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const handleViewCandidate = async (candidate: Candidate) => {
     setSelectedCandidate(candidate); // Set initial data from list
     setShowDetailsModal(true);
@@ -149,6 +152,32 @@ const Candidateslist = () => {
       }
     } catch (err) {
       console.error("Error fetching full candidate details:", err);
+    }
+  };
+
+  const confirmDelete = (candidate: Candidate) => {
+    setCandidateToDelete(candidate);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteCandidate = async () => {
+    if (!candidateToDelete) return;
+
+    try {
+      const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${candidateToDelete.id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (data.success) {
+        setCandidates(candidates.filter(c => c.id !== candidateToDelete.id));
+        setShowDeleteModal(false);
+        setCandidateToDelete(null);
+      } else {
+        alert(data.message || "Failed to delete candidate");
+      }
+    } catch (err) {
+      console.error("Error deleting candidate:", err);
+      alert("Error deleting candidate");
     }
   };
 
@@ -309,11 +338,7 @@ const Candidateslist = () => {
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
                       <Image
-                        src={
-                          c.profile_photo?.startsWith("http")
-                            ? c.profile_photo
-                            : `${process.env.NEXT_PUBLIC_API_URL}/candidate-profile/${c.id}/download/photo?size=thumbnail`
-                        }
+                        src={c.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
                         alt={c.full_name}
                         width={40}
                         height={40}
@@ -354,12 +379,13 @@ const Candidateslist = () => {
                     >
                       <FaEye />
                     </button>
-                    {/* <button className="text-[#00C9FF] hover:text-blue-700">
-                      <FaEnvelope />
-                    </button>
-                    <button className="text-[#00C9FF] hover:text-blue-700">
+                    <button
+                      onClick={() => confirmDelete(c)}
+                      className="text-[#00C9FF] hover:text-red-600 transition"
+                      title="Delete Candidate"
+                    >
                       <FaTrash />
-                    </button> */}
+                    </button>
                   </div>
                 </div>
 
@@ -368,11 +394,7 @@ const Candidateslist = () => {
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
                       <Image
-                        src={
-                          c.profile_photo?.startsWith("http")
-                            ? c.profile_photo
-                            : `${process.env.NEXT_PUBLIC_API_URL}/candidate-profile/${c.id}/download/photo?size=thumbnail`
-                        }
+                        src={c.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
                         alt={c.full_name}
                         width={40}
                         height={40}
@@ -410,9 +432,17 @@ const Candidateslist = () => {
                   <div className="flex gap-4 justify-start mt-2">
                     <button
                       onClick={() => handleViewCandidate(c)}
-                      className="text-[#00C9FF] hover:text-blue-700"
+                      className="text-[#00C9FF] hover:text-blue-700 transition"
+                      title="View Details"
                     >
                       <FaEye />
+                    </button>
+                    <button
+                      onClick={() => confirmDelete(c)}
+                      className="text-[#00C9FF] hover:text-red-600 transition"
+                      title="Delete Candidate"
+                    >
+                      <FaTrash />
                     </button>
                   </div>
                 </div>
@@ -467,45 +497,32 @@ const Candidateslist = () => {
         </main>
 
         {/* Delete modal */}
-        {showModal && (
+        {/* Delete confirmation modal */}
+        {showDeleteModal && candidateToDelete && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
             <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowDeleteModal(false)}
                 className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl font-bold"
               >
                 ×
               </button>
               <div className="px-6 py-8 text-center">
                 <p className="text-lg font-medium mb-6">
-                  Do you want to delete your profile?
+                  Do you want to delete <span className="font-bold">{candidateToDelete.full_name} {candidateToDelete.surname}</span>'s profile?
                 </p>
                 <div className="flex justify-center gap-4">
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={() => setShowDeleteModal(false)}
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                   >
                     No
                   </button>
                   <button
-                    onClick={async () => {
-                      try {
-                        const res = await fetch("/api/delete-profile", {
-                          method: "DELETE",
-                        });
-                        if (res.ok) {
-                          console.log("Profile deleted successfully");
-                        } else {
-                          console.error("Failed to delete profile");
-                        }
-                      } catch (err) {
-                        console.error("Error deleting profile", err);
-                      }
-                      setShowModal(false);
-                    }}
+                    onClick={handleDeleteCandidate}
                     className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                   >
-                    Yes
+                    Yes, Delete
                   </button>
                 </div>
               </div>
@@ -534,7 +551,7 @@ const Candidateslist = () => {
                 <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start border-b pb-6">
                   {selectedCandidate.profile_photo ? (
                     <img
-                      src={selectedCandidate.profile_photo.startsWith('http') ? selectedCandidate.profile_photo : `https://api.rojgariindia.com/uploads/${selectedCandidate.profile_photo}`}
+                      src={selectedCandidate.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}/download/photo` : "/images/profile1.webp"}
                       alt={selectedCandidate.full_name}
                       width={100}
                       height={100}
@@ -557,7 +574,7 @@ const Candidateslist = () => {
                       </span>
                       {selectedCandidate.resume && (
                         <a
-                          href={`https://api.rojgariindia.com/uploads/${selectedCandidate.resume}`}
+                          href={`https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}/download/resume`}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
@@ -767,6 +784,10 @@ const Candidateslist = () => {
                     <div>
                       <p className="font-semibold text-gray-500">Interview Availability</p>
                       <p className="text-gray-900 font-medium">{selectedCandidate.interview_availability || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Preferred Shift</p>
+                      <p className="text-gray-900 font-medium">{selectedCandidate.preferred_shift || 'N/A'}</p>
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Expected Salary (Monthly)</p>

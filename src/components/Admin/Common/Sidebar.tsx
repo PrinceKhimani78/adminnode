@@ -25,7 +25,8 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
-  const router = useRouter(); // Need to import useRouter
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const router = useRouter();
 
   // AUTH GUARD: Check if user is logged in
   useEffect(() => {
@@ -109,7 +110,13 @@ export default function Sidebar({
               <Link
                 key={i}
                 href={item.href}
-                onClick={() => setMobileOpen?.(false)}
+                onClick={(e) => {
+                  if (item.href === "#delete") {
+                    e.preventDefault();
+                    setShowDeleteModal(true);
+                  }
+                  setMobileOpen?.(false);
+                }}
                 className="flex items-center gap-3 px-3 text-[#72B76A]"
               >
                 <div className="w-6 text-lg">{item.icon}</div>
@@ -157,6 +164,12 @@ export default function Sidebar({
                 >
                   <Link
                     href={item.href}
+                    onClick={(e) => {
+                      if (item.href === "#delete") {
+                        e.preventDefault();
+                        setShowDeleteModal(true);
+                      }
+                    }}
                     className={`flex items-center gap-2 rounded-md
                     ${isActive
                         ? "bg-[#72B76A] text-white"
@@ -177,6 +190,45 @@ export default function Sidebar({
           </nav>
         </aside>
       </div>
+
+      {/* Delete Admin Account Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[10001]">
+          <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative">
+            <button
+              onClick={() => setShowDeleteModal(false)}
+              className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl font-bold"
+            >
+              ×
+            </button>
+            <div className="px-6 py-8 text-center">
+              <p className="text-lg font-medium mb-6">
+                Are you sure you want to delete your <span className="font-bold">Admin Profile</span>? This action cannot be undone.
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  No, Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // In a real app, call delete API here. 
+                    // For now we'll simulate success and logout.
+                    localStorage.removeItem("admin_logged_in");
+                    router.push("/");
+                    setShowDeleteModal(false);
+                  }}
+                  className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

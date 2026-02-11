@@ -477,52 +477,6 @@ const Companyprofile = () => {
             </div>
           </div>
         </main>
-        {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative">
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl font-bold"
-              >
-                ×
-              </button>
-              <div className="px-6 py-8 text-center">
-                <p className="text-lg font-medium mb-6">
-                  Do you want to delete your profile?
-                </p>
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                  >
-                    No
-                  </button>
-                  <button
-                    onClick={async () => {
-                      try {
-                        const res = await fetch("/api/delete-profile", {
-                          method: "DELETE",
-                        });
-                        if (res.ok) {
-                          console.log("Profile deleted successfully");
-                          // optional: redirect or logout
-                        } else {
-                          console.error("Failed to delete profile");
-                        }
-                      } catch (err) {
-                        console.error("Error deleting profile", err);
-                      }
-                      setShowModal(false);
-                    }}
-                    className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-                  >
-                    Yes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
       {/* <Footer /> */}
     </>

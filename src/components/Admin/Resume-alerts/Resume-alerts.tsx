@@ -43,7 +43,22 @@ const alertsData = [
 
 const Resumealerts = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [alerts, setAlerts] = useState(alertsData);
   const [showModal, setShowModal] = useState(false);
+  const [alertToDelete, setAlertToDelete] = useState<number | null>(null);
+
+  const confirmDeleteAlert = (index: number) => {
+    setAlertToDelete(index);
+    setShowModal(true);
+  };
+
+  const handleDeleteAlert = () => {
+    if (alertToDelete !== null) {
+      setAlerts(alerts.filter((_, i) => i !== alertToDelete));
+      setShowModal(false);
+      setAlertToDelete(null);
+    }
+  };
   return (
     <>
       <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
@@ -132,7 +147,7 @@ const Resumealerts = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-sm text-gray-700">
-                {alertsData.map((alert, i) => (
+                {alerts.map((alert, i) => (
                   <tr
                     key={i}
                     className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
@@ -145,7 +160,10 @@ const Resumealerts = () => {
                       <button className="p-2 rounded-full bg-blue-50 text-[#00C9FF] hover:bg-blue-100">
                         <FaEye />
                       </button>
-                      <button className="p-2 rounded-full bg-blue-50 text-[#00C9FF] hover:bg-red-100">
+                      <button
+                        onClick={() => confirmDeleteAlert(i)}
+                        className="p-2 rounded-full bg-blue-50 text-[#00C9FF] hover:bg-red-100 transition"
+                      >
                         <FaTrash />
                       </button>
                     </td>
@@ -166,7 +184,7 @@ const Resumealerts = () => {
               </button>
               <div className="px-6 py-8 text-center">
                 <p className="text-lg font-medium mb-6">
-                  Do you want to delete your profile?
+                  Do you want to delete this <span className="font-bold">Resume Alert</span>?
                 </p>
                 <div className="flex justify-center gap-4">
                   <button
@@ -176,25 +194,10 @@ const Resumealerts = () => {
                     No
                   </button>
                   <button
-                    onClick={async () => {
-                      try {
-                        const res = await fetch("/api/delete-profile", {
-                          method: "DELETE",
-                        });
-                        if (res.ok) {
-                          console.log("Profile deleted successfully");
-                          // optional: redirect or logout
-                        } else {
-                          console.error("Failed to delete profile");
-                        }
-                      } catch (err) {
-                        console.error("Error deleting profile", err);
-                      }
-                      setShowModal(false);
-                    }}
+                    onClick={handleDeleteAlert}
                     className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                   >
-                    Yes
+                    Yes, Delete
                   </button>
                 </div>
               </div>

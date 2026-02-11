@@ -167,9 +167,8 @@ const Packages = () => {
               {packages.map((pkg, i) => (
                 <div
                   key={pkg.id}
-                  className={`grid grid-cols-1 sm:grid-cols-7 text-sm ${
-                    i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } border-b border-gray-400`}
+                  className={`grid grid-cols-1 sm:grid-cols-7 text-sm ${i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    } border-b border-gray-400`}
                 >
                   {/* Package + Expired together */}
                   <div className="px-4 py-3">
@@ -182,11 +181,10 @@ const Packages = () => {
                   <div className="px-4 py-3">{pkg.used}</div>
                   <div className="px-4 py-3">{pkg.remain}</div>
                   <div
-                    className={`px-4 py-3 font-semibold ${
-                      pkg.status === "Active"
+                    className={`px-4 py-3 font-semibold ${pkg.status === "Active"
                         ? "text-green-600"
                         : "text-red-500"
-                    }`}
+                      }`}
                   >
                     {pkg.status}
                   </div>
@@ -195,52 +193,6 @@ const Packages = () => {
             </div>
           </div>
         </main>
-        {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative">
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl font-bold"
-              >
-                ×
-              </button>
-              <div className="px-6 py-8 text-center">
-                <p className="text-lg font-medium mb-6">
-                  Do you want to delete your profile?
-                </p>
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                  >
-                    No
-                  </button>
-                  <button
-                    onClick={async () => {
-                      try {
-                        const res = await fetch("/api/delete-profile", {
-                          method: "DELETE",
-                        });
-                        if (res.ok) {
-                          console.log("Profile deleted successfully");
-                          // optional: redirect or logout
-                        } else {
-                          console.error("Failed to delete profile");
-                        }
-                      } catch (err) {
-                        console.error("Error deleting profile", err);
-                      }
-                      setShowModal(false);
-                    }}
-                    className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-                  >
-                    Yes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
       {/* <Footer /> */}
     </>

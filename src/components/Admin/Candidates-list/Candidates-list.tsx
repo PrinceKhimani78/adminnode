@@ -550,16 +550,15 @@ const Candidateslist = () => {
                 {/* Header Profile Section */}
                 <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start border-b pb-6">
                   {selectedCandidate.profile_photo ? (
-                    <img
-                      src={selectedCandidate.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}/download/photo` : "/images/profile1.webp"}
-                      alt={selectedCandidate.full_name}
-                      width={100}
-                      height={100}
-                      className="rounded-full border-4 border-gray-100 object-cover shadow-sm w-24 h-24"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/images/profile1.webp";
-                      }}
-                    />
+                    <div className="relative w-24 h-24">
+                      <Image
+                        src={`https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}/download/photo`}
+                        alt={selectedCandidate.full_name}
+                        fill
+                        className="rounded-full border-4 border-gray-100 object-cover shadow-sm"
+                        unoptimized // External API might not support double optimization well
+                      />
+                    </div>
                   ) : (
                     <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 shadow-sm">
                       {selectedCandidate.full_name?.charAt(0) || 'U'}
@@ -840,6 +839,16 @@ const Candidateslist = () => {
                   className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-bold transition text-sm"
                 >
                   Close
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDetailsModal(false);
+                    confirmDelete(selectedCandidate);
+                  }}
+                  className="px-6 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-bold transition text-sm flex items-center gap-2 shadow-sm"
+                >
+                  <FaTrash className="text-xs" />
+                  Delete Profile
                 </button>
                 <button
                   onClick={() => window.print()}

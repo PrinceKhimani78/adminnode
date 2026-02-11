@@ -84,15 +84,30 @@ const jobs = [
 ];
 const Managejobs = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [allJobs, setAllJobs] = useState(jobs);
   const [showModal, setShowModal] = useState(false);
+  const [jobToDelete, setJobToDelete] = useState<number | null>(null);
   const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(jobs.length / entries);
+  const confirmDeleteJob = (id: number) => {
+    setJobToDelete(id);
+    setShowModal(true);
+  };
+
+  const handleDeleteJob = () => {
+    if (jobToDelete !== null) {
+      setAllJobs(allJobs.filter((job) => job.id !== jobToDelete));
+      setShowModal(false);
+      setJobToDelete(null);
+    }
+  };
+
+  const totalPages = Math.ceil(allJobs.length / entries);
 
   const startIndex = (currentPage - 1) * entries;
   const endIndex = startIndex + entries;
-  const currentJobs = jobs.slice(startIndex, endIndex);
+  const currentJobs = allJobs.slice(startIndex, endIndex);
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -197,7 +212,7 @@ const Managejobs = () => {
           </div>
           {/* Job Details  */}
           <div className="space-y-4">
-            {jobs.map((job) => (
+            {currentJobs.map((job) => (
               <div
                 key={job.id}
                 className="flex flex-col sm:flex-row sm:items-center justify-between border border-gray-100 rounded-lg p-4 shadow-sm bg-white hover:bg-gray-50 transition"
@@ -242,7 +257,10 @@ const Managejobs = () => {
                     <button className="p-2 hover:bg-blue-50 rounded-full">
                       <FaEye />
                     </button>
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
+                    <button
+                      onClick={() => confirmDeleteJob(job.id)}
+                      className="p-2 hover:bg-red-50 text-red-500 rounded-full transition"
+                    >
                       <FaTrash />
                     </button>
                   </div>
@@ -254,18 +272,17 @@ const Managejobs = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 gap-2 mt-5">
             <p>
               Showing {startIndex + 1} to{" "}
-              {endIndex > jobs.length ? jobs.length : endIndex} of {jobs.length}{" "}
+              {endIndex > allJobs.length ? allJobs.length : endIndex} of {allJobs.length}{" "}
               entries
             </p>
             <div className="flex items-center gap-1">
               <button
                 onClick={handlePrev}
                 disabled={currentPage === 1}
-                className={`px-3 py-1 border rounded cursor-pointer ${
-                  currentPage === 1
+                className={`px-3 py-1 border rounded cursor-pointer ${currentPage === 1
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-gray-100"
-                }`}
+                  }`}
               >
                 Previous
               </button>
@@ -274,11 +291,10 @@ const Managejobs = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
-                  className={`px-3 py-1 border rounded cursor-pointer ${
-                    currentPage === index + 1
+                  className={`px-3 py-1 border rounded cursor-pointer ${currentPage === index + 1
                       ? "bg-[#023052] text-white"
                       : "bg-gray-100 text-gray-700"
-                  }`}
+                    }`}
                 >
                   {index + 1}
                 </button>
@@ -287,11 +303,10 @@ const Managejobs = () => {
               <button
                 onClick={handleNext}
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1 border rounded cursor-pointer ${
-                  currentPage === totalPages
+                className={`px-3 py-1 border rounded cursor-pointer ${currentPage === totalPages
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-gray-100"
-                }`}
+                  }`}
               >
                 Next
               </button>
@@ -309,7 +324,7 @@ const Managejobs = () => {
               </button>
               <div className="px-6 py-8 text-center">
                 <p className="text-lg font-medium mb-6">
-                  Do you want to delete your profile?
+                  Do you want to delete this <span className="font-bold">Job Post</span>?
                 </p>
                 <div className="flex justify-center gap-4">
                   <button
@@ -319,25 +334,10 @@ const Managejobs = () => {
                     No
                   </button>
                   <button
-                    onClick={async () => {
-                      try {
-                        const res = await fetch("/api/delete-profile", {
-                          method: "DELETE",
-                        });
-                        if (res.ok) {
-                          console.log("Profile deleted successfully");
-                          // optional: redirect or logout
-                        } else {
-                          console.error("Failed to delete profile");
-                        }
-                      } catch (err) {
-                        console.error("Error deleting profile", err);
-                      }
-                      setShowModal(false);
-                    }}
+                    onClick={handleDeleteJob}
                     className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                   >
-                    Yes
+                    Yes, Delete
                   </button>
                 </div>
               </div>

@@ -19,6 +19,7 @@ interface Candidate {
   district: string;
   city: string;
   village: string;
+  state?: string;
   total_experience_years: number;
   expected_salary_min: number;
   expected_salary_max: number;
@@ -38,7 +39,12 @@ interface Candidate {
   preferred_shift?: string;
   resume?: string;
   fresher?: boolean;
+  experienced?: boolean;
   pincode?: string;
+  pref_state?: string;
+  pref_district?: string;
+  pref_city?: string;
+  pref_village?: string;
   work_experience?: {
     id?: string;
     position: string;
@@ -510,10 +516,10 @@ const Candidateslist = () => {
         {/* Candidate Details Modal */}
         {showDetailsModal && selectedCandidate && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999] animate-fadeIn p-4 overflow-y-auto">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl relative flex flex-col max-h-[90vh]">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl relative flex flex-col max-h-[90vh]">
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white rounded-t-xl z-10">
-                <h2 className="text-xl font-bold text-gray-800">Candidate Details</h2>
+                <h2 className="text-xl font-bold text-gray-800">Candidate Information View</h2>
                 <button
                   onClick={() => setShowDetailsModal(false)}
                   className="text-gray-400 hover:text-gray-600 transition"
@@ -523,18 +529,19 @@ const Candidateslist = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6 overflow-y-auto">
+              <div className="p-6 overflow-y-auto space-y-8">
                 {/* Header Profile Section */}
-                <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8 border-b pb-6">
+                <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start border-b pb-6">
                   {selectedCandidate.profile_photo ? (
                     <img
-                      src={`https://api.rojgariindia.com/uploads/${selectedCandidate.profile_photo}`}
+                      src={selectedCandidate.profile_photo.startsWith('http') ? selectedCandidate.profile_photo : `https://api.rojgariindia.com/uploads/${selectedCandidate.profile_photo}`}
                       alt={selectedCandidate.full_name}
                       width={100}
                       height={100}
                       className="rounded-full border-4 border-gray-100 object-cover shadow-sm w-24 h-24"
-                      referrerPolicy="no-referrer"
-                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/profile1.webp";
+                      }}
                     />
                   ) : (
                     <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 shadow-sm">
@@ -562,192 +569,268 @@ const Candidateslist = () => {
                   </div>
                 </div>
 
-                {/* Details Grid */}
-                <div className="space-y-8">
+                {/* 1. PERSONAL DETAILS */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-gray-50 px-5 py-3 border-b border-gray-200">
+                    <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Personal Details</h4>
+                  </div>
+                  <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-10 text-sm">
+                    <div>
+                      <p className="font-semibold text-gray-500">First Name</p>
+                      <p className="text-gray-900">{selectedCandidate.full_name}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Last Name</p>
+                      <p className="text-gray-900">{selectedCandidate.surname || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Email Address</p>
+                      <p className="text-gray-900 break-all">{selectedCandidate.email}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Mobile Number</p>
+                      <p className="text-gray-900">{selectedCandidate.mobile_number}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Alt Mobile Number</p>
+                      <p className="text-gray-900">{selectedCandidate.alternate_mobile_number || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Date of Birth</p>
+                      <p className="text-gray-900">{selectedCandidate.date_of_birth ? new Date(selectedCandidate.date_of_birth).toLocaleDateString() : 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Gender</p>
+                      <p className="text-gray-900">{selectedCandidate.gender || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Marital Status</p>
+                      <p className="text-gray-900">{selectedCandidate.marital_status || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">State</p>
+                      <p className="text-gray-900">{selectedCandidate.state || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">District</p>
+                      <p className="text-gray-900">{selectedCandidate.district || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">City</p>
+                      <p className="text-gray-900">{selectedCandidate.city || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Village</p>
+                      <p className="text-gray-900">{selectedCandidate.village || 'N/A'}</p>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <p className="font-semibold text-gray-500">Permanent Address</p>
+                      <p className="text-gray-900">{selectedCandidate.address || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Area Pin Code</p>
+                      <p className="text-gray-900">{selectedCandidate.pincode || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Languages</p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {selectedCandidate.languages_known && selectedCandidate.languages_known.length > 0 ? (
+                          selectedCandidate.languages_known.map((lang, idx) => (
+                            <span key={idx} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs border border-blue-100">{lang}</span>
+                          ))
+                        ) : 'N/A'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                  {/* 1. PERSONAL INFORMATION */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">1. Personal Information</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">First Name:</span> {selectedCandidate.full_name}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Last Name:</span> {selectedCandidate.surname || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Email:</span> {selectedCandidate.email}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Mobile:</span> {selectedCandidate.mobile_number}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Alt Mobile:</span> {selectedCandidate.alternate_mobile_number || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Date of Birth:</span> {selectedCandidate.date_of_birth ? new Date(selectedCandidate.date_of_birth).toLocaleDateString() : 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Gender:</span> {selectedCandidate.gender}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Marital Status:</span> {selectedCandidate.marital_status || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">State:</span> {selectedCandidate.state || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">District:</span> {selectedCandidate.district || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">City:</span> {selectedCandidate.city || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Village:</span> {selectedCandidate.village || 'N/A'}</p>
-                      <p className="sm:col-span-2"><span className="font-semibold text-gray-700 w-32 inline-block">Address:</span> {selectedCandidate.address || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Pin Code:</span> {selectedCandidate.pincode || 'N/A'}</p>
-                      {selectedCandidate.languages_known && selectedCandidate.languages_known.length > 0 && (
-                        <div className="sm:col-span-2 flex flex-wrap gap-1 mt-1">
-                          <span className="font-semibold text-gray-700 w-32 inline-block">Languages:</span>
-                          <div className="flex flex-wrap gap-1 flex-1">
-                            {selectedCandidate.languages_known.map((lang: string, idx: number) => (
-                              <span key={idx} className="bg-green-50 text-green-700 px-2 py-0.5 rounded text-xs border border-green-100">{lang}</span>
-                            ))}
-                          </div>
+                {/* 2. PROFESSIONAL */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-gray-50 px-5 py-3 border-b border-gray-200">
+                    <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Professional</h4>
+                  </div>
+                  <div className="p-5 space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-10 text-sm">
+                      <div>
+                        <p className="font-semibold text-gray-500">Current Position</p>
+                        <p className="text-gray-900 font-medium">{selectedCandidate.position || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-500">Experience (in Years)</p>
+                        <p className="text-gray-900 font-medium">{selectedCandidate.total_experience_years || 0} Years</p>
+                      </div>
+                    </div>
+
+                    <div className="text-sm">
+                      <p className="font-semibold text-gray-500 mb-1">Profile Summary</p>
+                      <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 leading-relaxed italic">
+                        {selectedCandidate.summary || "No summary provided."}
+                      </p>
+                    </div>
+
+                    {/* Work Experience History */}
+                    <div className="space-y-4">
+                      <p className="font-bold text-gray-800 text-sm border-l-4 border-[#00C9FF] pl-2">Work Experience</p>
+                      {selectedCandidate.work_experience && selectedCandidate.work_experience.length > 0 ? (
+                        <div className="space-y-3">
+                          {selectedCandidate.work_experience.map((exp: any, index: number) => (
+                            <div key={index} className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-[#00C9FF] transition">
+                              <div className="flex justify-between items-start mb-2">
+                                <div>
+                                  <h5 className="font-bold text-gray-900">{exp.position}</h5>
+                                  <p className="text-gray-600 font-medium">{exp.company}</p>
+                                </div>
+                                <span className={`px-2 py-0.5 text-[10px] rounded-full font-bold uppercase ${exp.is_current ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                                  {exp.is_current ? 'Current' : 'Previous'}
+                                </span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                                <p><span className="font-semibold">Duration:</span> {exp.start_date ? new Date(exp.start_date).toLocaleDateString() : 'N/A'} - {exp.is_current ? 'Present' : (exp.end_date ? new Date(exp.end_date).toLocaleDateString() : 'N/A')}</p>
+                                <p><span className="font-semibold">Notice Period:</span> {exp.salary_period || '0'} Days</p>
+                                <p><span className="font-semibold">Salary:</span> ₹{exp.current_wages || 'N/A'}</p>
+                                <p><span className="font-semibold">Location:</span> {exp.current_city || 'N/A'}</p>
+                              </div>
+                            </div>
+                          ))}
                         </div>
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">No work experience listed.</p>
+                      )}
+                    </div>
+
+                    {/* Education */}
+                    <div className="space-y-4">
+                      <p className="font-bold text-gray-800 text-sm border-l-4 border-[#AE70BB] pl-2">Education</p>
+                      {selectedCandidate.education && selectedCandidate.education.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {selectedCandidate.education.map((edu: any, index: number) => (
+                            <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+                              <p className="font-bold text-gray-900 text-sm">{edu.degree}</p>
+                              <p className="text-xs text-gray-600">{edu.university}</p>
+                              <p className="text-[10px] text-gray-400 mt-1">Passing Year: {edu.passing_year}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">No education details recorded.</p>
+                      )}
+                    </div>
+
+                    {/* Skills */}
+                    <div className="space-y-4">
+                      <p className="font-bold text-gray-800 text-sm border-l-4 border-[#72B76A] pl-2">Skills</p>
+                      {selectedCandidate.skills && selectedCandidate.skills.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {selectedCandidate.skills.map((skill: any, index: number) => (
+                            <div key={index} className="px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center gap-3">
+                              <div>
+                                <p className="text-xs font-bold text-gray-900">{skill.skill_name}</p>
+                                <p className="text-[10px] text-[#72B76A] font-bold">{skill.years_of_experience} Yrs Experience</p>
+                                {skill.level && <p className="text-[9px] text-gray-400 uppercase">{skill.level}</p>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">No skills specified.</p>
+                      )}
+                    </div>
+
+                    {/* Certifications */}
+                    <div className="space-y-4">
+                      <p className="font-bold text-gray-800 text-sm border-l-4 border-[#FFCC23] pl-2">Certifications</p>
+                      {selectedCandidate.certifications && selectedCandidate.certifications.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {selectedCandidate.certifications.map((cert: any, index: number) => (
+                            <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+                              <div className="flex justify-between items-start">
+                                <p className="font-bold text-gray-900 text-sm">{cert.name}</p>
+                                {cert.year && <span className="text-[10px] font-bold text-gray-500">{cert.year}</span>}
+                              </div>
+                              {cert.achievement && <p className="text-xs text-gray-600 mt-1 italic">"{cert.achievement}"</p>}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">No certifications listed.</p>
                       )}
                     </div>
                   </div>
+                </div>
 
-                  {/* 2. Work Experience */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">2. Work Experience</h4>
-                    <p className="mb-4 font-medium text-gray-700">Type: {selectedCandidate.experienced ? 'Experienced' : 'Fresher'}</p>
-
-                    {selectedCandidate.work_experience && selectedCandidate.work_experience.length > 0 ? (
-                      <div className="space-y-4">
-                        {selectedCandidate.work_experience.map((exp: any, index: number) => (
-                          <div key={index} className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                            <div className="flex justify-between items-start mb-3">
-                              <div>
-                                <h5 className="font-bold text-gray-800 text-base">{exp.position}</h5>
-                                <p className="text-sm text-gray-600">{exp.company}</p>
-                              </div>
-                              <span className={`px-2 py-1 text-xs rounded font-medium ${exp.is_current ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                                {exp.is_current ? 'Current Job' : 'Previous Job'}
-                              </span>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                              <p><span className="font-semibold text-gray-600">Start Date:</span> {exp.start_date ? new Date(exp.start_date).toLocaleDateString() : 'N/A'}</p>
-                              <p><span className="font-semibold text-gray-600">End Date:</span> {exp.is_current ? 'Present' : (exp.end_date ? new Date(exp.end_date).toLocaleDateString() : 'N/A')}</p>
-                              <p><span className="font-semibold text-gray-600">Notice Period:</span> {exp.salary_period || 'N/A'} Days</p>
-                              <p><span className="font-semibold text-gray-600">Current Salary:</span> ₹{exp.current_wages || 'N/A'}</p>
-                              <p><span className="font-semibold text-gray-600">Current City:</span> {exp.current_city || 'N/A'}</p>
-                              <p><span className="font-semibold text-gray-600">Current Village:</span> {exp.current_village || 'N/A'}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 italic">No specific work experience records found.</p>
-                    )}
-
-                    <div className="mt-6 grid grid-cols-1 gap-4 text-sm border-t pt-4">
-                      <p><span className="font-bold text-gray-700 w-40 inline-block">Experience (in Years):</span> {selectedCandidate.total_experience_years || 0} Years</p>
-                      <div>
-                        <p className="font-bold text-gray-700 mb-2">Summary:</p>
-                        <p className="text-gray-600 bg-white p-3 rounded border border-gray-200 min-h-[60px]">{selectedCandidate.summary || 'No summary provided.'}</p>
-                      </div>
+                {/* 3. AVAILABILITY & EXPECTATIONS */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-gray-50 px-5 py-3 border-b border-gray-200">
+                    <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Availability & Expectations</h4>
+                  </div>
+                  <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-10 text-sm">
+                    <div>
+                      <p className="font-semibold text-gray-500">Interview Availability</p>
+                      <p className="text-gray-900 font-medium">{selectedCandidate.interview_availability || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Expected Salary (Monthly)</p>
+                      <p className="text-[#00C9FF] font-bold">₹{selectedCandidate.expected_salary_min || 0} - ₹{selectedCandidate.expected_salary_max || 0}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Preferred State</p>
+                      <p className="text-gray-900">{selectedCandidate.pref_state || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Preferred District</p>
+                      <p className="text-gray-900">{selectedCandidate.pref_district || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Preferred City</p>
+                      <p className="text-gray-900">{selectedCandidate.pref_city || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Preferred Village</p>
+                      <p className="text-gray-900">{selectedCandidate.pref_village || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Availability to Join</p>
+                      <p className="text-gray-900 font-medium">{selectedCandidate.availability_start ? new Date(selectedCandidate.availability_start).toLocaleDateString() : 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-500">Job Category</p>
+                      <p className="text-gray-900">{selectedCandidate.job_category || 'N/A'}</p>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <p className="font-semibold text-gray-500 mb-1">Additional Notes / Remarks</p>
+                      <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 min-h-[60px]">
+                        {selectedCandidate.additional_info || "No additional info provided."}
+                      </p>
                     </div>
                   </div>
-
-                  {/* 3. Education Details */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">3. Education Details</h4>
-                    {selectedCandidate.education && selectedCandidate.education.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {selectedCandidate.education.map((edu: any, index: number) => (
-                          <div key={index} className="bg-white p-4 rounded-lg border border-gray-200">
-                            <p className="font-bold text-gray-800">{edu.degree}</p>
-                            <p className="text-sm text-gray-600">{edu.university}</p>
-                            <p className="text-xs text-[#72B76A] font-semibold mt-2">Passing Year: {edu.passing_year}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 italic">No education details recorded.</p>
-                    )}
-                  </div>
-
-                  {/* 4. Certifications */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">4. Certifications</h4>
-                    {selectedCandidate.certifications && selectedCandidate.certifications.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {selectedCandidate.certifications.map((cert: any, index: number) => (
-                          <div key={index} className="bg-white p-4 rounded-lg border border-gray-200">
-                            <div className="flex justify-between items-start mb-2">
-                              <p className="font-bold text-gray-800">{cert.name}</p>
-                              {cert.year && <span className="text-xs font-bold bg-green-50 text-green-700 px-2 py-0.5 rounded">{cert.year}</span>}
-                            </div>
-                            {cert.achievement && <p className="text-sm text-gray-600 italic">"{cert.achievement}"</p>}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 italic">No certifications listed.</p>
-                    )}
-                  </div>
-
-                  {/* 5. Your Skills */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">5. Your Skills</h4>
-                    {selectedCandidate.skills && selectedCandidate.skills.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
-                        {selectedCandidate.skills.map((skill: any, index: number) => (
-                          <div key={index} className="px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
-                            <p className="text-sm font-bold text-gray-800">{skill.skill_name}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-xs text-gray-500 uppercase font-medium">{skill.level || 'Beginner'}</span>
-                              <span className="w-1 h-1 rounded-full bg-gray-300"></span>
-                              <span className="text-xs text-[#72B76A] font-bold">{skill.years_of_experience} Yrs</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 italic">No skills specified.</p>
-                    )}
-                  </div>
-
-                  {/* 6. Availability & Preferred Location */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">6. Availability & Preferred Location</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Category:</span> {selectedCandidate.interview_availability || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">State:</span> {selectedCandidate.pref_state || selectedCandidate.current_location?.split(',')?.pop()?.trim() || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">District:</span> {selectedCandidate.pref_district || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">City:</span> {selectedCandidate.pref_city || selectedCandidate.current_location?.split(',')?.[0]?.trim() || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Village:</span> {selectedCandidate.pref_village || 'N/A'}</p>
-                    </div>
-                  </div>
-
-                  {/* 7. Additional Info */}
-                  <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h4 className="text-sm font-bold text-[#72B76A] uppercase tracking-wider mb-4 border-b border-green-100 pb-2">7. Additional Info</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Joining Date:</span> {selectedCandidate.availability_start ? new Date(selectedCandidate.availability_start).toLocaleDateString() : 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Job Category:</span> {selectedCandidate.job_category || 'N/A'}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Min Salary:</span> ₹{selectedCandidate.expected_salary_min || 0}</p>
-                      <p><span className="font-semibold text-gray-700 w-32 inline-block">Max Salary:</span> ₹{selectedCandidate.expected_salary_max || 0}</p>
-                    </div>
-                    {selectedCandidate.additional_info && (
-                      <div className="border-t pt-4">
-                        <p className="font-bold text-gray-700 mb-2">Remarks / Notes:</p>
-                        <p className="text-gray-600 bg-white p-3 rounded border border-gray-200">{selectedCandidate.additional_info}</p>
-                      </div>
-                    )}
-                  </div>
-
                 </div>
 
                 {/* System Info */}
-                <div className="mt-6 pt-4 border-t text-xs text-gray-400 text-center flex justify-between px-4">
+                <div className="pt-4 border-t text-[10px] text-gray-400 text-center flex justify-between px-2">
                   <span>Registered on: {new Date(selectedCandidate.created_at).toLocaleDateString()}</span>
                   <span>Last Updated: {new Date(selectedCandidate.updated_at).toLocaleDateString()}</span>
                 </div>
-
               </div>
 
               {/* Footer */}
-              <div className="p-5 border-t bg-gray-50 rounded-b-xl flex justify-end">
+              <div className="p-5 border-t bg-gray-50 rounded-b-xl flex justify-end gap-3">
                 <button
                   onClick={() => setShowDetailsModal(false)}
-                  className="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-medium transition"
+                  className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-bold transition text-sm"
                 >
                   Close
+                </button>
+                <button
+                  onClick={() => window.print()}
+                  className="px-6 py-2 bg-[#00C9FF] hover:bg-blue-600 text-white rounded-lg font-bold transition text-sm shadow-sm"
+                >
+                  Print Profile
                 </button>
               </div>
             </div>
           </div>
         )}
+
 
         {/* search popup  */}
 

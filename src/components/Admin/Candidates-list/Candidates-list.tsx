@@ -449,7 +449,7 @@ const Candidateslist = () => {
                         width={40}
                         height={40}
                         className="rounded-full border object-cover w-10 h-10"
-                        unoptimized={Boolean(c.profile_photo && typeof c.profile_photo === 'string' && c.profile_photo.startsWith("http"))}
+                        unoptimized
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -505,7 +505,7 @@ const Candidateslist = () => {
                         width={40}
                         height={40}
                         className="rounded-full border object-cover w-10 h-10"
-                        unoptimized={Boolean(c.profile_photo && typeof c.profile_photo === 'string' && c.profile_photo.startsWith("http"))}
+                        unoptimized
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">

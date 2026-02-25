@@ -106,8 +106,9 @@ const Candidateslist = () => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const response = await fetch("https://api.rojgariindia.com/api/candidate-profile?limit=100");
+        const response = await fetch("/api/candidate-profile?limit=100");
         const data = await response.json();
+        console.log("FETCH RESULT: ", data);
         if (data.success && data.data && data.data.profiles) {
           setCandidates(data.data.profiles);
         } else {
@@ -149,7 +150,7 @@ const Candidateslist = () => {
     setIsEditing(false);
 
     try {
-      const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${candidate.id}`);
+      const response = await fetch(`/api/candidate-profile/${candidate.id}`);
       const data = await response.json();
       if (data.success && data.data) {
         setSelectedCandidate(data.data); // Update with full details
@@ -169,7 +170,7 @@ const Candidateslist = () => {
     if (!candidateToDelete) return;
 
     try {
-      const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${candidateToDelete.id}`, {
+      const response = await fetch(`/api/candidate-profile/${candidateToDelete.id}`, {
         method: "DELETE",
       });
       const data = await response.json();
@@ -194,12 +195,59 @@ const Candidateslist = () => {
     if (!selectedCandidate) return;
 
     try {
-      const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}`, {
+      // Build payload matching the backend updateCandidateProfileSchema exactly.
+      // Only include fields that are in the schema; use correct types per field.
+      const strOrEmpty = (v: unknown) =>
+        v === null || v === undefined ? '' : String(v);
+      const numOrNull = (v: unknown) =>
+        v === null || v === undefined || v === '' ? null : Number(v);
+      const dateOrNull = (v: unknown) =>
+        v === null || v === undefined || v === '' ? null : v;
+      const parseJsonArray = (v: unknown): unknown[] | null => {
+        if (Array.isArray(v)) return v;
+        if (typeof v === 'string' && v.trim().startsWith('[')) {
+          try { return JSON.parse(v.trim()); } catch { return null; }
+        }
+        return null;
+      };
+
+      const payload: Record<string, unknown> = {
+        // Required-like strings
+        full_name: strOrEmpty(editForm.full_name),
+        surname: strOrEmpty(editForm.surname),
+        email: strOrEmpty(editForm.email),
+        mobile_number: strOrEmpty(editForm.mobile_number),
+        // Optional strings (allow '')
+        alternate_mobile_number: strOrEmpty(editForm.alternate_mobile_number),
+        address: strOrEmpty(editForm.address),
+        state: strOrEmpty(editForm.state),
+        city: strOrEmpty(editForm.city),
+        district: strOrEmpty(editForm.district),
+        village: strOrEmpty(editForm.village),
+        pincode: strOrEmpty(editForm.pincode),
+        position: strOrEmpty(editForm.position),
+        gender: strOrEmpty(editForm.gender),
+        marital_status: strOrEmpty(editForm.marital_status),
+        job_category: strOrEmpty(editForm.job_category),
+        interview_availability: strOrEmpty(editForm.interview_availability),
+        preferred_shift: strOrEmpty(editForm.preferred_shift),
+        summary: strOrEmpty(editForm.summary),
+        additional_info: strOrEmpty(editForm.additional_info),
+        // Numbers (allow null)
+        total_experience_years: numOrNull(editForm.total_experience_years),
+        expected_salary_min: numOrNull(editForm.expected_salary_min),
+        expected_salary_max: numOrNull(editForm.expected_salary_max),
+        // Dates (allow null or '')
+        date_of_birth: dateOrNull(editForm.date_of_birth),
+        availability_start: dateOrNull(editForm.availability_start),
+        // Arrays (must be real arrays, not JSON strings)
+        languages_known: parseJsonArray(editForm.languages_known),
+      };
+
+      const response = await fetch(`/api/candidate-profile/${selectedCandidate.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editForm),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -207,8 +255,9 @@ const Candidateslist = () => {
       if (data.success) {
         setSelectedCandidate({ ...selectedCandidate, ...editForm } as Candidate);
         setIsEditing(false);
-        // Update list
-        setCandidates(candidates.map(c => c.id === selectedCandidate.id ? { ...c, ...editForm } as Candidate : c));
+        setCandidates(candidates.map(c =>
+          c.id === selectedCandidate.id ? { ...c, ...editForm } as Candidate : c
+        ));
         alert("Candidate details updated successfully!");
       } else {
         alert(data.message || "Failed to update candidate details");
@@ -379,11 +428,11 @@ const Candidateslist = () => {
                     {c.profile_photo ? (
                       <Image
                         src={c.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
-                        alt={c.full_name}
+                        alt={c.full_name || "Profile"}
                         width={40}
                         height={40}
                         className="rounded-full border object-cover w-10 h-10"
-                        unoptimized={c.profile_photo?.startsWith("http")}
+                        unoptimized={Boolean(c.profile_photo && typeof c.profile_photo === 'string' && c.profile_photo.startsWith("http"))}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -435,11 +484,11 @@ const Candidateslist = () => {
                     {c.profile_photo ? (
                       <Image
                         src={c.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
-                        alt={c.full_name}
+                        alt={c.full_name || "Profile"}
                         width={40}
                         height={40}
                         className="rounded-full border object-cover w-10 h-10"
-                        unoptimized={c.profile_photo?.startsWith("http")}
+                        unoptimized={Boolean(c.profile_photo && typeof c.profile_photo === 'string' && c.profile_photo.startsWith("http"))}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">

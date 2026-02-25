@@ -218,7 +218,7 @@ const Candidateslist = () => {
   };
   return (
     <>
-      <div className={`pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative ${showDetailsModal ? "print:hidden" : ""}`}>
+      <div className={`pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative`}>
         {/* Sidebar */}
         <div className="print:hidden">
           <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />

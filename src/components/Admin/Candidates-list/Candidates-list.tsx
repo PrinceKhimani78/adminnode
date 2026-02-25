@@ -534,8 +534,8 @@ const Candidateslist = () => {
 
         {/* Candidate Details Modal */}
         {showDetailsModal && selectedCandidate && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999] animate-fadeIn p-4 overflow-y-auto print:static print:bg-transparent print:p-0 print:m-0 print:block">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl relative flex flex-col max-h-[90vh] print:max-w-full print:max-h-none print:shadow-none print:w-full print:overflow-visible">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999] animate-fadeIn p-4 overflow-y-auto print:static print:bg-transparent print:p-0 print:m-0 print:block print:w-full">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl relative flex flex-col max-h-[90vh] print:max-w-none print:max-h-none print:shadow-none print:w-full print:overflow-visible print:border-none">
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white rounded-t-xl z-10 print:static print:border-none print:p-0 print:mb-4">
                 <h2 className="text-xl font-bold text-gray-800">Candidate Information View</h2>

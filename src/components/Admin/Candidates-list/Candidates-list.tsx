@@ -685,7 +685,16 @@ const Candidateslist = () => {
                   )}
                   <div className="text-center sm:text-left flex-1">
                     <h3 className="text-2xl font-bold text-gray-900">{selectedCandidate.full_name} {selectedCandidate.surname}</h3>
-                    <p className="text-gray-500 font-medium">{selectedCandidate.job_category || selectedCandidate.position || 'Job Seeker'}</p>
+                    <p className="text-gray-500 font-medium">
+                      {(() => {
+                        const cat = selectedCandidate.job_category;
+                        const pos = selectedCandidate.position;
+                        if (cat && cat !== 'Other' && pos) return `${cat} · ${pos}`;
+                        if (cat && cat !== 'Other') return cat;
+                        if (pos) return pos;
+                        return 'Job Seeker';
+                      })()}
+                    </p>
                     <div className="flex flex-wrap gap-2 mt-2 justify-center sm:justify-start">
                       <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${selectedCandidate.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                         {selectedCandidate.status || 'Active'}

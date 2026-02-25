@@ -136,19 +136,24 @@ const Candidateslist = () => {
   // Filter logic (basic)
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState<Partial<Candidate>>({});
 
   const [candidateToDelete, setCandidateToDelete] = useState<Candidate | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleViewCandidate = async (candidate: Candidate) => {
     setSelectedCandidate(candidate); // Set initial data from list
+    setEditForm(candidate);
     setShowDetailsModal(true);
+    setIsEditing(false);
 
     try {
       const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${candidate.id}`);
       const data = await response.json();
       if (data.success && data.data) {
         setSelectedCandidate(data.data); // Update with full details
+        setEditForm(data.data);
       }
     } catch (err) {
       console.error("Error fetching full candidate details:", err);
@@ -178,6 +183,39 @@ const Candidateslist = () => {
     } catch (err) {
       console.error("Error deleting candidate:", err);
       alert("Error deleting candidate");
+    }
+  };
+
+  const handleEditChange = (field: keyof Candidate, value: any) => {
+    setEditForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveChanges = async () => {
+    if (!selectedCandidate) return;
+
+    try {
+      const response = await fetch(`https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSelectedCandidate({ ...selectedCandidate, ...editForm } as Candidate);
+        setIsEditing(false);
+        // Update list
+        setCandidates(candidates.map(c => c.id === selectedCandidate.id ? { ...c, ...editForm } as Candidate : c));
+        alert("Candidate details updated successfully!");
+      } else {
+        alert(data.message || "Failed to update candidate details");
+      }
+    } catch (err) {
+      console.error("Error updating candidate:", err);
+      alert("Error updating candidate. Check console for details.");
     }
   };
 
@@ -539,12 +577,25 @@ const Candidateslist = () => {
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white rounded-t-xl z-10 print:static print:border-none print:p-0 print:mb-4">
                 <h2 className="text-xl font-bold text-gray-800">Candidate Information View</h2>
-                <button
-                  onClick={() => setShowDetailsModal(false)}
-                  className="text-gray-400 hover:text-gray-600 transition print:hidden"
-                >
-                  <RxCross2 size={24} />
-                </button>
+                <div className="flex items-center gap-4">
+                  {!isEditing && (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="text-sm font-semibold text-[#00C9FF] hover:text-blue-600 transition print:hidden"
+                    >
+                      Edit Profile
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      setShowDetailsModal(false);
+                      setIsEditing(false);
+                    }}
+                    className="text-gray-400 hover:text-gray-600 transition print:hidden"
+                  >
+                    <RxCross2 size={24} />
+                  </button>
+                </div>
               </div>
 
               {/* Content */}
@@ -595,59 +646,194 @@ const Candidateslist = () => {
                   <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-10 text-sm">
                     <div>
                       <p className="font-semibold text-gray-500">First Name</p>
-                      <p className="text-gray-900">{selectedCandidate.full_name}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.full_name || ''}
+                          onChange={(e) => handleEditChange('full_name', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.full_name}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Last Name</p>
-                      <p className="text-gray-900">{selectedCandidate.surname || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.surname || ''}
+                          onChange={(e) => handleEditChange('surname', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.surname || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Email Address</p>
-                      <p className="text-gray-900 break-all">{selectedCandidate.email}</p>
+                      {isEditing ? (
+                        <input
+                          type="email"
+                          value={editForm.email || ''}
+                          onChange={(e) => handleEditChange('email', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900 break-all">{selectedCandidate.email}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Mobile Number</p>
-                      <p className="text-gray-900">{selectedCandidate.mobile_number}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.mobile_number || ''}
+                          onChange={(e) => handleEditChange('mobile_number', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.mobile_number}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Alt Mobile Number</p>
-                      <p className="text-gray-900">{selectedCandidate.alternate_mobile_number || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.alternate_mobile_number || ''}
+                          onChange={(e) => handleEditChange('alternate_mobile_number', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.alternate_mobile_number || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Date of Birth</p>
-                      <p className="text-gray-900">{selectedCandidate.date_of_birth ? new Date(selectedCandidate.date_of_birth).toLocaleDateString() : 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="date"
+                          value={editForm.date_of_birth ? editForm.date_of_birth.split('T')[0] : ''}
+                          onChange={(e) => handleEditChange('date_of_birth', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.date_of_birth ? new Date(selectedCandidate.date_of_birth).toLocaleDateString() : 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Gender</p>
-                      <p className="text-gray-900">{selectedCandidate.gender || 'N/A'}</p>
+                      {isEditing ? (
+                        <select
+                          value={editForm.gender || ''}
+                          onChange={(e) => handleEditChange('gender', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded bg-white"
+                        >
+                          <option value="">Select</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.gender || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Marital Status</p>
-                      <p className="text-gray-900">{selectedCandidate.marital_status || 'N/A'}</p>
+                      {isEditing ? (
+                        <select
+                          value={editForm.marital_status || ''}
+                          onChange={(e) => handleEditChange('marital_status', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded bg-white"
+                        >
+                          <option value="">Select</option>
+                          <option value="Single">Single</option>
+                          <option value="Married">Married</option>
+                          <option value="Divorced">Divorced</option>
+                          <option value="Widowed">Widowed</option>
+                        </select>
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.marital_status || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">State</p>
-                      <p className="text-gray-900">{selectedCandidate.state || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.state || ''}
+                          onChange={(e) => handleEditChange('state', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.state || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">District</p>
-                      <p className="text-gray-900">{selectedCandidate.district || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.district || ''}
+                          onChange={(e) => handleEditChange('district', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.district || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">City</p>
-                      <p className="text-gray-900">{selectedCandidate.city || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.city || ''}
+                          onChange={(e) => handleEditChange('city', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.city || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Village</p>
-                      <p className="text-gray-900">{selectedCandidate.village || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.village || ''}
+                          onChange={(e) => handleEditChange('village', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.village || 'N/A'}</p>
+                      )}
                     </div>
                     <div className="sm:col-span-2">
                       <p className="font-semibold text-gray-500">Permanent Address</p>
-                      <p className="text-gray-900">{selectedCandidate.address || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.address || ''}
+                          onChange={(e) => handleEditChange('address', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.address || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Area Pin Code</p>
-                      <p className="text-gray-900">{selectedCandidate.pincode || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.pincode || ''}
+                          onChange={(e) => handleEditChange('pincode', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.pincode || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Languages</p>
@@ -682,19 +868,47 @@ const Candidateslist = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-10 text-sm">
                       <div>
                         <p className="font-semibold text-gray-500">Current Position</p>
-                        <p className="text-gray-900 font-medium">{selectedCandidate.position || 'N/A'}</p>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            value={editForm.position || ''}
+                            onChange={(e) => handleEditChange('position', e.target.value)}
+                            className="w-full mt-1 p-2 border rounded"
+                          />
+                        ) : (
+                          <p className="text-gray-900 font-medium">{selectedCandidate.position || 'N/A'}</p>
+                        )}
                       </div>
                       <div>
                         <p className="font-semibold text-gray-500">Experience (in Years)</p>
-                        <p className="text-gray-900 font-medium">{selectedCandidate.total_experience_years || 0} Years</p>
+                        {isEditing ? (
+                          <input
+                            type="number"
+                            min="0"
+                            step="0.5"
+                            value={editForm.total_experience_years || ''}
+                            onChange={(e) => handleEditChange('total_experience_years', parseFloat(e.target.value))}
+                            className="w-full mt-1 p-2 border rounded"
+                          />
+                        ) : (
+                          <p className="text-gray-900 font-medium">{selectedCandidate.total_experience_years || 0} Years</p>
+                        )}
                       </div>
                     </div>
 
                     <div className="text-sm">
                       <p className="font-semibold text-gray-500 mb-1">Profile Summary</p>
-                      <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 leading-relaxed italic">
-                        {selectedCandidate.summary || "No summary provided."}
-                      </p>
+                      {isEditing ? (
+                        <textarea
+                          value={editForm.summary || ''}
+                          onChange={(e) => handleEditChange('summary', e.target.value)}
+                          className="w-full p-2 border rounded min-h-[80px]"
+                        />
+                      ) : (
+                        <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 leading-relaxed italic">
+                          {selectedCandidate.summary || "No summary provided."}
+                        </p>
+                      )}
                     </div>
 
                     {/* Work Experience History */}
@@ -795,45 +1009,144 @@ const Candidateslist = () => {
                   <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-10 text-sm">
                     <div>
                       <p className="font-semibold text-gray-500">Interview Availability</p>
-                      <p className="text-gray-900 font-medium">{selectedCandidate.interview_availability || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.interview_availability || ''}
+                          onChange={(e) => handleEditChange('interview_availability', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900 font-medium">{selectedCandidate.interview_availability || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Preferred Shift</p>
-                      <p className="text-gray-900 font-medium">{selectedCandidate.preferred_shift || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.preferred_shift || ''}
+                          onChange={(e) => handleEditChange('preferred_shift', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900 font-medium">{selectedCandidate.preferred_shift || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Expected Salary (Monthly)</p>
-                      <p className="text-[#00C9FF] font-bold">₹{selectedCandidate.expected_salary_min || 0} - ₹{selectedCandidate.expected_salary_max || 0}</p>
+                      {isEditing ? (
+                        <div className="flex gap-2 mt-1">
+                          <input
+                            type="number"
+                            placeholder="Min"
+                            value={editForm.expected_salary_min || ''}
+                            onChange={(e) => handleEditChange('expected_salary_min', Number(e.target.value))}
+                            className="w-1/2 p-2 border rounded"
+                          />
+                          <input
+                            type="number"
+                            placeholder="Max"
+                            value={editForm.expected_salary_max || ''}
+                            onChange={(e) => handleEditChange('expected_salary_max', Number(e.target.value))}
+                            className="w-1/2 p-2 border rounded"
+                          />
+                        </div>
+                      ) : (
+                        <p className="text-[#00C9FF] font-bold">₹{selectedCandidate.expected_salary_min || 0} - ₹{selectedCandidate.expected_salary_max || 0}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Preferred State</p>
-                      <p className="text-gray-900">{selectedCandidate.pref_state || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.pref_state || ''}
+                          onChange={(e) => handleEditChange('pref_state', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.pref_state || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Preferred District</p>
-                      <p className="text-gray-900">{selectedCandidate.pref_district || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.pref_district || ''}
+                          onChange={(e) => handleEditChange('pref_district', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.pref_district || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Preferred City</p>
-                      <p className="text-gray-900">{selectedCandidate.pref_city || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.pref_city || ''}
+                          onChange={(e) => handleEditChange('pref_city', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.pref_city || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Preferred Village</p>
-                      <p className="text-gray-900">{selectedCandidate.pref_village || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.pref_village || ''}
+                          onChange={(e) => handleEditChange('pref_village', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.pref_village || 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Availability to Join</p>
-                      <p className="text-gray-900 font-medium">{selectedCandidate.availability_start ? new Date(selectedCandidate.availability_start).toLocaleDateString() : 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="date"
+                          value={editForm.availability_start ? editForm.availability_start.split('T')[0] : ''}
+                          onChange={(e) => handleEditChange('availability_start', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900 font-medium">{selectedCandidate.availability_start ? new Date(selectedCandidate.availability_start).toLocaleDateString() : 'N/A'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-500">Job Category</p>
-                      <p className="text-gray-900">{selectedCandidate.job_category || 'N/A'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.job_category || ''}
+                          onChange={(e) => handleEditChange('job_category', e.target.value)}
+                          className="w-full mt-1 p-2 border rounded"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{selectedCandidate.job_category || 'N/A'}</p>
+                      )}
                     </div>
                     <div className="sm:col-span-2">
                       <p className="font-semibold text-gray-500 mb-1">Additional Notes / Remarks</p>
-                      <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 min-h-[60px]">
-                        {selectedCandidate.additional_info || "No additional info provided."}
-                      </p>
+                      {isEditing ? (
+                        <textarea
+                          value={editForm.additional_info || ''}
+                          onChange={(e) => handleEditChange('additional_info', e.target.value)}
+                          className="w-full p-2 border rounded min-h-[60px]"
+                        />
+                      ) : (
+                        <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 min-h-[60px]">
+                          {selectedCandidate.additional_info || "No additional info provided."}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -847,28 +1160,50 @@ const Candidateslist = () => {
 
               {/* Footer */}
               <div className="p-5 border-t bg-gray-50 rounded-b-xl flex justify-end gap-3 print:hidden">
-                <button
-                  onClick={() => setShowDetailsModal(false)}
-                  className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-bold transition text-sm"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={() => {
-                    setShowDetailsModal(false);
-                    confirmDelete(selectedCandidate);
-                  }}
-                  className="px-6 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-bold transition text-sm flex items-center gap-2 shadow-sm"
-                >
-                  <FaTrash className="text-xs" />
-                  Delete Profile
-                </button>
-                <button
-                  onClick={() => window.print()}
-                  className="px-6 py-2 bg-[#00C9FF] hover:bg-blue-600 text-white rounded-lg font-bold transition text-sm shadow-sm"
-                >
-                  Print Profile
-                </button>
+                {isEditing ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        setIsEditing(false);
+                        setEditForm(selectedCandidate);
+                      }}
+                      className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-bold transition text-sm"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveChanges}
+                      className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold transition text-sm shadow-sm"
+                    >
+                      Save Changes
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setShowDetailsModal(false)}
+                      className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-bold transition text-sm"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowDetailsModal(false);
+                        confirmDelete(selectedCandidate);
+                      }}
+                      className="px-6 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-bold transition text-sm flex items-center gap-2 shadow-sm"
+                    >
+                      <FaTrash className="text-xs" />
+                      Delete Profile
+                    </button>
+                    <button
+                      onClick={() => window.print()}
+                      className="px-6 py-2 bg-[#00C9FF] hover:bg-blue-600 text-white rounded-lg font-bold transition text-sm shadow-sm"
+                    >
+                      Print Profile
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

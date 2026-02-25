@@ -242,11 +242,23 @@ const Candidateslist = () => {
         availability_start: dateOrNull(editForm.availability_start),
         // Arrays (must be real arrays, not JSON strings)
         languages_known: parseJsonArray(editForm.languages_known),
-        // Nested arrays — send edited or original data
-        skills: ((editForm.skills ?? selectedCandidate.skills) || []) as any[],
-        work_experience: ((editForm.work_experience ?? selectedCandidate.work_experience) || []) as any[],
-        education: ((editForm.education ?? selectedCandidate.education) || []) as any[],
-        certifications: ((editForm.certifications ?? selectedCandidate.certifications) || []) as any[],
+        // Nested arrays — send edited or original data, coerce types to match Joi schema
+        skills: ((editForm.skills ?? selectedCandidate.skills) || []).map((s: any) => ({
+          ...s,
+          years_of_experience: String(s.years_of_experience ?? '0'),
+        })) as any[],
+        work_experience: ((editForm.work_experience ?? selectedCandidate.work_experience) || []).map((e: any) => ({
+          ...e,
+          current_wages: e.current_wages !== '' && e.current_wages !== null && e.current_wages !== undefined ? Number(e.current_wages) : undefined,
+        })) as any[],
+        education: ((editForm.education ?? selectedCandidate.education) || []).map((e: any) => ({
+          ...e,
+          passing_year: String(e.passing_year ?? ''),
+        })) as any[],
+        certifications: ((editForm.certifications ?? selectedCandidate.certifications) || []).map((c: any) => ({
+          ...c,
+          year: c.year ? String(c.year) : undefined,
+        })) as any[],
       };
 
       const response = await fetch(`/api/candidate-profile/${selectedCandidate.id}`, {
@@ -890,21 +902,21 @@ const Candidateslist = () => {
                       )}
                     </div>
                     <div>
-                       <p className="font-semibold text-gray-500">Languages</p>
-                       {isEditing ? (
-                         <div className="mt-2 flex flex-wrap gap-2">
-                           {['Hindi','English','Gujarati','Marathi','Bengali','Tamil','Telugu','Kannada','Punjabi','Urdu'].map(lang => {
-                             const cur: string[] = (() => { const v = editForm.languages_known; if (Array.isArray(v)) return v as string[]; if (typeof v === 'string') { try { return JSON.parse(v); } catch { return []; } } return []; })();
-                             const on = cur.includes(lang);
-                             return (<label key={lang} onClick={() => handleEditChange('languages_known', on ? cur.filter(l=>l!==lang) : [...cur,lang])} className={`px-2 py-1 rounded border cursor-pointer text-xs select-none ${on?'bg-blue-50 border-blue-400 text-blue-700 font-semibold':'border-gray-200 text-gray-500'}`}>{lang}</label>);
-                           })}
-                         </div>
-                       ) : (
-                         <div className="flex flex-wrap gap-1 mt-1">
-                           {(() => { const langs = selectedCandidate.languages_known; let p: string[] = []; if (Array.isArray(langs)) { p = langs; } else if (typeof langs === 'string') { try { p = JSON.parse(langs); } catch { p = [langs]; } } return p.length > 0 ? p.map((l,i) => (<span key={i} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs border border-blue-100">{l}</span>)) : 'N/A'; })()}
-                         </div>
-                       )}
-                     </div>
+                      <p className="font-semibold text-gray-500">Languages</p>
+                      {isEditing ? (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {['Hindi', 'English', 'Gujarati', 'Marathi', 'Bengali', 'Tamil', 'Telugu', 'Kannada', 'Punjabi', 'Urdu'].map(lang => {
+                            const cur: string[] = (() => { const v = editForm.languages_known; if (Array.isArray(v)) return v as string[]; if (typeof v === 'string') { try { return JSON.parse(v); } catch { return []; } } return []; })();
+                            const on = cur.includes(lang);
+                            return (<label key={lang} onClick={() => handleEditChange('languages_known', on ? cur.filter(l => l !== lang) : [...cur, lang])} className={`px-2 py-1 rounded border cursor-pointer text-xs select-none ${on ? 'bg-blue-50 border-blue-400 text-blue-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>{lang}</label>);
+                          })}
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {(() => { const langs = selectedCandidate.languages_known; let p: string[] = []; if (Array.isArray(langs)) { p = langs; } else if (typeof langs === 'string') { try { p = JSON.parse(langs); } catch { p = [langs]; } } return p.length > 0 ? p.map((l, i) => (<span key={i} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs border border-blue-100">{l}</span>)) : 'N/A'; })()}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 

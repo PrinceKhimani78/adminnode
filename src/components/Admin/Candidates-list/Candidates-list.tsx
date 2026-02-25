@@ -218,10 +218,12 @@ const Candidateslist = () => {
   };
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className={`pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative ${showDetailsModal ? "print:hidden" : ""}`}>
         {/* Sidebar */}
-        <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-        <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">
+        <div className="print:hidden">
+          <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        </div>
+        <main className={`flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8 ${showDetailsModal ? "print:hidden" : ""}`}>
           {/* Title + Breadcrumb */}
           <div className="border-b pb-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
@@ -532,14 +534,14 @@ const Candidateslist = () => {
 
         {/* Candidate Details Modal */}
         {showDetailsModal && selectedCandidate && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999] animate-fadeIn p-4 overflow-y-auto">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl relative flex flex-col max-h-[90vh]">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999] animate-fadeIn p-4 overflow-y-auto print:static print:bg-transparent print:p-0 print:m-0 print:block">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl relative flex flex-col max-h-[90vh] print:max-w-full print:max-h-none print:shadow-none print:w-full print:overflow-visible">
               {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white rounded-t-xl z-10">
+              <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white rounded-t-xl z-10 print:static print:border-none print:p-0 print:mb-4">
                 <h2 className="text-xl font-bold text-gray-800">Candidate Information View</h2>
                 <button
                   onClick={() => setShowDetailsModal(false)}
-                  className="text-gray-400 hover:text-gray-600 transition"
+                  className="text-gray-400 hover:text-gray-600 transition print:hidden"
                 >
                   <RxCross2 size={24} />
                 </button>
@@ -844,7 +846,7 @@ const Candidateslist = () => {
               </div>
 
               {/* Footer */}
-              <div className="p-5 border-t bg-gray-50 rounded-b-xl flex justify-end gap-3">
+              <div className="p-5 border-t bg-gray-50 rounded-b-xl flex justify-end gap-3 print:hidden">
                 <button
                   onClick={() => setShowDetailsModal(false)}
                   className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-bold transition text-sm"

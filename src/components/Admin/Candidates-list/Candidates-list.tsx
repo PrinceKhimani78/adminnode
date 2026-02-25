@@ -650,11 +650,22 @@ const Candidateslist = () => {
                     <div>
                       <p className="font-semibold text-gray-500">Languages</p>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {selectedCandidate.languages_known && selectedCandidate.languages_known.length > 0 ? (
-                          selectedCandidate.languages_known.map((lang, idx) => (
+                        {(() => {
+                          const langs = selectedCandidate.languages_known;
+                          let parsedLangs: string[] = [];
+                          if (Array.isArray(langs)) {
+                            parsedLangs = langs;
+                          } else if (typeof langs === 'string') {
+                            try {
+                              parsedLangs = JSON.parse(langs);
+                            } catch {
+                              parsedLangs = [langs as string];
+                            }
+                          }
+                          return parsedLangs.length > 0 ? parsedLangs.map((lang, idx) => (
                             <span key={idx} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs border border-blue-100">{lang}</span>
-                          ))
-                        ) : 'N/A'}
+                          )) : 'N/A';
+                        })()}
                       </div>
                     </div>
                   </div>

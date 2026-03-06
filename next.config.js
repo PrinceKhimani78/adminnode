@@ -13,8 +13,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/candidate-profile/:path*',
-        destination: 'https://api.rojgariindia.com/api/candidate-profile/:path*',
+        source: '/api/:path*',
+        destination: 'http://localhost:3000/api/:path*',
       },
     ];
   },

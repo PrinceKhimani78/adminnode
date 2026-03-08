@@ -17,6 +17,7 @@ import {
   FaEye,
 } from "react-icons/fa";
 import Sidebar from "../Common/Sidebar";
+import AdminHeader from "../Common/AdminHeader";
 import {
   LineChart,
   Line,
@@ -213,7 +214,8 @@ const Dashboard = () => {
       <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-        <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8">
+        <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-4">
+          <AdminHeader />
           {/* Title + Breadcrumb */}
           <div className="border-b pb-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
@@ -256,22 +258,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Profile */}
-          <div className="flex items-center gap-4">
-            <Image
-              src="/images/profile1.webp"
-              alt="Profile"
-              width={80}
-              height={80}
-              className="rounded-full border"
-            />
-            <div>
-              <h2 className="text-base sm:text-lg font-bold">
-                Randall Henderson
-              </h2>
-              <p className="text-gray-500">IT Contractor</p>
-            </div>
-          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Sidebar from "../Common/Sidebar";
+import AdminHeader from "../Common/AdminHeader";
 import { FaEye, FaEnvelope, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
 import { IoChevronForward } from "react-icons/io5";
 import { FiChevronRight } from "react-icons/fi";
@@ -106,7 +107,12 @@ const Candidateslist = () => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const response = await fetch("/api/candidate-profile?limit=100");
+        const token = localStorage.getItem("admin_token");
+        const response = await fetch("/api/candidate-profile?limit=100", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const data = await response.json();
         console.log("FETCH RESULT: ", data);
         if (data.success && data.data && data.data.profiles) {
@@ -142,6 +148,17 @@ const Candidateslist = () => {
 
   const [candidateToDelete, setCandidateToDelete] = useState<Candidate | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userRole, setUserRole] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userStr = localStorage.getItem("admin_user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        setUserRole(user.role || "");
+      }
+    }
+  }, []);
 
   const handleViewCandidate = async (candidate: Candidate) => {
     setSelectedCandidate(candidate); // Set initial data from list
@@ -150,7 +167,12 @@ const Candidateslist = () => {
     setIsEditing(false);
 
     try {
-      const response = await fetch(`/api/candidate-profile/${candidate.id}`);
+      const token = localStorage.getItem("admin_token");
+      const response = await fetch(`/api/candidate-profile/${candidate.id}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       const data = await response.json();
       if (data.success && data.data) {
         setSelectedCandidate(data.data); // Update with full details
@@ -170,8 +192,12 @@ const Candidateslist = () => {
     if (!candidateToDelete) return;
 
     try {
+      const token = localStorage.getItem("admin_token");
       const response = await fetch(`/api/candidate-profile/${candidateToDelete.id}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       });
       const data = await response.json();
       if (data.success) {
@@ -261,9 +287,13 @@ const Candidateslist = () => {
         })) as any[],
       };
 
+      const token = localStorage.getItem("admin_token");
       const response = await fetch(`/api/candidate-profile/${selectedCandidate.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(payload),
       });
 
@@ -327,7 +357,8 @@ const Candidateslist = () => {
         <div className="print:hidden">
           <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         </div>
-        <main className={`flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-8 ${showDetailsModal ? "print:hidden" : ""}`}>
+        <main className={`flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-4 ${showDetailsModal ? "print:hidden" : ""}`}>
+          <AdminHeader />
           {/* Title + Breadcrumb */}
           <div className="border-b pb-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
@@ -444,7 +475,7 @@ const Candidateslist = () => {
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
                       <Image
-                        src={c.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
+                        src={c.profile_photo ? `/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
                         alt={c.full_name || "Profile"}
                         width={40}
                         height={40}
@@ -500,7 +531,7 @@ const Candidateslist = () => {
                   <div className="flex items-center gap-3 px-3 py-3">
                     {c.profile_photo ? (
                       <Image
-                        src={c.profile_photo ? `https://api.rojgariindia.com/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
+                        src={c.profile_photo ? `/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
                         alt={c.full_name || "Profile"}
                         width={40}
                         height={40}
@@ -543,13 +574,15 @@ const Candidateslist = () => {
                     >
                       <FaEye />
                     </button>
-                    <button
-                      onClick={() => confirmDelete(c)}
-                      className="text-[#00C9FF] hover:text-red-600 transition"
-                      title="Delete Candidate"
-                    >
-                      <FaTrash />
-                    </button>
+                    {userRole === 'superadmin' && (
+                      <button
+                        onClick={() => confirmDelete(c)}
+                        className="text-[#00C9FF] hover:text-red-600 transition"
+                        title="Delete Candidate"
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

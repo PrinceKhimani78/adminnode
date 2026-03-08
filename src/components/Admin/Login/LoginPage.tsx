@@ -11,12 +11,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    if (username === "admin" && password === "admin@123") {
-      localStorage.setItem("admin_logged_in", "true");
-      router.push("/admin/dashboard");
-    } else {
-      setError("Invalid username or password");
+  const handleLogin = async () => {
+    try {
+      setError("");
+      const response = await fetch("/api/admin/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: username, password }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        localStorage.setItem("admin_token", result.data.token);
+        localStorage.setItem("admin_user", JSON.stringify(result.data.user));
+        localStorage.setItem("admin_logged_in", "true");
+        router.push("/admin/dashboard");
+      } else {
+        setError(result.message || "Invalid email or password");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -51,8 +66,8 @@ export default function LoginPage() {
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          autoComplete="off"
+          placeholder="Email"
+          autoComplete="email"
           className="
             mb-4 w-full
             rounded-lg

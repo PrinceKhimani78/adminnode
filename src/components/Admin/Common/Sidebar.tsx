@@ -26,15 +26,21 @@ export default function Sidebar({
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userRole, setUserRole] = useState<string>("");
   const router = useRouter();
 
-  // AUTH GUARD: Check if user is logged in
   useEffect(() => {
     // Only check on client side
     if (typeof window !== "undefined") {
       const isLoggedIn = localStorage.getItem("admin_logged_in");
       if (!isLoggedIn) {
         router.push("/"); // Redirect to login if not authenticated
+      }
+
+      const userStr = localStorage.getItem("admin_user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        setUserRole(user.role || "");
       }
     }
   }, [router]);
@@ -75,6 +81,15 @@ export default function Sidebar({
       label: "Resume Alerts",
       href: "/admin/resume-alerts",
     },
+    ...(userRole === "superadmin"
+      ? [
+        {
+          icon: <FaUsers />,
+          label: "Manage Admins",
+          href: "/admin/manage-admins",
+        },
+      ]
+      : []),
     {
       icon: <FaTrash />,
       label: "Delete Profile",

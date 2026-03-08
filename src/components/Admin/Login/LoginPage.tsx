@@ -66,8 +66,8 @@ export default function LoginPage() {
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Email"
-          autoComplete="email"
+          placeholder="Email or Username"
+          autoComplete="username"
           className="
             mb-4 w-full
             rounded-lg

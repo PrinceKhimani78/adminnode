@@ -10,43 +10,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy and Build on Server
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: https://api.rojgariindia.com/api
+
+      - name: Compress Release
+        run: tar -czf release.tar.gz .next public package.json package-lock.json next.config.js
+
+      - name: Upload Tarball
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "release.tar.gz"
+          target: "/home/admin.rojgariindia.com/"
+          overwrite: true
+
+      - name: Extract and Restart PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          command_timeout: 45m
+          command_timeout: 10m
           script: |
             set -e
             export NVM_DIR=~/.nvm
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            
-            # Ensure target directory exists
+
             mkdir -p /home/admin.rojgariindia.com/release
-            cd /home/admin.rojgariindia.com/release
-
-            # Initialize git if not present
-            if [ ! -d ".git" ]; then
-              echo "Cloning repository..."
-              git clone https://github.com/PrinceKhimani78/adminnode.git .
-            fi
-
-            # Pull latest changes
-            echo "Pulling latest code..."
-            git reset --hard
-            git pull origin main
-
-            # Install dependencies and build
-            echo "Installing dependencies..."
-            npm ci
+            cd /home/admin.rojgariindia.com/
+            tar -xzf release.tar.gz -C release/
+            rm release.tar.gz
             
-            echo "Building Next.js app..."
-            export NEXT_PUBLIC_API_URL=https://api.rojgariindia.com/api
-            npm run build
-
-            # Restart PM2 process
-            echo "Restarting PM2..."
+            cd release
+            npm ci --production
+            
             pm2 delete adminnode || true
             PORT=3022 pm2 start npm --name adminnode -- start
             pm2 save

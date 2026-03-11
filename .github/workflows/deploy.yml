@@ -27,20 +27,17 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: https://api.rojgariindia.com/api
 
-      - name: Compress Release
-        run: tar -czf release.tar.gz .next public package.json package-lock.json next.config.js
-
-      - name: Upload Tarball
+      - name: Upload build to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "release.tar.gz"
-          target: "/home/admin.rojgariindia.com/"
+          source: "."
+          target: "/home/admin.rojgariindia.com/release"
           overwrite: true
 
-      - name: Extract and Restart PM2
+      - name: Restart AdminNode with PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -49,19 +46,8 @@ jobs:
           command_timeout: 10m
           script: |
             set -e
-            export NVM_DIR=~/.nvm
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            cd /home/admin.rojgariindia.com/release
 
-            mkdir -p /home/admin.rojgariindia.com/release
-            cd /home/admin.rojgariindia.com/
-            tar -xzf release.tar.gz -C release/
-            rm release.tar.gz
-            
-            cd release
-            npm ci --production
-            
             pm2 delete adminnode || true
             PORT=3022 pm2 start npm --name adminnode -- start
             pm2 save
-            
-            echo "Deployment to adminnode complete!"

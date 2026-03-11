@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Admin Panel",
 };
 
+import ClientWrapper from "@/components/ClientWrapper";
+
 export default function RootLayout({
   children,
 }: {
@@ -28,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
+        <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>
   );

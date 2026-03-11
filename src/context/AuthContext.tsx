@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const BACKEND = process.env.NEXT_PUBLIC_BACKEND_API_URL || "https://api.rojgariindia.com/api";
+    const BACKEND = process.env.NEXT_PUBLIC_BACKEND_API_URL || "/api";
 
     // Rehydrate from localStorage on mount
     useEffect(() => {

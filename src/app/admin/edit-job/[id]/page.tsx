@@ -23,7 +23,7 @@ const EditJobPage = ({ params }: EditJobPageProps) => {
       if (!isAuthenticated || !token) return;
       
       try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:4000/api";
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || "/api";
         const response = await fetch(`${backendUrl}/jobs/${id}`, {
           headers: {
             "Authorization": `Bearer ${token}`

@@ -28,7 +28,11 @@ jobs:
           NEXT_PUBLIC_API_URL: https://api.rojgariindia.com/api
 
       - name: Compress Release
-        run: tar -czf release.tar.gz .next public package.json package-lock.json next.config.js
+        run: |
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+          cd .next/standalone
+          tar -czf ../../release.tar.gz .
 
       - name: Upload Tarball
         uses: appleboy/scp-action@v0.1.7
@@ -58,11 +62,9 @@ jobs:
             rm release.tar.gz
             
             cd release
-            npm cache clean --force || true
-            NODE_OPTIONS="--max-old-space-size=512" npm install --omit=dev --no-audit --no-fund
             
             pm2 delete adminnode || true
-            PORT=3022 pm2 start npm --name adminnode -- start
+            PORT=3022 pm2 start server.js --name adminnode
             pm2 save
             
             echo "Deployment to adminnode complete!"

@@ -150,6 +150,39 @@ const Candidateslist = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userRole, setUserRole] = useState<string>("");
 
+  // Resume upload state
+  const [resumeUploadFile, setResumeUploadFile] = useState<File | null>(null);
+  const [resumeUploading, setResumeUploading] = useState(false);
+  const [resumeUploadMsg, setResumeUploadMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
+
+  const handleResumeUpload = async () => {
+    if (!resumeUploadFile || !selectedCandidate) return;
+    setResumeUploading(true);
+    setResumeUploadMsg(null);
+    try {
+      const token = localStorage.getItem("admin_token");
+      const fd = new FormData();
+      fd.append("resume", resumeUploadFile);
+      const res = await fetch(`/api/candidate-profile/${selectedCandidate.id}/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setResumeUploadMsg({ text: "Resume uploaded successfully!", type: "success" });
+        setSelectedCandidate((prev) => prev ? { ...prev, resume: data.data?.resume || "uploaded" } : prev);
+        setResumeUploadFile(null);
+      } else {
+        setResumeUploadMsg({ text: data.message || "Upload failed. Please try again.", type: "error" });
+      }
+    } catch {
+      setResumeUploadMsg({ text: "Upload failed. Check your connection.", type: "error" });
+    } finally {
+      setResumeUploading(false);
+    }
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userStr = localStorage.getItem("admin_user");
@@ -704,7 +737,7 @@ const Candidateslist = () => {
                   {selectedCandidate.profile_photo ? (
                     <div className="relative w-24 h-24">
                       <Image
-                        src={`https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}/download/photo`}
+                        src={`/api/candidate-profile/${selectedCandidate.id}/download/photo`}
                         alt={selectedCandidate.full_name}
                         fill
                         className="rounded-full border-4 border-gray-100 object-cover shadow-sm"
@@ -734,7 +767,7 @@ const Candidateslist = () => {
                       </span>
                       {selectedCandidate.resume && (
                         <a
-                          href={`https://api.rojgariindia.com/api/candidate-profile/${selectedCandidate.id}/download/resume`}
+                          href={`/api/candidate-profile/${selectedCandidate.id}/download/resume`}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
@@ -1212,6 +1245,78 @@ const Candidateslist = () => {
                       ) : (
                         <p className="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 min-h-[60px]">
                           {selectedCandidate.additional_info || "No additional info provided."}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. DOCUMENTS */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-gray-50 px-5 py-3 border-b border-gray-200">
+                    <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Documents</h4>
+                  </div>
+                  <div className="p-5 space-y-4 text-sm">
+                    {/* Resume status */}
+                    <div className="flex items-center justify-between flex-wrap gap-3">
+                      <div>
+                        <p className="font-semibold text-gray-500 mb-1">Resume</p>
+                        {selectedCandidate.resume ? (
+                          <a
+                            href={`/api/candidate-profile/${selectedCandidate.id}/download/resume`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition"
+                          >
+                            📄 Download Resume
+                          </a>
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">No resume uploaded yet.</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Resume upload */}
+                    <div>
+                      <p className="font-semibold text-gray-500 mb-2">{selectedCandidate.resume ? "Replace Resume" : "Upload Resume"}</p>
+                      <label className={`flex items-center gap-3 w-full px-4 py-3 border-2 border-dashed rounded-xl cursor-pointer transition ${
+                        resumeUploadFile ? "border-[#00C9FF] bg-blue-50" : "border-gray-300 hover:border-[#00C9FF]"
+                      }`}>
+                        <span className="text-xl">{resumeUploadFile ? "📄" : "📎"}</span>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-semibold text-gray-700">
+                            {resumeUploadFile ? resumeUploadFile.name : "Choose PDF or Image"}
+                          </span>
+                          <span className="text-[10px] text-gray-400">
+                            {resumeUploadFile ? "Click to change" : "PDF, JPG, PNG · Max 5MB"}
+                          </span>
+                        </div>
+                        <input
+                          type="file"
+                          accept="application/pdf,image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            setResumeUploadFile(e.target.files?.[0] || null);
+                            setResumeUploadMsg(null);
+                          }}
+                        />
+                      </label>
+
+                      {resumeUploadFile && (
+                        <button
+                          onClick={handleResumeUpload}
+                          disabled={resumeUploading}
+                          className="mt-3 px-5 py-2 bg-[#00C9FF] hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-bold rounded-lg transition shadow-sm"
+                        >
+                          {resumeUploading ? "Uploading..." : "Upload Resume"}
+                        </button>
+                      )}
+
+                      {resumeUploadMsg && (
+                        <p className={`mt-2 text-xs font-medium ${
+                          resumeUploadMsg.type === "success" ? "text-green-600" : "text-red-500"
+                        }`}>
+                          {resumeUploadMsg.text}
                         </p>
                       )}
                     </div>

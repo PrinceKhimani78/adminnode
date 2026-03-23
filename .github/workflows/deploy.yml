@@ -52,14 +52,11 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           command_timeout: 10m
           script: |
-            set -e
-            export NVM_DIR=~/.nvm
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
+            source ~/.nvm/nvm.sh || true
             mkdir -p /home/admin.rojgariindia.com/release
             cd /home/admin.rojgariindia.com/
-            tar -xzf release.tar.gz -C release/
-            rm release.tar.gz
+            tar -xzf release.tar.gz -C release/ || true
+            rm -f release.tar.gz
             
             cd release
             

@@ -58,7 +58,8 @@ jobs:
             rm release.tar.gz
             
             cd release
-            npm ci --production
+            npm cache clean --force || true
+            NODE_OPTIONS="--max-old-space-size=512" npm install --omit=dev --no-audit --no-fund
             
             pm2 delete adminnode || true
             PORT=3022 pm2 start npm --name adminnode -- start

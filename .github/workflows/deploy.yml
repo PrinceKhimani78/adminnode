@@ -54,15 +54,33 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            mkdir -p /home/admin.rojgariindia.com/release
+            # Ensure Node 20 is used
+            nvm install 20 || true
+            nvm use 20 || true
+            
+            echo "🚀 Starting adminnode deployment..."
+
             cd /home/admin.rojgariindia.com/
-            tar -xzf release.tar.gz -C release/ || true
+
+            # Ensure tar exists before extracting
+            if [ ! -f release.tar.gz ]; then
+              echo "❌ release.tar.gz not found!"
+            fi
+
+            rm -rf release
+            mkdir release
+
+            tar -xzf release.tar.gz -C release/
             rm -f release.tar.gz
-            
+
             cd release
-            
+
+            # Restart app safely
             pm2 delete adminnode || true
             PORT=3022 pm2 start server.js --name adminnode
             pm2 save
-            
-            echo "Deployment to adminnode complete!"
+
+            echo "✅ adminnode deployment complete! Checking status..."
+            sleep 3
+            pm2 list
+            pm2 logs adminnode --lines 50 --nostream || true

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -7,14 +7,11 @@ import {
   FaFileAlt,
   FaBell,
   FaEnvelope,
-  FaBookmark,
-  FaCode,
-  FaUserCheck,
-  FaBoxOpen,
-  FaStar,
   FaMapMarkerAlt,
   FaTrash,
   FaEye,
+  FaUsers,
+  FaUserTie,
 } from "react-icons/fa";
 import Sidebar from "../Common/Sidebar";
 import AdminHeader from "../Common/AdminHeader";
@@ -31,184 +28,143 @@ import {
 
 import { FiChevronRight } from "react-icons/fi";
 import { IoChevronForward } from "react-icons/io5";
-const profileViewsData = [
-  { month: "January", viewers: 200 },
-  { month: "February", viewers: 250 },
-  { month: "March", viewers: 350 },
-  { month: "April", viewers: 200 },
-  { month: "May", viewers: 250 },
-  { month: "June", viewers: 150 },
-];
-const inboxMessages = [
-  {
-    name: "Lucy Smith",
-    message:
-      "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
-    date: "18 June 2023",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Richred Paul",
-    message:
-      "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
-    date: "19 June 2023",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Jon Doe",
-    message:
-      "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
-    date: "20 June 2023",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Lucy Smith",
-    message:
-      "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
-    date: "18 June 2023",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Richred Paul",
-    message:
-      "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
-    date: "19 June 2023",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Jon Doe",
-    message:
-      "Bring to the table win-win survival strategies to ensure proactive domination. at the end of the day, going forward, a new normal that has evolved from generation.",
-    date: "20 June 2023",
-    image: "/images/profile1.webp",
-  },
-];
-const applicants = [
-  {
-    name: "Wanda Montgomery",
-    role: "Charted Accountant",
-    location: "New York",
-    rate: "$20 / Day",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Peter Hawkins",
-    role: "Medical Professed",
-    location: "New York",
-    rate: "$7 / Hour",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Ralph Johnson",
-    role: "Bank Manger",
-    location: "New York",
-    rate: "$180 / Day",
-    image: "/images/profile1.webp",
-  },
-  {
-    name: "Randall Henderson",
-    role: "IT Contractor",
-    location: "New York",
-    rate: "$90 / Week",
-    image: "/images/profile1.webp",
-  },
-];
 
-const activities = [
-  {
-    icon: <FaEnvelope className="text-green-600" />,
-    text: (
-      <>
-        Nikol Tesla has sent you{" "}
-        <span className="text-green-600 font-medium">private message!</span>
-      </>
-    ),
-  },
-  {
-    icon: <FaBriefcase className="text-blue-600" />,
-    text: (
-      <>
-        Your job for{" "}
-        <span className="text-blue-600 font-medium">Web Designer</span> has been
-        approved!
-      </>
-    ),
-  },
+interface Candidate {
+  id: string;
+  full_name: string;
+  surname: string;
+  email: string;
+  mobile_number: string;
+  district: string;
+  city: string;
+  village: string;
+  total_experience_years: number;
+  expected_salary_min: number;
+  expected_salary_max: number;
+  profile_photo?: string;
+  created_at: string;
+  status: string;
+  position?: string;
+  job_category?: string;
+}
 
-  {
-    icon: <FaBookmark className="text-yellow-500" />,
-    text: (
-      <>
-        Someone bookmarked your{" "}
-        <span className="text-yellow-500 font-medium">SEO Expert</span> Job
-        listing!
-      </>
-    ),
-  },
-  {
-    icon: <FaCode className="text-cyan-600" />,
-    text: (
-      <>
-        Your job listing{" "}
-        <span className="text-cyan-600 font-medium">Core PHP Developer</span>{" "}
-        for Site Maintenance is expiring!
-      </>
-    ),
-  },
-  {
-    icon: <FaUserCheck className="text-green-700" />,
-    text: (
-      <>
-        You have new application for{" "}
-        <span className="text-green-700 font-medium">
-          UI/UX Developer & Designer!
-        </span>
-      </>
-    ),
-  },
-  {
-    icon: <FaBoxOpen className="text-red-600" />,
-    text: (
-      <>
-        Your Magento Developer job expire{" "}
-        <span className="text-red-600 font-medium">Renew</span> now it.
-      </>
-    ),
-  },
-  {
-    icon: <FaStar className="text-orange-500" />,
-    text: (
-      <>
-        David cope left a{" "}
-        <span className="text-orange-500 font-medium">review 4.5</span> for Real
-        Estate Logo
-      </>
-    ),
-  },
-  {
-    icon: <FaEnvelope className="text-green-600" />,
-    text: (
-      <>
-        Nikol Tesla has sent you{" "}
-        <span className="text-green-600 font-medium">private message!</span>
-      </>
-    ),
-  },
-  {
-    icon: <FaBriefcase className="text-blue-600" />,
-    text: (
-      <>
-        Your job for{" "}
-        <span className="text-blue-600 font-medium">Web Designer</span> has been
-        approved!
-      </>
-    ),
-  },
-];
+interface DashboardStats {
+  totalJobs: number;
+  totalCandidates: number;
+  totalRecruiters: number;
+  pendingRecruiters: number;
+}
 
 const Dashboard = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [stats, setStats] = useState<DashboardStats>({
+    totalJobs: 0,
+    totalCandidates: 0,
+    totalRecruiters: 0,
+    pendingRecruiters: 0,
+  });
+  const [recentCandidates, setRecentCandidates] = useState<Candidate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Generate profile views from candidate registration data
+  const [profileViewsData, setProfileViewsData] = useState<{ month: string; registrations: number }[]>([]);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("admin_token");
+        const headers = { "Authorization": `Bearer ${token}` };
+
+        // Fetch candidates
+        const candidatesRes = await fetch("/api/candidate-profile?limit=200", { headers });
+        const candidatesData = await candidatesRes.json();
+
+        let allCandidates: Candidate[] = [];
+        if (candidatesData.success && candidatesData.data?.profiles) {
+          allCandidates = candidatesData.data.profiles;
+        }
+
+        // Fetch jobs
+        let totalJobs = 0;
+        try {
+          const jobsRes = await fetch("/api/jobs?limit=1", { headers });
+          const jobsData = await jobsRes.json();
+          if (jobsData.success) {
+            totalJobs = jobsData.data?.total || jobsData.data?.jobs?.length || 0;
+          }
+        } catch { totalJobs = 0; }
+
+        // Fetch recruiters (pending)
+        let totalRecruiters = 0;
+        let pendingRecruiters = 0;
+        try {
+          const pendingRes = await fetch("/api/recruiter/pending", { headers });
+          const pendingData = await pendingRes.json();
+          if (pendingData.success) {
+            pendingRecruiters = pendingData.data?.length || 0;
+          }
+        } catch { /* ignore */ }
+
+        // Set stats
+        setStats({
+          totalJobs,
+          totalCandidates: allCandidates.length,
+          totalRecruiters,
+          pendingRecruiters,
+        });
+
+        // Recent candidates (last 6, sorted by created_at desc)
+        const sorted = [...allCandidates].sort((a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        setRecentCandidates(sorted.slice(0, 6));
+
+        // Build monthly registration chart from real data
+        const monthCounts: Record<string, number> = {};
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        // Last 6 months
+        const now = new Date();
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          const key = `${d.getFullYear()}-${d.getMonth()}`;
+          monthCounts[key] = 0;
+        }
+
+        allCandidates.forEach(c => {
+          const d = new Date(c.created_at);
+          const key = `${d.getFullYear()}-${d.getMonth()}`;
+          if (key in monthCounts) {
+            monthCounts[key]++;
+          }
+        });
+
+        const chartData = Object.entries(monthCounts).map(([key, count]) => {
+          const [year, month] = key.split('-').map(Number);
+          return {
+            month: `${monthNames[month]} ${year}`,
+            registrations: count,
+          };
+        });
+
+        setProfileViewsData(chartData);
+
+      } catch (err) {
+        console.error("Failed to fetch dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  const formatDate = (dateStr: string) => {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
   return (
     <>
       <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
@@ -258,175 +214,159 @@ const Dashboard = () => {
             </div>
           </div>
 
-
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 title: "Posted Jobs",
-                value: 25,
+                value: loading ? "..." : stats.totalJobs,
                 icon: <FaBriefcase />,
                 color: "bg-[#FFCC23]",
+                href: "/admin/manage-jobs",
               },
               {
-                title: "Total Applications",
-                value: 435,
-                icon: <FaFileAlt />,
+                title: "Total Candidates",
+                value: loading ? "..." : stats.totalCandidates,
+                icon: <FaUsers />,
                 color: "bg-[#72B76A]",
+                href: "/admin/candidates-list",
               },
               {
-                title: "Messages",
-                value: 28,
-                icon: <FaEnvelope />,
+                title: "Pending Recruiters",
+                value: loading ? "..." : stats.pendingRecruiters,
+                icon: <FaUserTie />,
                 color: "bg-[#AE70BB]",
+                href: "/admin/manage-recruiters",
               },
               {
-                title: "Notifications",
-                value: 18,
+                title: "Recent Registrations",
+                value: loading ? "..." : recentCandidates.length,
                 icon: <FaBell />,
                 color: "bg-[#00C9FF]",
+                href: "/admin/candidates-list",
               },
             ].map((card, i) => (
-              <div
+              <Link
                 key={i}
-                className={`${card.color} text-white p-6 rounded-lg shadow flex justify-between items-center`}
+                href={card.href}
+                className={`${card.color} text-white p-6 rounded-lg shadow flex justify-between items-center hover:opacity-90 hover:scale-[1.02] transition-all cursor-pointer`}
               >
                 <div className="flex flex-col gap-2">
                   <div className="text-3xl text-white">{card.icon}</div>
                   <p className="text-sm">{card.title}</p>
                 </div>
                 <p className="text-3xl font-bold">{card.value}</p>
-              </div>
+              </Link>
             ))}
           </div>
-          {/* Profile Views & Inbox side by side */}
-          <div className="grid ">
-            {/* Profile Views */}
+
+          {/* Candidate Registrations Chart */}
+          <div className="grid">
             <div className="bg-white shadow rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <FaFileAlt /> Your Profile Views
+                <FaFileAlt /> Candidate Registrations (Last 6 Months)
               </h3>
               <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={profileViewsData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="month" stroke="#6b7280" />
-                    <YAxis stroke="#6b7280" />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="viewers"
-                      stroke="#42A5F5"
-                      strokeWidth={3}
-                      dot={{ r: 5, fill: "#42A5F5" }}
-                      activeDot={{ r: 8 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                {loading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#72B76A]"></div>
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={profileViewsData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="month" stroke="#6b7280" />
+                      <YAxis stroke="#6b7280" />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="registrations"
+                        stroke="#72B76A"
+                        strokeWidth={3}
+                        dot={{ r: 5, fill: "#72B76A" }}
+                        activeDot={{ r: 8 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </div>
+          </div>
 
-            {/* Inbox */}
-            {/* <div className="bg-white shadow rounded-lg p-6">
-              <h3 className="text-lg font-semibold mb-4">Inbox</h3>
+          {/* Recent Candidates */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <FaUsers className="text-[#72B76A]" /> Recent Candidates
+              </h3>
+              <Link href="/admin/candidates-list" className="text-sm text-[#72B76A] hover:underline font-medium">
+                View All →
+              </Link>
+            </div>
 
-             
-              <div className="divide-y divide-gray-200 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-[#023052] scrollbar-track-gray-100">
-                {inboxMessages.map((msg, i) => (
+            {loading ? (
+              <div className="flex justify-center py-10">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#72B76A]"></div>
+              </div>
+            ) : recentCandidates.length === 0 ? (
+              <p className="text-gray-500 text-center py-6">No candidates registered yet.</p>
+            ) : (
+              <div className="divide-y divide-gray-200">
+                {recentCandidates.map((c) => (
                   <div
-                    key={i}
-                    className="flex items-start gap-4 py-4 hover:bg-gray-50 transition"
+                    key={c.id}
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 px-2 hover:bg-gray-50 rounded-lg transition gap-4"
                   >
-                    <Image
-                      src={msg.image}
-                      alt={msg.name}
-                      width={50}
-                      height={50}
-                      className="rounded-full"
-                    />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-semibold">{msg.name}</h4>
-                        <span className="text-xs text-gray-500">
-                          {msg.date}
-                        </span>
+                    <div className="flex items-center gap-4">
+                      <div className="relative w-[50px] h-[50px] flex-shrink-0">
+                        {c.profile_photo ? (
+                          <img
+                            src={`/api/candidate-profile/${c.id}/download/photo?size=thumbnail`}
+                            alt={c.full_name}
+                            className="rounded-full border object-cover w-[50px] h-[50px]"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                              (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                            }}
+                          />
+                        ) : null}
+                        <div className={`w-[50px] h-[50px] rounded-full bg-[#72B76A]/10 flex items-center justify-center text-lg font-bold text-[#72B76A] ${c.profile_photo ? 'hidden absolute inset-0' : ''}`}>
+                          {c.full_name?.charAt(0) || 'U'}
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1 line-clamp-1">
-                        {msg.message}
-                      </p>
+                      <div>
+                        <h4 className="font-semibold text-sm sm:text-base">
+                          {c.full_name} {c.surname}
+                        </h4>
+                        <p className="text-xs text-gray-500">
+                          {c.job_category && c.job_category !== 'Other' ? c.job_category : c.position || 'Job Seeker'}
+                        </p>
+                        <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                          <FaMapMarkerAlt className="text-[#42A5F5] text-[10px]" />
+                          <span>{c.district || c.city || 'N/A'}{c.village ? `, ${c.village}` : ''}</span>
+                          <span className="text-[#72B76A] font-semibold">
+                            {c.total_experience_years ? `${c.total_experience_years} Yrs Exp` : 'Fresher'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
+                        {formatDate(c.created_at)}
+                      </span>
+                      <Link
+                        href="/admin/candidates-list"
+                        className="p-2 hover:bg-blue-50 rounded-full text-[#42A5F5]"
+                      >
+                        <FaEye />
+                      </Link>
                     </div>
                   </div>
                 ))}
               </div>
-            </div> */}
-          </div>
-          {/* Recent Activities  */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-              <FaBriefcase className="text-gray-600" />
-              Recent Activities
-            </h3>
-
-            {/* Activities list */}
-            <div className="divide-y divide-gray-200 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
-              {activities.map((activity, i) => (
-                <div key={i} className="flex items-start gap-3 py-3 text-sm">
-                  <div className="text-lg">{activity.icon}</div>
-                  <p className="text-gray-700 leading-snug">{activity.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Recent Applicants */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Recent Applicants</h3>
-            <div className="divide-y divide-gray-400">
-              {applicants.map((applicant, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 px-2 hover:bg-gray-50 rounded-lg transition gap-4"
-                >
-                  <div className=" flex items-center gap-4  ">
-                    <Image
-                      src={applicant.image}
-                      alt={applicant.name}
-                      width={50}
-                      height={50}
-                      className="rounded-full border"
-                    />
-                    <div>
-                      <h4 className="font-semibold text-sm sm:text-base">
-                        {applicant.name}
-                      </h4>
-                      <p className="text-[10px] sm:text-[15px] text-gray-500">
-                        {applicant.role}
-                      </p>
-                      <div className="flex items-center gap-2 text-[10px] sm:text-sm text-gray-600 mt-1">
-                        <FaMapMarkerAlt className="text-[#42A5F5]" />
-                        <span>{applicant.location}</span>
-                        <span className="text-green-600 font-medium">
-                          {applicant.rate}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex sm:flex-row flex-row sm:justify-end justify-center gap-3 text-[#42A5F5]">
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
-                      <FaEye />
-                    </button>
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
-                      <FaEnvelope />
-                    </button>
-                    <button className="p-2 hover:bg-blue-50 rounded-full">
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+            )}
           </div>
         </main>
       </div>

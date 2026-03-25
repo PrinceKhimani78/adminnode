@@ -132,10 +132,10 @@ const Candidateslist = () => {
   }, []);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  // const [entries, setEntries] = useState(10); // Simplified for now
+  const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const entries = 10;
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Filter candidates locally for now
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
@@ -349,9 +349,10 @@ const Candidateslist = () => {
   };
 
   const filteredCandidates = candidates.filter(c => {
-    if (selectedKeywords.length === 0) return true;
-    const searchString = `${c.full_name} ${c.position || ''} ${c.status}`.toLowerCase();
-    return selectedKeywords.some(k => searchString.includes(k.toLowerCase()));
+    const searchString = `${c.full_name} ${c.surname || ''} ${c.email} ${c.mobile_number} ${c.position || ''} ${c.status}`.toLowerCase();
+    const matchesKeywords = selectedKeywords.length === 0 || selectedKeywords.some(k => searchString.includes(k.toLowerCase()));
+    const matchesSearch = searchQuery.trim() === '' || searchString.includes(searchQuery.toLowerCase());
+    return matchesKeywords && matchesSearch;
   });
 
   const totalPages = Math.ceil(filteredCandidates.length / entries);
@@ -368,7 +369,7 @@ const Candidateslist = () => {
   };
 
   const handleEntriesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // setEntries(Number(e.target.value));
+    setEntries(Number(e.target.value));
     setCurrentPage(1);
   };
 
@@ -475,6 +476,8 @@ const Candidateslist = () => {
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                   className="w-full p-2 rounded bg-white text-sm placeholder-slate-400 ring-1 ring-gray-400 
       transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
                 />
@@ -482,16 +485,16 @@ const Candidateslist = () => {
             </div>
 
             {/* Table Header (desktop only) */}
-            <div className="hidden sm:grid grid-cols-7 font-semibold text-sm text-gray-600 border-b py-2">
-              <div className="px-3">
+            <div className="hidden sm:grid font-semibold text-sm text-gray-600 border-b py-2" style={{ gridTemplateColumns: '40px 2fr 1fr 1.2fr 0.8fr 70px 80px' }}>
+              <div className="px-2">
                 <input type="checkbox" />
               </div>
               <div className="px-3">Name</div>
               <div className="px-3">Mobile</div>
               <div className="px-3">Location</div>
               <div className="px-3">Experience</div>
-              <div className="px-3">Status</div>
-              <div className="px-3 text-center col-span-1">Actions</div>
+              <div className="px-2">Status</div>
+              <div className="px-2 text-center">Actions</div>
             </div>
 
             {loading ? <div className="p-10 text-center">Loading candidates...</div> : currentCandidates.map((c, i) => (
@@ -501,47 +504,49 @@ const Candidateslist = () => {
                   }`}
               >
                 {/* Desktop Grid */}
-                <div className="hidden sm:grid grid-cols-7 items-center text-sm">
-                  <div className="px-3 py-3">
+                <div className="hidden sm:grid items-center text-sm" style={{ gridTemplateColumns: '40px 2fr 1fr 1.2fr 0.8fr 70px 80px' }}>
+                  <div className="px-2 py-3">
                     <input type="checkbox" />
                   </div>
                   <div className="flex items-center gap-3 px-3 py-3">
-                    {c.profile_photo ? (
-                      <Image
-                        src={c.profile_photo ? `/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
-                        alt={c.full_name || "Profile"}
-                        width={40}
-                        height={40}
-                        className="rounded-full border object-cover w-10 h-10"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      {c.profile_photo ? (
+                        <img
+                          src={`/api/candidate-profile/${c.id}/download/photo?size=thumbnail`}
+                          alt={c.full_name || "Profile"}
+                          className="rounded-full border object-cover w-10 h-10"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                      ) : null}
+                      <div className={`w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500 ${c.profile_photo ? 'hidden absolute inset-0' : ''}`}>
                         {c.full_name?.charAt(0) || 'U'}
                       </div>
-                    )}
-                    <div>
-                      <p className="font-semibold text-slate-950">{c.full_name} {c.surname}</p>
-                      <p className="text-xs text-gray-500">{c.email}</p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-slate-950 truncate">{c.full_name} {c.surname}</p>
+                      <p className="text-xs text-gray-500 truncate">{c.email}</p>
                     </div>
                   </div>
                   <div className="px-3 py-3">{c.mobile_number}</div>
                   <div className="px-3 py-3">
                     <p className="flex items-center gap-1">
-                      <FaMapMarkerAlt className="text-[#00c9ff] text-xs" />
-                      {c.district || c.city}, {c.village ? c.village : ''}
+                      <FaMapMarkerAlt className="text-[#00c9ff] text-xs flex-shrink-0" />
+                      <span className="truncate">{c.district || c.city}{c.village ? `, ${c.village}` : ''}</span>
                     </p>
                   </div>
                   <div className="px-3 py-3 font-medium">
-                    {c.total_experience_years ? `${c.total_experience_years} Years` : 'Fresher'}
+                    {c.total_experience_years ? `${c.total_experience_years} Yrs` : 'Fresher'}
                   </div>
-                  <div className="px-3 py-3">
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                  <div className="px-2 py-3">
+                    <span className={`px-2 py-1 rounded text-[10px] font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                       }`}>
                       {c.status || 'Active'}
                     </span>
                   </div>
-                  <div className="flex gap-3 px-3 py-3 justify-center col-span-1">
+                  <div className="flex gap-3 px-2 py-3 justify-center">
                     <button
                       onClick={() => handleViewCandidate(c)}
                       className="text-[#00C9FF] hover:text-blue-700"
@@ -551,7 +556,7 @@ const Candidateslist = () => {
                     </button>
                     <button
                       onClick={() => confirmDelete(c)}
-                      className="text-[#00C9FF] hover:text-red-600 transition"
+                      className="text-red-500 hover:text-red-700 transition"
                       title="Delete Candidate"
                     >
                       <FaTrash />
@@ -562,20 +567,22 @@ const Candidateslist = () => {
                 {/* Mobile Card */}
                 <div className="sm:hidden px-3 py-4 space-y-2">
                   <div className="flex items-center gap-3 px-3 py-3">
-                    {c.profile_photo ? (
-                      <Image
-                        src={c.profile_photo ? `/api/candidate-profile/${c.id}/download/photo?size=thumbnail` : "/images/profile1.webp"}
-                        alt={c.full_name || "Profile"}
-                        width={40}
-                        height={40}
-                        className="rounded-full border object-cover w-10 h-10"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      {c.profile_photo ? (
+                        <img
+                          src={`/api/candidate-profile/${c.id}/download/photo?size=thumbnail`}
+                          alt={c.full_name || "Profile"}
+                          className="rounded-full border object-cover w-10 h-10"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                      ) : null}
+                      <div className={`w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500 ${c.profile_photo ? 'hidden absolute inset-0' : ''}`}>
                         {c.full_name?.charAt(0) || 'U'}
                       </div>
-                    )}
+                    </div>
                     <div>
                       <p className="font-semibold text-slate-950">{c.full_name}</p>
                       <p className="text-xs text-gray-500 flex items-center gap-1">
@@ -610,7 +617,7 @@ const Candidateslist = () => {
                     {userRole === 'superadmin' && (
                       <button
                         onClick={() => confirmDelete(c)}
-                        className="text-[#00C9FF] hover:text-red-600 transition"
+                        className="text-red-500 hover:text-red-700 transition"
                         title="Delete Candidate"
                       >
                         <FaTrash />

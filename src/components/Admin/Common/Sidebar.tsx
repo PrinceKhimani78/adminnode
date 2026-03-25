@@ -13,6 +13,9 @@ import {
   FaBox,
   FaBell,
   FaTrash,
+  FaUserShield,
+  FaUserPlus,
+  FaListAlt,
 } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
@@ -84,16 +87,27 @@ export default function Sidebar({
     ...(userRole === "superadmin"
       ? [
         {
-          icon: <FaUsers />,
+          icon: <FaUserShield />,
           label: "Manage Admins",
           href: "/admin/manage-admins",
+        },
+        {
+          icon: <FaUserPlus />,
+          label: "Manage Recruiters",
+          href: "/admin/manage-recruiters",
+        },
+        {
+          icon: <FaListAlt />,
+          label: "Industry Requests",
+          href: "/admin/industry-requests",
         },
       ]
       : []),
     {
-      icon: <FaTrash />,
+      icon: <FaTrash className="text-red-500" />,
       label: "Delete Profile",
       href: "#delete",
+      isDelete: true,
     },
   ];
 
@@ -145,7 +159,7 @@ export default function Sidebar({
       {/* ===== Desktop Sidebar ===== */}
       <div className="hidden md:block">
         <aside
-          className={`sticky top-0 h-[66vh] flex flex-col
+          className={`sticky top-0 h-auto max-h-[90vh] flex flex-col overflow-y-auto
           bg-white shadow rounded-r-lg transition-all duration-300
           ${collapsed ? "w-16 items-center" : "w-52"}`}
         >
@@ -165,7 +179,7 @@ export default function Sidebar({
           </div>
 
           {/* Menu */}
-          <nav className="flex-1 flex flex-col px-2 space-y-3">
+          <nav className="flex-1 flex flex-col px-2 space-y-3 pb-4">
             {menuItems.map((item, i) => {
               const isActive = pathname === item.href;
 
@@ -188,7 +202,9 @@ export default function Sidebar({
                     className={`flex items-center gap-2 rounded-md
                     ${isActive
                         ? "bg-[#72B76A] text-white"
-                        : "text-[#72B76A] hover:bg-[#72B76A] hover:text-white"
+                        : (item as any).isDelete
+                          ? "text-red-500 hover:bg-red-50"
+                          : "text-[#72B76A] hover:bg-[#72B76A] hover:text-white"
                       }`}
                   >
                     <div className="w-10 h-10 flex items-center justify-center text-lg">

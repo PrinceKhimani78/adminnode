@@ -75,8 +75,9 @@ const InputField = ({ id, name, label, value, onChange, placeholder, type = "tex
 const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
   const [activeStep, setActiveStep] = useState(1);
   const router = useRouter();
-  const { user, token, isAuthenticated } = useAuth();
+  const { user, token: authToken, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [manualQuestion, setManualQuestion] = useState("");
 
   const [formData, setFormData] = useState<JobData>({
@@ -141,14 +142,18 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     if (activeStep < 5) {
       setActiveStep(activeStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
-    if (!isAuthenticated || !token) {
-      alert("You must be logged in to perform this action.");
+    // Use authToken from context, or fall back to admin_token from localStorage
+    const token = authToken || localStorage.getItem("admin_token");
+
+    if (!token) {
+      setErrorMessage("You must be logged in to perform this action.");
       return;
     }
 
@@ -172,11 +177,11 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
         alert(isEdit ? "Job updated successfully!" : "Job posted successfully!");
         router.push('/admin/manage-jobs');
       } else {
-        alert(data.message || "Action failed");
+        setErrorMessage(data.message || "Action failed. Please try again.");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred.");
+      setErrorMessage("An error occurred. Please check the console for details.");
     } finally {
       setLoading(false);
     }
@@ -261,6 +266,18 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
       {/* Form Area */}
       <div className="flex-1 max-w-3xl bg-white p-8 sm:p-10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
         <form onSubmit={handleSubmit} className="space-y-10">
+          {/* Error Banner */}
+          {errorMessage && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl flex items-start justify-between gap-3">
+              <div>
+                <p className="font-semibold text-sm">Error</p>
+                <p className="text-sm mt-0.5">{errorMessage}</p>
+              </div>
+              <button type="button" onClick={() => setErrorMessage(null)} className="text-red-400 hover:text-red-600 flex-shrink-0">
+                <FaTimes />
+              </button>
+            </div>
+          )}
           {/* Step 1: Job Details */}
           {activeStep === 1 && (
             <>

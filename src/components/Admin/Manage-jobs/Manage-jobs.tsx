@@ -24,6 +24,7 @@ interface Job {
   perks_and_benefits?: string;
   created_at: string;
   status: 'Active' | 'Expired' | 'Draft';
+  applicationCount?: number;
 }
 
 const Managejobs = () => {
@@ -243,6 +244,9 @@ const Managejobs = () => {
                       <p className="text-sm text-gray-700 mt-1">
                         <span className="font-medium text-gray-500">Category:</span> {job.job_category}
                       </p>
+                      <Link href={`/admin/manage-jobs/${job.id}/applicants`} className="text-sm text-blue-600 font-medium hover:underline mt-1 inline-block">
+                        {job.applicationCount || 0} Applied
+                      </Link>
                     </div>
                   </div>
 

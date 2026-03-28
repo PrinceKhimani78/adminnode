@@ -52,11 +52,10 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           command_timeout: 10m
           script: |
-            export NVM_DIR=~/.nvm
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            # Ensure Node 20 is used
-            nvm install 20 || true
-            nvm use 20 || true
+            # Use binary installs only, never compile from source on small VPS
+            export NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist
+            nvm use 20 || (rm -rf "$NVM_DIR/versions/node/v20.20.2" && nvm install 20 --bin)
+            nvm use 20
             
             echo "🚀 Starting adminnode deployment..."
 

@@ -43,6 +43,8 @@ jobs:
           source: "release.tar.gz"
           target: "/home/admin.rojgariindia.com/"
           overwrite: true
+          debug: true
+          timeout: 2m
 
       - name: Extract and Restart PM2
         uses: appleboy/ssh-action@v1.0.0

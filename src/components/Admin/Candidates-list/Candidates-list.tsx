@@ -554,13 +554,15 @@ const Candidateslist = () => {
                     >
                       <FaEye />
                     </button>
-                    <button
-                      onClick={() => confirmDelete(c)}
-                      className="text-red-500 hover:text-red-700 transition"
-                      title="Delete Candidate"
-                    >
-                      <FaTrash />
-                    </button>
+                    {(userRole === 'superadmin' || userRole === 'admin') && (
+                      <button
+                        onClick={() => confirmDelete(c)}
+                        className="text-red-500 hover:text-red-700 transition"
+                        title="Delete Candidate"
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -614,7 +616,7 @@ const Candidateslist = () => {
                     >
                       <FaEye />
                     </button>
-                    {userRole === 'superadmin' && (
+                    {(userRole === 'superadmin' || userRole === 'admin') && (
                       <button
                         onClick={() => confirmDelete(c)}
                         className="text-red-500 hover:text-red-700 transition"
@@ -1365,16 +1367,18 @@ const Candidateslist = () => {
                     >
                       Close
                     </button>
-                    <button
-                      onClick={() => {
-                        setShowDetailsModal(false);
-                        confirmDelete(selectedCandidate);
-                      }}
-                      className="px-6 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-bold transition text-sm flex items-center gap-2 shadow-sm"
-                    >
-                      <FaTrash className="text-xs" />
-                      Delete Profile
-                    </button>
+                    {(userRole === 'superadmin' || userRole === 'admin') && (
+                      <button
+                        onClick={() => {
+                          setShowDetailsModal(false);
+                          confirmDelete(selectedCandidate);
+                        }}
+                        className="px-6 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-bold transition text-sm flex items-center gap-2 shadow-sm"
+                      >
+                        <FaTrash className="text-xs" />
+                        Delete Profile
+                      </button>
+                    )}
                     <button
                       onClick={() => window.print()}
                       className="px-6 py-2 bg-[#00C9FF] hover:bg-blue-600 text-white rounded-lg font-bold transition text-sm shadow-sm"

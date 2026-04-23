@@ -91,6 +91,10 @@ export default function Sidebar({
           label: "Manage Admins",
           href: "/admin/manage-admins",
         },
+      ]
+      : []),
+    ...(userRole === "superadmin" || userRole === "admin"
+      ? [
         {
           icon: <FaUserPlus />,
           label: "Manage Recruiters",

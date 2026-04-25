@@ -129,7 +129,7 @@ const IndustryRequests = () => {
     const pendingCount = pendingRequests.reduce((sum, r) => sum + (r.pending_industries?.length || 0), 0);
 
     return (
-        <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+        <div className="pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative">
             <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
             <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-4">
                 <AdminHeader />

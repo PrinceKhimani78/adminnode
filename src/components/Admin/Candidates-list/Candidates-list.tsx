@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Sidebar from "../Common/Sidebar";
 import AdminHeader from "../Common/AdminHeader";
+import Pagination from "../Common/Pagination";
 import { FaEye, FaEnvelope, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
 import { IoChevronForward } from "react-icons/io5";
 import { FiChevronRight } from "react-icons/fi";
@@ -360,13 +361,7 @@ const Candidateslist = () => {
   const endIndex = startIndex + entries;
   const currentCandidates = filteredCandidates.slice(startIndex, endIndex);
 
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
 
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
 
   const handleEntriesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setEntries(Number(e.target.value));
@@ -386,7 +381,7 @@ const Candidateslist = () => {
   };
   return (
     <>
-      <div className={`pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative`}>
+      <div className={`pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative`}>
         {/* Sidebar */}
         <div className="print:hidden">
           <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
@@ -413,25 +408,8 @@ const Candidateslist = () => {
                   Candidates List
                 </h1>
               </div>
-              {/* Breadcrumbs */}
-              <nav
-                aria-label="Breadcrumb"
-                className="hidden sm:block text-sm text-gray-500 text-center sm:text-right"
-              >
-                <ol className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
-                  <li className="flex items-center gap-2">
-                    <Link href="/" className="hover:text-gray-700 transition">
-                      Home
-                    </Link>
-                    <FiChevronRight />
-                  </li>
-                  <li>
-                    <span className="text-gray-700 font-medium">
-                      All Candidates
-                    </span>
-                  </li>
-                </ol>
-              </nav>
+              
+              
             </div>
           </div>
 
@@ -549,7 +527,7 @@ const Candidateslist = () => {
                   <div className="flex gap-3 px-2 py-3 justify-center">
                     <button
                       onClick={() => handleViewCandidate(c)}
-                      className="text-[#00C9FF] hover:text-blue-700"
+                      className="p-1.5 rounded-full bg-blue-50 text-[#00c9ff] hover:bg-blue-100 transition text-sm"
                       title="View Details"
                     >
                       <FaEye />
@@ -557,7 +535,7 @@ const Candidateslist = () => {
                     {(userRole === 'superadmin' || userRole === 'admin') && (
                       <button
                         onClick={() => confirmDelete(c)}
-                        className="text-red-500 hover:text-red-700 transition"
+                        className="p-1.5 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition text-sm"
                         title="Delete Candidate"
                       >
                         <FaTrash />
@@ -611,7 +589,7 @@ const Candidateslist = () => {
                   <div className="flex gap-4 justify-start mt-2">
                     <button
                       onClick={() => handleViewCandidate(c)}
-                      className="text-[#00C9FF] hover:text-blue-700 transition"
+                      className="p-1.5 rounded-full bg-blue-50 text-[#00c9ff] hover:bg-blue-100 transition text-sm"
                       title="View Details"
                     >
                       <FaEye />
@@ -619,7 +597,7 @@ const Candidateslist = () => {
                     {(userRole === 'superadmin' || userRole === 'admin') && (
                       <button
                         onClick={() => confirmDelete(c)}
-                        className="text-red-500 hover:text-red-700 transition"
+                        className="p-1.5 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition text-sm"
                         title="Delete Candidate"
                       >
                         <FaTrash />
@@ -637,42 +615,11 @@ const Candidateslist = () => {
                 {endIndex > filteredCandidates.length ? filteredCandidates.length : endIndex} of{" "}
                 {filteredCandidates.length} entries
               </p>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={handlePrev}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-1 border rounded cursor-pointer ${currentPage === 1
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-100"
-                    }`}
-                >
-                  Previous
-                </button>
-
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentPage(index + 1)}
-                    className={`px-3 py-1 border rounded cursor-pointer ${currentPage === index + 1
-                      ? "bg-[#023052] text-white"
-                      : "bg-gray-100 text-gray-700"
-                      }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-
-                <button
-                  onClick={handleNext}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-1 border rounded cursor-pointer ${currentPage === totalPages
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-100"
-                    }`}
-                >
-                  Next
-                </button>
-              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </div>
         </main>

@@ -57,7 +57,7 @@ const InputField = ({ id, name, label, value, onChange, placeholder, type = "tex
       {label}
     </label>
     <div className="relative">
-      {icon && <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00C9FF] transition-colors">{icon}</span>}
+      {icon && <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#72B76A] transition-colors">{icon}</span>}
       <input
         type={type}
         id={id}
@@ -65,7 +65,7 @@ const InputField = ({ id, name, label, value, onChange, placeholder, type = "tex
         value={value ?? ""}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full ${icon ? "pl-11" : "pl-4"} pr-4 h-11 rounded-lg bg-gray-50 border border-gray-200 text-sm placeholder-slate-400 transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]/20 focus:border-[#00c9ff]`}
+        className={`w-full ${icon ? "pl-11" : "pl-4"} pr-4 h-11 rounded-lg bg-gray-50 border border-gray-200 text-sm placeholder-slate-400 transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]/20 focus:border-[#72B76A]`}
         required={required}
       />
     </div>
@@ -239,12 +239,12 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
             { id: 4, label: "Job description" },
             { id: 5, label: "Communication preferences" }
           ].map((step) => (
-            <div key={step.id} className="flex items-center gap-4 group">
+            <div key={step.id} className="flex items-start gap-4 group">
               <div className="flex flex-col items-center">
                 <div 
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all cursor-pointer ${
-                    activeStep === step.id ? "bg-[#00c9ff] text-white ring-4 ring-[#00c9ff]/20" : 
-                    activeStep > step.id ? "bg-[#00c9ff] text-white" : "bg-white border-2 border-gray-200 text-gray-400"
+                    activeStep === step.id ? "bg-[#72B76A] text-white ring-4 ring-[#72B76A]/20" : 
+                    activeStep > step.id ? "bg-[#72B76A] text-white" : "bg-white border-2 border-gray-200 text-gray-400"
                   }`}
                   onClick={() => activeStep >= step.id || isEdit ? setActiveStep(step.id) : null}
                 >
@@ -253,7 +253,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                 {step.id < 5 && <div className="w-0.5 h-10 bg-gray-200 my-1"></div>}
               </div>
               <span 
-                className={`text-sm font-medium transition-colors cursor-pointer ${activeStep === step.id ? "text-[#00c9ff]" : "text-gray-500"}`}
+                className={`text-sm font-medium transition-colors cursor-pointer mt-1.5 ${activeStep === step.id ? "text-[#72B76A]" : "text-gray-500"}`}
                 onClick={() => activeStep >= step.id || isEdit ? setActiveStep(step.id) : null}
               >
                 {step.label}
@@ -289,7 +289,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                       key={type}
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, posting_as: type }))}
-                      className={`px-6 py-2.5 rounded-full text-sm font-semibold border-2 transition-all ${formData.posting_as === type ? "bg-white border-[#00c9ff] text-[#00c9ff] shadow-md ring-2 ring-[#00c9ff]/10" : "bg-gray-50 border-gray-100 text-gray-500 hover:border-gray-200"}`}
+                      className={`px-6 py-2.5 rounded-full text-sm font-semibold border-2 transition-all ${formData.posting_as === type ? "bg-white border-[#72B76A] text-[#72B76A] shadow-md ring-2 ring-[#72B76A]/10" : "bg-gray-50 border-gray-100 text-gray-500 hover:border-gray-200"}`}
                     >
                       {type}
                     </button>
@@ -335,7 +335,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                   <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Perks and Benefits</label>
                   <div className="flex flex-wrap gap-2">
                     {perksSuggestions.map(perk => (
-                      <button key={perk} type="button" onClick={() => togglePerk(perk)} className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${formData.perks_and_benefits.includes(perk) ? "bg-[#00c9ff] border-[#00c9ff] text-white" : "bg-white border-gray-200 text-gray-600 hover:border-[#00c9ff]"}`}>
+                      <button key={perk} type="button" onClick={() => togglePerk(perk)} className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${formData.perks_and_benefits.includes(perk) ? "bg-[#72B76A] border-[#72B76A] text-white" : "bg-white border-gray-200 text-gray-600 hover:border-[#72B76A]"}`}>
                         {formData.perks_and_benefits.includes(perk) ? <FaCheck /> : <FaPlus />} {perk}
                       </button>
                     ))}
@@ -359,7 +359,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                 <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Qualification</label>
                 <div className="flex flex-wrap gap-2">
                   {["12th Pass", "Diploma", "Graduate", "Post-Graduate", "Any"].map(q => (
-                    <button key={q} type="button" onClick={() => handleChipClick("qualifications", q)} className={`px-5 py-2 rounded-full text-xs font-semibold border transition-all ${formData.qualifications === q ? "bg-[#00c9ff] border-[#00c9ff] text-white" : "bg-white border-gray-200 text-gray-600"}`}>
+                    <button key={q} type="button" onClick={() => handleChipClick("qualifications", q)} className={`px-5 py-2 rounded-full text-xs font-semibold border transition-all ${formData.qualifications === q ? "bg-[#72B76A] border-[#72B76A] text-white" : "bg-white border-gray-200 text-gray-600"}`}>
                       {q}
                     </button>
                   ))}
@@ -370,7 +370,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                 <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Gender Preference</label>
                 <div className="flex flex-wrap gap-2">
                   {["Any", "Male", "Female"].map(g => (
-                    <button key={g} type="button" onClick={() => handleChipClick("gender", g)} className={`px-5 py-2 rounded-full text-xs font-semibold border transition-all ${formData.gender === g ? "bg-[#00c9ff] border-[#00c9ff] text-white" : "bg-white border-gray-200 text-gray-600"}`}>
+                    <button key={g} type="button" onClick={() => handleChipClick("gender", g)} className={`px-5 py-2 rounded-full text-xs font-semibold border transition-all ${formData.gender === g ? "bg-[#72B76A] border-[#72B76A] text-white" : "bg-white border-gray-200 text-gray-600"}`}>
                       {g}
                     </button>
                   ))}
@@ -401,7 +401,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                       }
                     }}
                     placeholder="Type your own question here..."
-                    className="flex-1 h-11 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]/20 focus:border-[#00c9ff]"
+                    className="flex-1 h-11 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]/20 focus:border-[#72B76A]"
                   />
                   <button
                     type="button"
@@ -429,7 +429,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                 <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Suggested Questions</label>
                 <div className="flex flex-wrap gap-2">
                   {screeningSuggestions.map(q => (
-                    <button key={q} type="button" onClick={() => addQuestion(q)} className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-blue-50 text-blue-600 hover:bg-blue-100 uppercase tracking-tight">
+                    <button key={q} type="button" onClick={() => addQuestion(q)} className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-green-50 text-green-600 hover:bg-green-100 uppercase tracking-tight">
                       <FaPlus /> {q}
                     </button>
                   ))}
@@ -443,7 +443,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
             <section className="space-y-6">
               <div className="space-y-2">
                 <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Job Description</label>
-                <textarea name="description" rows={10} value={formData.description} onChange={handleChange} placeholder="Tell candidates about the role..." className="w-full p-4 rounded-xl bg-gray-50 border border-gray-200 text-sm min-h-[250px] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]/20" required />
+                <textarea name="description" rows={10} value={formData.description} onChange={handleChange} placeholder="Tell candidates about the role..." className="w-full p-4 rounded-xl bg-gray-50 border border-gray-200 text-sm min-h-[250px] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]/20" required />
               </div>
             </section>
           )}
@@ -454,15 +454,15 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
               <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#00c9ff]/10 text-[#00c9ff] rounded-full flex items-center justify-center"><FaPhone /></div>
+                    <div className="w-10 h-10 bg-[#72B76A]/10 text-[#72B76A] rounded-full flex items-center justify-center"><FaPhone /></div>
                     <div>
                       <h4 className="text-sm font-bold text-gray-900">Communication Preferences</h4>
                       <p className="text-xs text-gray-500">Allow candidates to call you directly?</p>
                     </div>
                   </div>
                   <div className="flex bg-white rounded-lg p-1 border border-gray-200">
-                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, allow_calls: true }))} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${formData.allow_calls ? "bg-[#00c9ff] text-white" : "text-gray-500"}`}>Yes</button>
-                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, allow_calls: false }))} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${!formData.allow_calls ? "bg-[#00c9ff] text-white" : "text-gray-500"}`}>No</button>
+                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, allow_calls: true }))} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${formData.allow_calls ? "bg-[#72B76A] text-white" : "text-gray-500"}`}>Yes</button>
+                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, allow_calls: false }))} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${!formData.allow_calls ? "bg-[#72B76A] text-white" : "text-gray-500"}`}>No</button>
                   </div>
                 </div>
 
@@ -484,12 +484,12 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                <div className="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"><FaCheck /></div>
                <h3 className="text-xl font-bold text-gray-900 mb-1">Ready to {isEdit ? "Update" : "Publish"}!</h3>
                <p className="text-gray-500 text-xs mb-6">Review your job details before submitting.</p>
-               <div className="p-5 bg-blue-50 rounded-xl text-left border border-blue-100 max-w-sm mx-auto">
-                  <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-3">Snapshot</p>
+               <div className="p-5 bg-green-50 rounded-xl text-left border border-green-100 max-w-sm mx-auto">
+                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-3">Snapshot</p>
                   <p className="font-bold text-gray-800 text-sm leading-tight">{formData.title}</p>
                   <p className="text-xs text-gray-500 mt-1">{formData.company_name} • {formData.location}</p>
                   <div className="mt-4 flex gap-4 text-[11px] font-bold">
-                     <span className="text-blue-600">₹{formData.salary_min} - ₹{formData.salary_max}</span>
+                     <span className="text-green-600">₹{formData.salary_min} - ₹{formData.salary_max}</span>
                      <span className="text-gray-400">{formData.exp_min} - {formData.exp_max} Yrs</span>
                   </div>
                </div>
@@ -502,7 +502,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
             <button type="button" onClick={handleBack} disabled={activeStep === 1} className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${activeStep === 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}>
               <FaChevronLeft className="text-xs" /> Back
             </button>
-            <button type="submit" disabled={loading} className="h-12 px-10 bg-[#00c9ff] text-white font-bold rounded-full shadow-lg shadow-blue-100 hover:bg-[#00b4e6] hover:translate-y-[-2px] transition-all disabled:opacity-50 flex items-center gap-2">
+            <button type="submit" disabled={loading} className="h-12 px-10 bg-[#72B76A] text-white font-bold rounded-full shadow-lg shadow-green-100 hover:bg-[#61a35a] hover:translate-y-[-2px] transition-all disabled:opacity-50 flex items-center gap-2">
               {loading ? "Processing..." : activeStep === 5 ? (isEdit ? "Update Job" : "Publish Job") : "Next"}
               {activeStep < 5 && <FaChevronRight className="text-xs" />}
             </button>

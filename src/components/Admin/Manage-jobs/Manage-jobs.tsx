@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Sidebar from "../Common/Sidebar";
 import AdminHeader from "../Common/AdminHeader";
+import Pagination from "../Common/Pagination";
 import { FaEye, FaTrash, FaEdit } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
+import { IoChevronForward } from "react-icons/io5";
 import { useAuth } from "@/context/AuthContext";
 
 interface Job {
@@ -94,12 +96,7 @@ const Managejobs = () => {
     setCurrentPage(1); // Reset to first page
   };
 
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
+
 
   // Delete Job Actions
   const confirmDeleteJob = (id: string) => {
@@ -156,32 +153,30 @@ const Managejobs = () => {
 
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative">
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-6 overflow-hidden">
           {/* Header */}
           <AdminHeader />
           <div className="border-b pb-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-6 bg-[#00c9ff] rounded-full"></div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-                  Manage <span className="text-gray-500">Jobs</span>
+              {/* Mobile toggle button */}
+              <div className="flex gap-5 items-center ">
+                <IoChevronForward
+                  onClick={() => setMobileOpen(true)}
+                  className="text-[white] text-2xl cursor-pointer md:hidden bg-black rounded-full p-1"
+                />
+                <h1
+                  className="fontAL font-semibold capitalize text-xl md:text-2xl lg:text-3xl "
+                  style={{
+                    letterSpacing: "1px",
+                    wordSpacing: "2px",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Manage Jobs
                 </h1>
               </div>
-
-              {/* Breadcrumbs */}
-              <nav aria-label="Breadcrumb" className="hidden sm:block text-sm text-gray-500 text-center sm:text-right">
-                <ol className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
-                  <li className="flex items-center gap-2">
-                    <Link href="/dashboard" className="hover:text-gray-700 transition">Dashboard</Link>
-                    <FiChevronRight />
-                  </li>
-                  <li>
-                    <span className="text-gray-700 font-medium">Manage Jobs</span>
-                  </li>
-                </ol>
-              </nav>
             </div>
             {user?.role === 'recruiter' && (
               <p className="text-sm text-gray-500 mt-2">Managing jobs for {user.companyName}</p>
@@ -207,7 +202,7 @@ const Managejobs = () => {
               <input
                 type="text"
                 placeholder="Search jobs..."
-                className="w-full sm:w-64 p-2 rounded bg-white text-sm placeholder-slate-400 ring-1 ring-gray-300 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+                className="w-full sm:w-64 p-2 rounded bg-white text-sm placeholder-slate-400 ring-1 ring-gray-300 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -233,18 +228,18 @@ const Managejobs = () => {
                 >
                   {/* Job Info */}
                   <div className="flex gap-4 items-start sm:items-center flex-1">
-                    <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded flex items-center justify-center font-bold text-xl shrink-0">
+                    <div className="w-12 h-12 bg-[#72B76A]/10 text-[#72B76A] rounded flex items-center justify-center font-bold text-xl shrink-0">
                       {job.title.charAt(0)}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-[#00c9ff] cursor-pointer hover:underline">
+                      <h3 className="text-lg font-semibold text-slate-800 cursor-pointer hover:text-[#72B76A] transition-colors">
                         {job.title}
                       </h3>
                       <p className="text-sm text-gray-500">{job.location}</p>
                       <p className="text-sm text-gray-700 mt-1">
                         <span className="font-medium text-gray-500">Category:</span> {job.job_category}
                       </p>
-                      <Link href={`/admin/manage-jobs/${job.id}/applicants`} className="text-sm text-blue-600 font-medium hover:underline mt-1 inline-block">
+                      <Link href={`/admin/manage-jobs/${job.id}/applicants`} className="text-sm text-[#72B76A] font-medium hover:underline mt-1 inline-block">
                         {job.applicationCount || 0} Applied
                       </Link>
                     </div>
@@ -252,7 +247,7 @@ const Managejobs = () => {
 
                   {/* Job Meta & Actions */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-4 sm:mt-0">
-                    <span className="px-3 py-1 rounded bg-[#e8f8fd] text-[#00c9ff] border border-[#b3ebfa] text-xs font-semibold whitespace-nowrap text-center">
+                    <span className="px-3 py-1 rounded bg-[#72B76A]/10 text-[#72B76A] border border-[#72B76A]/30 text-xs font-semibold whitespace-nowrap text-center">
                       {job.employment_type}
                     </span>
 
@@ -269,21 +264,21 @@ const Managejobs = () => {
                     <div className="flex gap-2 sm:ml-4 border-t sm:border-t-0 sm:border-l border-gray-200 pt-3 sm:pt-0 sm:pl-4 justify-end">
                       <button 
                         onClick={() => handleViewJob(job)}
-                        className="p-2 text-gray-400 hover:text-[#00c9ff] hover:bg-blue-50 rounded transition" 
+                        className="p-1.5 rounded-full bg-blue-50 text-[#00c9ff] hover:bg-blue-100 transition text-sm" 
                         title="View details"
                       >
                         <FaEye />
                       </button>
                       <button 
                         onClick={() => handleEditJob(job.id)}
-                        className="p-2 text-gray-400 hover:text-green-500 hover:bg-green-50 rounded transition" 
+                        className="p-1.5 rounded-full bg-yellow-50 text-[#FFCC23] hover:bg-yellow-100 transition text-sm" 
                         title="Edit job"
                       >
                         <FaEdit />
                       </button>
                       <button
                         onClick={() => confirmDeleteJob(job.id)}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition"
+                        className="p-1.5 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition text-sm"
                         title="Delete job"
                       >
                         <FaTrash />
@@ -301,60 +296,11 @@ const Managejobs = () => {
               <p>
                 Showing {startIndex + 1} to {Math.min(endIndex, filteredJobs.length)} of {filteredJobs.length} entries
               </p>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={handlePrev}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-1.5 border rounded transition ${currentPage === 1
-                    ? "bg-gray-50 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
-                    }`}
-                >
-                  Previous
-                </button>
-
-                {/* Simple page numbers */}
-                <div className="hidden sm:flex gap-1">
-                  {[...Array(totalPages)].map((_, index) => {
-                    // Only show adjacent pages to keep it clean
-                    if (
-                      index === 0 ||
-                      index === totalPages - 1 ||
-                      (index >= currentPage - 2 && index <= currentPage)
-                    ) {
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentPage(index + 1)}
-                          className={`w-8 h-8 flex items-center justify-center border rounded transition ${currentPage === index + 1
-                            ? "bg-[#00c9ff] text-white border-[#00c9ff]"
-                            : "bg-white text-gray-700 hover:bg-gray-50"
-                            }`}
-                        >
-                          {index + 1}
-                        </button>
-                      );
-                    } else if (
-                      index === 1 && currentPage > 3 ||
-                      index === totalPages - 2 && currentPage < totalPages - 2
-                    ) {
-                      return <span key={index} className="px-1 text-gray-400">...</span>;
-                    }
-                    return null;
-                  })}
-                </div>
-
-                <button
-                  onClick={handleNext}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-1.5 border rounded transition ${currentPage === totalPages
-                    ? "bg-gray-50 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
-                    }`}
-                >
-                  Next
-                </button>
-              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           )}
         </main>

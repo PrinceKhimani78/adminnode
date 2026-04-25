@@ -62,7 +62,7 @@ const Resumealerts = () => {
   };
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative">
         {/* sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-4">
@@ -87,25 +87,7 @@ const Resumealerts = () => {
                   Resume Alerts
                 </h1>
               </div>
-              <nav
-                aria-label="Breadcrumb"
-                className="hidden sm:block text-sm text-gray-500 text-center sm:text-right"
-              >
-                <ol className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
-                  <li className="flex items-center gap-2">
-                    <Link href="/" className="hover:text-gray-700 transition">
-                      Home
-                    </Link>
-                    <FiChevronRight />
-                  </li>
-
-                  <li>
-                    <span className="text-gray-700 font-medium">
-                      Resume-alerts
-                    </span>
-                  </li>
-                </ol>
-              </nav>
+              
             </div>
           </div>
 
@@ -143,12 +125,12 @@ const Resumealerts = () => {
                     <td className="px-6 py-4">{alert.description}</td>
                     <td className="px-6 py-4">{alert.times}</td>
                     <td className="px-6 py-4 flex gap-3">
-                      <button className="p-2 rounded-full bg-blue-50 text-[#00C9FF] hover:bg-blue-100">
+                      <button className="p-1.5 rounded-full bg-blue-50 text-[#00c9ff] hover:bg-blue-100 transition text-sm">
                         <FaEye />
                       </button>
                       <button
                         onClick={() => confirmDeleteAlert(i)}
-                        className="p-2 rounded-full bg-blue-50 text-[#00C9FF] hover:bg-red-100 transition"
+                        className="p-1.5 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition text-sm"
                       >
                         <FaTrash />
                       </button>

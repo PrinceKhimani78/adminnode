@@ -27,7 +27,23 @@ export default function Sidebar({
   setMobileOpen?: (open: boolean) => void;
 }) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('sidebar_collapsed');
+      if (saved !== null) {
+        return saved === 'true';
+      }
+    }
+    return true;
+  });
+
+  const toggleSidebar = () => {
+    const newState = !collapsed;
+    setCollapsed(newState);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sidebar_collapsed', String(newState));
+    }
+  };
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userRole, setUserRole] = useState<string>("");
   const router = useRouter();
@@ -51,27 +67,27 @@ export default function Sidebar({
   const menuItems = [
     {
       icon: <FaHome />,
-      label: "Admin Dashboard",
+      label: "Admin\u00A0Dashboard",
       href: "/admin/dashboard",
     },
     {
       icon: <FaBuilding />,
-      label: "Company Profile",
+      label: "Company\u00A0Profile",
       href: "/admin/company-profile",
     },
     {
       icon: <FaBriefcase />,
-      label: "Manage Jobs",
+      label: "Manage\u00A0Jobs",
       href: "/admin/manage-jobs",
     },
     {
       icon: <FaPlus />,
-      label: "Post New Job",
+      label: "Post\u00A0New\u00A0Job",
       href: "/admin/post-job",
     },
     {
       icon: <FaUsers />,
-      label: "Candidates List",
+      label: "Candidates\u00A0List",
       href: "/admin/candidates-list",
     },
     {
@@ -79,11 +95,11 @@ export default function Sidebar({
       label: "Packages",
       href: "/admin/packages",
     },
-    {
-      icon: <FaBell />,
-      label: "Resume Alerts",
-      href: "/admin/resume-alerts",
-    },
+    // {
+    //   icon: <FaBell />,
+    //   label: "Resume Alerts",
+    //   href: "/admin/resume-alerts",
+    // },
     ...(userRole === "superadmin"
       ? [
         {
@@ -97,19 +113,19 @@ export default function Sidebar({
       ? [
         {
           icon: <FaUserPlus />,
-          label: "Manage Recruiters",
+          label: "Manage\u00A0Recruiters",
           href: "/admin/manage-recruiters",
         },
         {
           icon: <FaListAlt />,
-          label: "Industry Requests",
+          label: "Industry\u00A0Requests",
           href: "/admin/industry-requests",
         },
       ]
       : []),
     {
       icon: <FaTrash className="text-red-500" />,
-      label: "Delete Profile",
+      label: "Delete\u00A0Profile",
       href: "#delete",
       isDelete: true,
     },
@@ -161,16 +177,16 @@ export default function Sidebar({
       </div>
 
       {/* ===== Desktop Sidebar ===== */}
-      <div className="hidden md:block">
+      <div className={`hidden md:block transition-all duration-300 flex-shrink-0 z-20 ${collapsed ? "w-16" : "w-52"}`}>
         <aside
-          className={`sticky top-0 h-auto max-h-[90vh] flex flex-col overflow-y-auto
+          className={`fixed top-3 sm:top-4 h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-2rem)] flex flex-col overflow-y-auto
           bg-white shadow rounded-r-lg transition-all duration-300
           ${collapsed ? "w-16 items-center" : "w-52"}`}
         >
           {/* Toggle */}
           <div className={`py-5 ${collapsed ? "" : "ml-2"}`}>
             <button
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={toggleSidebar}
               className="w-8 h-8 flex items-center justify-center rounded-full
               border border-[#72B76A] hover:bg-[#72B76A]/10"
             >

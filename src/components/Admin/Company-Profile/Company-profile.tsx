@@ -44,14 +44,14 @@ const InputField = ({
     >
       {label}
     </label>
-    <span className="absolute left-3 top-10 text-[#00C9FF]">{icon}</span>
+    <span className="absolute left-3 top-10 text-[#72B76A]">{icon}</span>
     <input
       id={id}
       name={id}
       type="text"
       placeholder={placeholder}
-      className="w-full pl-10 p-2 rounded bg-white text-sm placeholder-slate-400 ring-1 ring-blue-100 
-      transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+      className="w-full pl-10 p-2 rounded bg-white text-sm placeholder-slate-400 ring-1 ring-green-100 
+      transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
     />
   </div>
 );
@@ -74,14 +74,14 @@ const SocialInput = ({
     >
       {label}
     </label>
-    <span className="absolute left-3 top-10 text-[#00C9FF]">{icon}</span>
+    <span className="absolute left-3 top-10 text-[#72B76A]">{icon}</span>
     <input
       id={id}
       name={id}
       type="url"
       placeholder={placeholder}
-      className="w-full pl-10 p-2 rounded text-sm placeholder-slate-400 ring-1 ring-blue-100 
-      transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+      className="w-full pl-10 p-2 rounded text-sm placeholder-slate-400 ring-1 ring-green-100 
+      transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
     />
   </div>
 );
@@ -90,7 +90,7 @@ const Companyprofile = () => {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-4">
@@ -115,26 +115,8 @@ const Companyprofile = () => {
                   Company-Profile
                 </h1>
               </div>
-              {/* Breadcrumbs (hidden on mobile) */}
-              <nav
-                aria-label="Breadcrumb"
-                className="hidden sm:block text-sm text-gray-500 text-center sm:text-right"
-              >
-                <ol className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
-                  <li className="flex items-center gap-2">
-                    <Link href="/" className="hover:text-gray-700 transition">
-                      Home
-                    </Link>
-                    <FiChevronRight />
-                  </li>
-
-                  <li>
-                    <span className="text-gray-700 font-medium">
-                      Company-Logo
-                    </span>
-                  </li>
-                </ol>
-              </nav>
+              
+              
             </div>
           </div>
 
@@ -161,7 +143,7 @@ const Companyprofile = () => {
                 <button
                   type="button"
                   className="absolute bottom-[10px] left-1/2 -translate-x-1/2 
-             bg-[#00C9FF] hover:bg-[#0069d9] text-white text-xs 
+             bg-[#72B76A] hover:bg-[#5a9c53] text-white text-xs 
              font-semibold w-[110px] py-2 rounded-md shadow text-center"
                 >
                   Upload Photo
@@ -173,14 +155,14 @@ const Companyprofile = () => {
                 <span className="font-semibold">Company Logo :- </span>
                 Max file size is <b>1MB</b>, Minimum dimension:
                 <b> 136 x 136 </b> and suitable file types are
-                <span className="text-blue-600"> .jpg</span> &{" "}
-                <span className="text-blue-600">webp</span>
+                <span className="text-[#72B76A]"> .jpg</span> &{" "}
+                <span className="text-[#72B76A]">webp</span>
               </p>
             </div>
 
             {/* Banner Upload */}
             <div>
-              <div className="border-2 border-dashed border-gray-300 bg-blue-50 rounded-md p-10 text-center text-gray-500 text-sm cursor-pointer hover:border-blue-400 hover:bg-blue-100 transition">
+              <div className="border-2 border-dashed border-gray-300 bg-green-50 rounded-md p-10 text-center text-gray-500 text-sm cursor-pointer hover:border-green-400 hover:bg-green-100 transition">
                 Drop files here to upload
               </div>
               <p className="text-gray-600 text-sm mt-2">
@@ -189,8 +171,8 @@ const Companyprofile = () => {
                 </span>
                 Max file size is <b>1MB</b>, Minimum dimension:
                 <b> 770 x 310 </b> and suitable file types are
-                <span className="text-blue-600"> .jpg</span> &{" "}
-                <span className="text-blue-600">webp</span>
+                <span className="text-[#72B76A]"> .jpg</span> &{" "}
+                <span className="text-[#72B76A]">webp</span>
               </p>
             </div>
           </div>
@@ -258,7 +240,7 @@ const Companyprofile = () => {
               >
                 Description
               </label>
-              <span className="absolute left-3 top-10 text-[#00C9FF]">
+              <span className="absolute left-3 top-10 text-[#72B76A]">
                 <FaInfoCircle />
               </span>
               <textarea
@@ -266,8 +248,8 @@ const Companyprofile = () => {
                 name="description"
                 placeholder="Greetings! We are Galaxy Software Development Company."
                 rows={4}
-                className="w-full pl-10 p-2 rounded bg-blue-50 text-sm placeholder-slate-400 ring-1 ring-blue-100 
-                transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+                className="w-full pl-10 p-2 rounded bg-green-50 text-sm placeholder-slate-400 ring-1 ring-green-100 
+                transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
               />
             </div>
 
@@ -275,8 +257,8 @@ const Companyprofile = () => {
             <div className="mt-6 flex justify-start">
               <button
                 type="submit"
-                className="relative px-6 h-10 overflow-hidden group border border-[#00c9ff] bg-[#00c9ff] rounded-lg 
-                  hover:bg-transparent text-white hover:text-[#00c9ff] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
+                className="relative px-6 h-10 overflow-hidden group border border-[#72B76A] bg-[#72B76A] rounded-lg 
+                  hover:bg-transparent text-white hover:text-[#72B76A] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
               >
                 <span
                   className="absolute right-0 w-10 h-full top-0 transition-all duration-1000 transform 
@@ -294,15 +276,15 @@ const Companyprofile = () => {
               Photo Gallery
             </h3>
 
-            <div className="border-2 border-dashed border-gray-300 bg-blue-50 rounded-md p-16 text-center text-gray-500 text-sm cursor-pointer hover:border-blue-400 hover:bg-blue-100 transition">
+            <div className="border-2 border-dashed border-gray-300 bg-green-50 rounded-md p-16 text-center text-gray-500 text-sm cursor-pointer hover:border-green-400 hover:bg-green-100 transition">
               Drop files here to upload
             </div>
 
             <div className="mt-6 flex justify-start">
               <button
                 type="submit"
-                className="relative px-6 h-10 overflow-hidden group border border-[#00c9ff] bg-[#00c9ff] rounded-lg 
-        hover:bg-transparent text-white hover:text-[#00c9ff] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
+                className="relative px-6 h-10 overflow-hidden group border border-[#72B76A] bg-[#72B76A] rounded-lg 
+        hover:bg-transparent text-white hover:text-[#72B76A] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
               >
                 <span
                   className="absolute right-0 w-10 h-full top-0 transition-all duration-1000 transform 
@@ -328,16 +310,16 @@ const Companyprofile = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Youtube
                 </label>
-                <span className="absolute left-3 top-8 text-[#00C9FF]">
+                <span className="absolute left-3 top-8 text-[#72B76A]">
                   <FaYoutube />
                 </span>
                 <input
                   type="text"
                   placeholder="https://www.youtube.com/"
-                  className="w-full pl-10 p-2 rounded bg-blue-50 text-sm placeholder-slate-400 ring-1 ring-blue-100 
-        focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+                  className="w-full pl-10 p-2 rounded bg-green-50 text-sm placeholder-slate-400 ring-1 ring-green-100 
+        focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
                 />
-                <div className="mt-1 text-xs text-[#00C9FF] flex items-center gap-1 cursor-pointer hover:underline">
+                <div className="mt-1 text-xs text-[#72B76A] flex items-center gap-1 cursor-pointer hover:underline">
                   <FaPlus /> Add More Fields
                 </div>
               </div>
@@ -347,16 +329,16 @@ const Companyprofile = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Vimeo
                 </label>
-                <span className="absolute left-3 top-8 text-[#00C9FF]">
+                <span className="absolute left-3 top-8 text-[#72B76A]">
                   <FaVimeoV />
                 </span>
                 <input
                   type="text"
                   placeholder="https://vimeo.com/"
-                  className="w-full pl-10 p-2 rounded bg-blue-50 text-sm placeholder-slate-400 ring-1 ring-blue-100 
-        focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00c9ff]"
+                  className="w-full pl-10 p-2 rounded bg-green-50 text-sm placeholder-slate-400 ring-1 ring-green-100 
+        focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#72B76A]"
                 />
-                <div className="mt-1 text-xs text-[#00C9FF] flex items-center gap-1 cursor-pointer hover:underline">
+                <div className="mt-1 text-xs text-[#72B76A] flex items-center gap-1 cursor-pointer hover:underline">
                   <FaPlus /> Add More Fields
                 </div>
               </div>
@@ -366,7 +348,7 @@ const Companyprofile = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Custom Video
               </label>
-              <div className="border-2 border-dashed border-gray-300 bg-blue-50 rounded-md p-16 text-center text-gray-500 text-sm cursor-pointer hover:border-blue-400 hover:bg-blue-100 transition">
+              <div className="border-2 border-dashed border-gray-300 bg-green-50 rounded-md p-16 text-center text-gray-500 text-sm cursor-pointer hover:border-green-400 hover:bg-green-100 transition">
                 Drop files here to upload
               </div>
             </div>
@@ -374,8 +356,8 @@ const Companyprofile = () => {
             <div className="mt-6 flex justify-start">
               <button
                 type="submit"
-                className="relative px-6 h-10 overflow-hidden group border border-[#00c9ff] bg-[#00c9ff] rounded-lg 
-        hover:bg-transparent text-white hover:text-[#00c9ff] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
+                className="relative px-6 h-10 overflow-hidden group border border-[#72B76A] bg-[#72B76A] rounded-lg 
+        hover:bg-transparent text-white hover:text-[#72B76A] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
               >
                 <span
                   className="absolute right-0 w-10 h-full top-0 transition-all duration-1000 transform 
@@ -449,8 +431,8 @@ const Companyprofile = () => {
             <div className="mt-6">
               <button
                 type="submit"
-                className="relative px-6 h-10 overflow-hidden group border border-[#00c9ff] bg-[#00c9ff] rounded-lg 
-                hover:bg-transparent text-white hover:text-[#00c9ff] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
+                className="relative px-6 h-10 overflow-hidden group border border-[#72B76A] bg-[#72B76A] rounded-lg 
+                hover:bg-transparent text-white hover:text-[#72B76A] active:scale-90 transition-all ease-out duration-700 cursor-pointer"
               >
                 <span
                   className="absolute right-0 w-10 h-full top-0 transition-all duration-1000 transform 

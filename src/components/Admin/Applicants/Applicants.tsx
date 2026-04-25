@@ -6,6 +6,7 @@ import Sidebar from "../Common/Sidebar";
 import AdminHeader from "../Common/AdminHeader";
 import { FaEye, FaCheck, FaTimes, FaClock, FaListAlt, FaDownload } from "react-icons/fa";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
+import { IoChevronForward } from "react-icons/io5";
 import { useAuth } from "@/context/AuthContext";
 import { useParams, useRouter } from "next/navigation";
 
@@ -74,25 +75,31 @@ const Applicants = () => {
 
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative">
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-6 overflow-hidden">
           <AdminHeader />
           
           <div className="border-b pb-4">
-             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-6 bg-[#00C9FF] rounded-full"></div>
-                    <h1 className="text-xl font-bold text-slate-800">Job Applicants</h1>
-                </div>
-                <nav className="text-sm text-slate-500 flex items-center gap-2">
-                    <Link href="/admin/dashboard" className="hover:text-slate-800 transition">Dashboard</Link>
-                    <FiChevronRight size={14} />
-                    <Link href="/admin/manage-jobs" className="hover:text-slate-800 transition">Manage Jobs</Link>
-                    <FiChevronRight size={14} />
-                    <span className="text-slate-400">Applicants</span>
-                </nav>
-             </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              {/* Mobile toggle button */}
+              <div className="flex gap-5 items-center ">
+                <IoChevronForward
+                  onClick={() => setMobileOpen(true)}
+                  className="text-[white] text-2xl cursor-pointer md:hidden bg-black rounded-full p-1"
+                />
+                <h1
+                  className="fontAL font-semibold capitalize text-xl md:text-2xl lg:text-3xl "
+                  style={{
+                    letterSpacing: "1px",
+                    wordSpacing: "2px",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Job Applicants
+                </h1>
+              </div>
+            </div>
           </div>
 
           <div className="overflow-x-auto">

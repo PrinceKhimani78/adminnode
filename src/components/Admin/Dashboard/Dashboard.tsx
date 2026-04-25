@@ -167,7 +167,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="pl-2 pr-4 sm:px-2 py-2 flex gap-3 sm:gap-4 my-10 relative">
+      <div className="pl-0 pr-3 sm:pr-4 py-3 sm:py-4 flex gap-3 sm:gap-4 relative">
         {/* Sidebar */}
         <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <main className="flex-1 px-5 py-5 min-w-0 bg-white shadow rounded-lg space-y-4">
@@ -193,24 +193,8 @@ const Dashboard = () => {
                 </h1>
               </div>
 
-              {/* Breadcrumbs (hidden on mobile) */}
-              <nav
-                aria-label="Breadcrumb"
-                className="hidden sm:block text-sm text-gray-500 text-center sm:text-right"
-              >
-                <ol className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
-                  <li className="flex items-center gap-2">
-                    <Link href="/" className="hover:text-gray-700 transition">
-                      Home
-                    </Link>
-                    <FiChevronRight />
-                  </li>
-
-                  <li>
-                    <span className="text-gray-700 font-medium">Dashboard</span>
-                  </li>
-                </ol>
-              </nav>
+              
+              
             </div>
           </div>
 
@@ -358,7 +342,7 @@ const Dashboard = () => {
                       </span>
                       <Link
                         href="/admin/candidates-list"
-                        className="p-2 hover:bg-blue-50 rounded-full text-[#42A5F5]"
+                        className="p-1.5 rounded-full bg-blue-50 text-[#00c9ff] hover:bg-blue-100 transition text-sm"
                       >
                         <FaEye />
                       </Link>

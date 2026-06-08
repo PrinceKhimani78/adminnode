@@ -8,10 +8,6 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   async rewrites() {
     return [
       {

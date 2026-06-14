@@ -58,8 +58,7 @@ const Managejobs = () => {
     }
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || "https://api.rojgariindia.com/api";
-      const response = await fetch(`${backendUrl}/jobs/recruiter`, {
+      const response = await fetch(`/api/jobs/recruiter`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -107,9 +106,7 @@ const Managejobs = () => {
   const handleDeleteJob = async () => {
     if (jobToDelete !== null && token) {
       try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || "https://api.rojgariindia.com/api";
-        // For now we just implement status update to inactive as specified in backend
-        const response = await fetch(`${backendUrl}/jobs/${jobToDelete}/status`, {
+        const response = await fetch(`/api/jobs/${jobToDelete}/status`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

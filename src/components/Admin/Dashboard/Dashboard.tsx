@@ -91,7 +91,7 @@ const Dashboard = () => {
           const jobsRes = await fetch("/api/jobs?limit=1", { headers });
           const jobsData = await jobsRes.json();
           if (jobsData.success) {
-            totalJobs = jobsData.data?.total || jobsData.data?.jobs?.length || 0;
+            totalJobs = jobsData.count || jobsData.data?.length || 0;
           }
         } catch { totalJobs = 0; }
 

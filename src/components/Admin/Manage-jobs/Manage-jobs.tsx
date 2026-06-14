@@ -80,9 +80,9 @@ const Managejobs = () => {
 
   // Filtering by search term
   const filteredJobs = allJobs.filter((job) =>
-    job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.job_category.toLowerCase().includes(searchTerm.toLowerCase())
+    (job.title?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (job.location?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (job.job_category?.toLowerCase() || "").includes(searchTerm.toLowerCase())
   );
 
   // Pagination logic

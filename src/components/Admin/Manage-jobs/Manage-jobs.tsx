@@ -106,13 +106,11 @@ const Managejobs = () => {
   const handleDeleteJob = async () => {
     if (jobToDelete !== null && token) {
       try {
-        const response = await fetch(`/api/jobs/${jobToDelete}/status`, {
-          method: 'PATCH',
+        const response = await fetch(`/api/jobs/${jobToDelete}`, {
+          method: 'DELETE',
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ is_active: false })
+          }
         });
         const data = await response.json();
         if (data.success) {

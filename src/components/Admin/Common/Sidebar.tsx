@@ -16,7 +16,6 @@ import {
   FaUserShield,
   FaUserPlus,
   FaListAlt,
-  FaEnvelope,
 } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
@@ -107,11 +106,6 @@ export default function Sidebar({
           icon: <FaUserShield />,
           label: "Manage Admins",
           href: "/admin/manage-admins",
-        },
-        {
-          icon: <FaEnvelope />,
-          label: "Newsletter Leads",
-          href: "/admin/newsletter-leads",
         },
       ]
       : []),

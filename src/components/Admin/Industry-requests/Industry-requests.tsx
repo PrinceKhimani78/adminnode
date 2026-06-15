@@ -108,6 +108,34 @@ const IndustryRequests = () => {
         }
     };
 
+    const handleRemoveApprovedIndustry = async (recruiterId: string, industryName: string) => {
+        if (!confirm(`Are you sure you want to remove "${industryName}" from approved industries?`)) return;
+        
+        setActionLoading(`remove-${recruiterId}-${industryName}`);
+        try {
+            const token = localStorage.getItem("admin_token");
+            const response = await fetch(`/api/recruiter/remove-approved-industry`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({ recruiterId, industryName })
+            });
+
+            if (response.ok) {
+                await fetchData();
+            } else {
+                const result = await response.json();
+                alert(result.message || "Failed to remove industry");
+            }
+        } catch (err) {
+            alert("Something went wrong during removal");
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
     const handleApprove = async (recruiterId: string, industryName: string) => {
         const actionId = `${recruiterId}-${industryName}`;
         setActionLoading(actionId);
@@ -330,8 +358,18 @@ const IndustryRequests = () => {
                                                     </p>
                                                     <div className="flex flex-wrap gap-2">
                                                         {recruiter.approved_industries.map(ind => (
-                                                            <span key={ind.id} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-semibold">
+                                                            <span key={ind.id} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-2">
                                                                 {ind.name}
+                                                                {userRole === 'superadmin' && (
+                                                                    <button
+                                                                        onClick={() => handleRemoveApprovedIndustry(recruiter.id, ind.name)}
+                                                                        disabled={actionLoading === `remove-${recruiter.id}-${ind.name}`}
+                                                                        className="hover:text-red-600 transition-colors disabled:opacity-50"
+                                                                        title="Remove Approved Industry"
+                                                                    >
+                                                                        {actionLoading === `remove-${recruiter.id}-${ind.name}` ? "..." : <FaTimes />}
+                                                                    </button>
+                                                                )}
                                                             </span>
                                                         ))}
                                                     </div>

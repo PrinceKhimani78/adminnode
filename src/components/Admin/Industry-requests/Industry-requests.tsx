@@ -25,6 +25,7 @@ const IndustryRequests = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [actionLoading, setActionLoading] = useState<string | null>(null);
+    const [userRole, setUserRole] = useState<string>("");
     const [viewModal, setViewModal] = useState<{ isOpen: boolean; request: RecruiterIndustryData | null; industry: string | null }>({
         isOpen: false,
         request: null,
@@ -70,7 +71,42 @@ const IndustryRequests = () => {
 
     useEffect(() => {
         fetchData();
+        const userStr = localStorage.getItem("admin_user");
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                setUserRole(user.role || "");
+            } catch (e) {
+                // ignore
+            }
+        }
     }, []);
+
+    const handleDeleteRecruiter = async (recruiterId: string) => {
+        if (!confirm("Are you sure you want to permanently delete this recruiter? This action cannot be undone.")) return;
+        
+        setActionLoading(`delete-${recruiterId}`);
+        try {
+            const token = localStorage.getItem("admin_token");
+            const response = await fetch(`/api/recruiter/${recruiterId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                await fetchData();
+            } else {
+                const result = await response.json();
+                alert(result.message || "Failed to delete recruiter");
+            }
+        } catch (err) {
+            alert("Something went wrong during deletion");
+        } finally {
+            setActionLoading(null);
+        }
+    };
 
     const handleApprove = async (recruiterId: string, industryName: string) => {
         const actionId = `${recruiterId}-${industryName}`;
@@ -263,14 +299,26 @@ const IndustryRequests = () => {
                                 return (
                                     <div key={recruiter.id} className="border border-gray-200 rounded-xl overflow-hidden">
                                         {/* Recruiter Header */}
-                                        <div className="bg-gray-50 px-5 py-4 flex items-center gap-4 border-b">
-                                            <div className="w-10 h-10 bg-[#72B76A]/10 rounded-full flex items-center justify-center">
-                                                <FaUserTie className="text-[#72B76A]" />
+                                        <div className="bg-gray-50 px-5 py-4 flex items-center justify-between border-b">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 bg-[#72B76A]/10 rounded-full flex items-center justify-center">
+                                                    <FaUserTie className="text-[#72B76A]" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-gray-900">{recruiter.full_name}</p>
+                                                    <p className="text-xs text-gray-500">{recruiter.company_name} · {recruiter.email}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="font-bold text-gray-900">{recruiter.full_name}</p>
-                                                <p className="text-xs text-gray-500">{recruiter.company_name} · {recruiter.email}</p>
-                                            </div>
+                                            {userRole === 'superadmin' && (
+                                                <button
+                                                    onClick={() => handleDeleteRecruiter(recruiter.id)}
+                                                    disabled={actionLoading === `delete-${recruiter.id}`}
+                                                    className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors disabled:opacity-50"
+                                                    title="Delete Recruiter"
+                                                >
+                                                    {actionLoading === `delete-${recruiter.id}` ? "..." : <FaTimesCircle />}
+                                                </button>
+                                            )}
                                         </div>
 
                                         <div className="p-5 space-y-4">

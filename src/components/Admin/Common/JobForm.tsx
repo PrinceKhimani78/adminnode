@@ -150,7 +150,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
     }
 
     // Use authToken from context, or fall back to admin_token from localStorage
-    const token = authToken || localStorage.getItem("admin_token");
+    const token = localStorage.getItem("admin_token") || authToken;
 
     if (!token) {
       setErrorMessage("You must be logged in to perform this action.");

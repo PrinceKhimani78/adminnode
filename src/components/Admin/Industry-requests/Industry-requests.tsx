@@ -256,6 +256,7 @@ const IndustryRequests = () => {
                                     <tr className="bg-gray-100 text-gray-700 text-sm">
                                         <th className="p-4 border">Recruiter</th>
                                         <th className="p-4 border">Company</th>
+                                        <th className="p-4 border">Existing Industry</th>
                                         <th className="p-4 border">Requested Industries</th>
                                     </tr>
                                 </thead>
@@ -272,6 +273,12 @@ const IndustryRequests = () => {
                                                 <div className="flex items-center gap-2">
                                                     <FaBuilding className="text-gray-400" />
                                                     <span>{request.company_name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-4 align-top">
+                                                <div className="flex items-center gap-2">
+                                                    <FaBuilding className="text-gray-400" />
+                                                    <span>{request.approved_industries?.map((i: any) => i.name).join(", ") || "N/A"}</span>
                                                 </div>
                                             </td>
                                             <td className="p-4">

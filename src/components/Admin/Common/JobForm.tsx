@@ -317,7 +317,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Salary per month (₹)</label>
+                  <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Salary (LPA)</label>
                   <div className="flex items-center gap-3">
                     <div className="relative flex-1">
                       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-medium">₹</span>
@@ -356,7 +356,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
               <InputField id="location" name="location" label="Job Location" value={formData.location} onChange={handleChange} placeholder="Ex. Mumbai, Maharashtra" icon={<FaMapMarkerAlt />} />
 
               <div className="space-y-4">
-                <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Qualification</label>
+                <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Required Education Qualification</label>
                 <div className="flex flex-wrap gap-2">
                   {["12th Pass", "Diploma", "Graduate", "Post-Graduate", "Any"].map(q => (
                     <button key={q} type="button" onClick={() => handleChipClick("qualifications", q)} className={`px-5 py-2 rounded-full text-xs font-semibold border transition-all ${formData.qualifications === q ? "bg-[#72B76A] border-[#72B76A] text-white" : "bg-white border-gray-200 text-gray-600"}`}>

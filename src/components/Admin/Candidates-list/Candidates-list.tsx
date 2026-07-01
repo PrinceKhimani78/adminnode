@@ -1090,7 +1090,7 @@ const Candidateslist = () => {
                       )}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-500">Expected Salary (Monthly)</p>
+                      <p className="font-semibold text-gray-500">Expected Salary (LPA)</p>
                       {isEditing ? (
                         <div className="flex gap-2 mt-1">
                           <input

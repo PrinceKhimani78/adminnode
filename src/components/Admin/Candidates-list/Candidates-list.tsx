@@ -518,8 +518,10 @@ const Candidateslist = () => {
                   <div className="px-3 py-3 font-medium">
                     {c.total_experience_years ? `${c.total_experience_years} Yrs` : 'Fresher'}
                   </div>
-                  <div className="px-2 py-3 flex items-center gap-1">
-                    {c.resume && <span title="Resume Attached" className="text-sm">📎</span>}
+                  <div className="px-2 py-3 flex items-center">
+                    <div className="w-6 flex justify-center flex-shrink-0">
+                      {c.resume && <span title="Resume Attached" className="text-sm">📎</span>}
+                    </div>
                     <span className={`px-2 py-1 rounded text-[10px] font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                       }`}>
                       {c.status || 'Active'}
@@ -580,9 +582,11 @@ const Candidateslist = () => {
                     <span className="font-semibold">Experience: </span>
                     {c.total_experience_years ? `${c.total_experience_years} Years` : 'Fresher'}
                   </p>
-                  <p className="flex items-center gap-1">
+                  <p className="flex items-center">
                     <span className="font-semibold">Status: </span>
-                    {c.resume && <span title="Resume Attached" className="text-sm">📎</span>}
+                    <div className="w-6 flex justify-center flex-shrink-0">
+                      {c.resume && <span title="Resume Attached" className="text-sm">📎</span>}
+                    </div>
                     <span className={`px-2 py-1 rounded text-xs font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                       }`}>
                       {c.status || 'Active'}

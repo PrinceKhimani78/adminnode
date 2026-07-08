@@ -358,7 +358,7 @@ const JobForm = ({ initialData, isEdit = false }: JobFormProps) => {
               <div className="space-y-4">
                 <label className="block text-[13px] font-semibold text-gray-600 uppercase tracking-wider">Required Education Qualification</label>
                 <div className="flex flex-wrap gap-2">
-                  {["12th Pass", "Diploma", "Graduate", "Post-Graduate", "Any"].map(q => (
+                  {["12th Pass", "ITI", "Diploma", "Bachelors", "BTech", "Graduate", "Masters", "Post-Graduate", "Specialization", "Any"].map(q => (
                     <button key={q} type="button" onClick={() => handleChipClick("qualifications", q)} className={`px-5 py-2 rounded-full text-xs font-semibold border transition-all ${formData.qualifications === q ? "bg-[#72B76A] border-[#72B76A] text-white" : "bg-white border-gray-200 text-gray-600"}`}>
                       {q}
                     </button>

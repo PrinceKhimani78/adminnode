@@ -504,7 +504,7 @@ const Candidateslist = () => {
                       </div>
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-slate-950 truncate">{c.full_name} {c.surname}</p>
+                      <p className="font-semibold text-slate-950 truncate">{c.full_name} {c.surname}{c.resume && ' 📎'}</p>
                       <p className="text-xs text-gray-500 truncate">{c.email}</p>
                     </div>
                   </div>
@@ -564,7 +564,7 @@ const Candidateslist = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-950">{c.full_name}</p>
+                      <p className="font-semibold text-slate-950">{c.full_name} {c.surname}{c.resume && ' 📎'}</p>
                       <p className="text-xs text-gray-500 flex items-center gap-1">
                         <FaMapMarkerAlt className="text-[#00c9ff]" />{" "}
                         {c.district || c.city}

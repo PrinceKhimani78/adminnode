@@ -504,7 +504,7 @@ const Candidateslist = () => {
                       </div>
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-slate-950 truncate">{c.full_name} {c.surname}{c.resume && ' 📎'}</p>
+                      <p className="font-semibold text-slate-950 truncate">{c.full_name} {c.surname}</p>
                       <p className="text-xs text-gray-500 truncate">{c.email}</p>
                     </div>
                   </div>
@@ -518,7 +518,8 @@ const Candidateslist = () => {
                   <div className="px-3 py-3 font-medium">
                     {c.total_experience_years ? `${c.total_experience_years} Yrs` : 'Fresher'}
                   </div>
-                  <div className="px-2 py-3">
+                  <div className="px-2 py-3 flex items-center gap-1">
+                    {c.resume && <span title="Resume Attached" className="text-sm">📎</span>}
                     <span className={`px-2 py-1 rounded text-[10px] font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                       }`}>
                       {c.status || 'Active'}
@@ -564,7 +565,7 @@ const Candidateslist = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-950">{c.full_name} {c.surname}{c.resume && ' 📎'}</p>
+                      <p className="font-semibold text-slate-950">{c.full_name} {c.surname}</p>
                       <p className="text-xs text-gray-500 flex items-center gap-1">
                         <FaMapMarkerAlt className="text-[#00c9ff]" />{" "}
                         {c.district || c.city}
@@ -579,8 +580,9 @@ const Candidateslist = () => {
                     <span className="font-semibold">Experience: </span>
                     {c.total_experience_years ? `${c.total_experience_years} Years` : 'Fresher'}
                   </p>
-                  <p>
+                  <p className="flex items-center gap-1">
                     <span className="font-semibold">Status: </span>
+                    {c.resume && <span title="Resume Attached" className="text-sm">📎</span>}
                     <span className={`px-2 py-1 rounded text-xs font-semibold ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                       }`}>
                       {c.status || 'Active'}

@@ -31,7 +31,7 @@ export function middleware(request: NextRequest) {
             padding: 20px;
           }
           h1 {
-            font-size: 100px;
+            font-size: 180px;
             font-weight: 800;
             margin: 0;
             color: #4a4a4a;

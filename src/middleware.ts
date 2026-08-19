@@ -25,6 +25,7 @@ export function middleware(request: NextRequest) {
             background-color: #ffffff;
             color: #444444;
             text-align: center;
+            transition: background-color 0.3s, color 0.3s;
           }
           .container {
             padding: 20px;
@@ -35,16 +36,32 @@ export function middleware(request: NextRequest) {
             margin: 0;
             color: #4a4a4a;
             line-height: 1;
+            transition: color 0.3s;
           }
           h2 {
             font-size: 24px;
             margin: 15px 0 10px 0;
             color: #4a4a4a;
+            transition: color 0.3s;
           }
           p {
             font-size: 12px;
             color: #666666;
             margin: 0;
+            transition: color 0.3s;
+          }
+          
+          @media (prefers-color-scheme: dark) {
+            body {
+              background-color: #121212;
+              color: #e0e0e0;
+            }
+            h1, h2 {
+              color: #f5f5f5;
+            }
+            p {
+              color: #a0a0a0;
+            }
           }
         </style>
       </head>

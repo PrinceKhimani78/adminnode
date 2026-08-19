@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffffff;
+            background-color: #f0f0f0; /* light gray bg */
             color: #444444;
             text-align: center;
             transition: background-color 0.3s, color 0.3s;
@@ -31,36 +31,38 @@ export function middleware(request: NextRequest) {
             padding: 20px;
           }
           h1 {
-            font-size: 180px;
+            font-size: 130px; /* Bit smaller than 180px */
             font-weight: 800;
             margin: 0;
-            color: #4a4a4a;
+            color: #666666; /* Same as p text */
             line-height: 1;
             transition: color 0.3s;
           }
           h2 {
             font-size: 24px;
             margin: 15px 0 10px 0;
-            color: #4a4a4a;
+            color: #999999; /* Lighter gray than h1 and p */
             transition: color 0.3s;
           }
           p {
             font-size: 12px;
-            color: #666666;
+            color: #666666; /* Same as h1 text */
             margin: 0;
             transition: color 0.3s;
           }
           
           @media (prefers-color-scheme: dark) {
             body {
-              background-color: #121212;
-              color: #e0e0e0;
+              background-color: #2b2b2b; /* Dark gray, not black */
             }
-            h1, h2 {
-              color: #f5f5f5;
+            h1 {
+              color: #888888; /* Same as p text */
+            }
+            h2 {
+              color: #cccccc; /* Lighter gray than h1 and p */
             }
             p {
-              color: #a0a0a0;
+              color: #888888; /* Same as h1 text */
             }
           }
         </style>

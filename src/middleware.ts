@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Set this to true to enable maintenance mode (site offline)
-const IS_MAINTENANCE_MODE = true;
+const IS_MAINTENANCE_MODE = false;
 
 export function middleware(request: NextRequest) {
   if (IS_MAINTENANCE_MODE) {

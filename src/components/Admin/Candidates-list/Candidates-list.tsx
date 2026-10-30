@@ -65,8 +65,10 @@ interface Candidate {
   languages_known?: string[];
   education?: {
     degree: string;
+    specialization?: string;
     university: string;
     passing_year: string;
+    grade?: string;
   }[];
   skills?: {
     skill_name: string;
@@ -313,6 +315,9 @@ const Candidateslist = () => {
         })) as any[],
         education: ((editForm.education ?? selectedCandidate.education) || []).map((e: any) => ({
           ...e,
+          degree: e.degree || '',
+          specialization: e.specialization || '',
+          university: e.university || '',
           passing_year: String(e.passing_year ?? ''),
         })) as any[],
         certifications: ((editForm.certifications ?? selectedCandidate.certifications) || []).map((c: any) => ({
@@ -1026,12 +1031,56 @@ const Candidateslist = () => {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <p className="font-bold text-gray-800 text-sm border-l-4 border-[#AE70BB] pl-2">Education</p>
-                        {isEditing && <button type="button" onClick={() => { const e2 = [...((editForm.education ?? selectedCandidate.education) || []) as any[]]; handleEditChange('education', [...e2, { degree: '', university: '', passing_year: '' }]); }} className="text-xs text-[#AE70BB] hover:underline">+ Add</button>}
+                        {isEditing && <button type="button" onClick={() => { const e2 = [...((editForm.education ?? selectedCandidate.education) || []) as any[]]; handleEditChange('education', [...e2, { degree: '', specialization: '', university: '', passing_year: '', grade: '' }]); }} className="text-xs text-[#AE70BB] hover:underline">+ Add</button>}
                       </div>
                       {(() => {
                         const edus = ((isEditing ? (editForm.education ?? selectedCandidate.education) : selectedCandidate.education) || []) as any[];
-                        if (isEditing) return edus.length > 0 ? (<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{edus.map((edu: any, i: number) => (<div key={i} className="p-3 bg-gray-50 border rounded-lg text-xs space-y-1.5"><div className="flex justify-between"><span className="font-semibold">#{i + 1}</span><button type="button" onClick={() => handleEditChange('education', edus.filter((_: any, j: number) => j !== i))} className="text-red-400">Remove</button></div><div><label className="text-gray-500">Degree</label><input className="w-full mt-0.5 p-1.5 border rounded text-xs" value={edu.degree || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], degree: e.target.value }; handleEditChange('education', n); }} /></div><div><label className="text-gray-500">University / Board</label><input className="w-full mt-0.5 p-1.5 border rounded text-xs" value={edu.university || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], university: e.target.value }; handleEditChange('education', n); }} /></div><div><label className="text-gray-500">Passing Year</label><input className="w-full mt-0.5 p-1.5 border rounded text-xs" value={edu.passing_year || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], passing_year: e.target.value }; handleEditChange('education', n); }} /></div></div>))}</div>) : <p className="text-xs text-gray-400 italic">Click + Add to add education.</p>;
-                        return edus.length > 0 ? (<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{edus.map((edu: any, i: number) => (<div key={i} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm"><p className="font-bold text-gray-900 text-sm">{edu.degree}</p><p className="text-xs text-gray-600">{edu.university}</p><p className="text-[10px] text-gray-400 mt-1">Passing Year: {edu.passing_year}</p></div>))}</div>) : <p className="text-xs text-gray-400 italic">No education details recorded.</p>;
+                        if (isEditing) return edus.length > 0 ? (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {edus.map((edu: any, i: number) => (
+                              <div key={i} className="p-3 bg-gray-50 border rounded-lg text-xs space-y-1.5">
+                                <div className="flex justify-between">
+                                  <span className="font-semibold">#{i + 1}</span>
+                                  <button type="button" onClick={() => handleEditChange('education', edus.filter((_: any, j: number) => j !== i))} className="text-red-400">Remove</button>
+                                </div>
+                                <div>
+                                  <label className="text-gray-500 font-medium">Degree / Qualification</label>
+                                  <input className="w-full mt-0.5 p-1.5 border rounded text-xs" placeholder="e.g. B.Tech, MBA" value={edu.degree || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], degree: e.target.value }; handleEditChange('education', n); }} />
+                                </div>
+                                <div>
+                                  <label className="text-gray-500 font-medium">Education Specialization</label>
+                                  <input className="w-full mt-0.5 p-1.5 border rounded text-xs" placeholder="e.g. Mechanical Engineering, Marketing" value={edu.specialization || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], specialization: e.target.value }; handleEditChange('education', n); }} />
+                                </div>
+                                <div>
+                                  <label className="text-gray-500 font-medium">University / Board</label>
+                                  <input className="w-full mt-0.5 p-1.5 border rounded text-xs" value={edu.university || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], university: e.target.value }; handleEditChange('education', n); }} />
+                                </div>
+                                <div>
+                                  <label className="text-gray-500 font-medium">Passing Year</label>
+                                  <input className="w-full mt-0.5 p-1.5 border rounded text-xs" value={edu.passing_year || ''} onChange={e => { const n = [...edus]; n[i] = { ...n[i], passing_year: e.target.value }; handleEditChange('education', n); }} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : <p className="text-xs text-gray-400 italic">Click + Add to add education.</p>;
+                        return edus.length > 0 ? (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {edus.map((edu: any, i: number) => {
+                              const title = edu.specialization
+                                ? (edu.degree?.toLowerCase().includes(edu.specialization.toLowerCase())
+                                    ? edu.degree
+                                    : `${edu.degree} in ${edu.specialization}`)
+                                : edu.degree;
+                              return (
+                                <div key={i} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+                                  <p className="font-bold text-gray-900 text-sm">{title}</p>
+                                  <p className="text-xs text-gray-600">{edu.university}</p>
+                                  <p className="text-[10px] text-gray-400 mt-1">Passing Year: {edu.passing_year}{edu.grade ? ` • Grade: ${edu.grade}` : ''}</p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : <p className="text-xs text-gray-400 italic">No education details recorded.</p>;
                       })()}
                     </div>
 
